@@ -1,0 +1,7 @@
+flutter_??.png
+result
+*.a
+
+cyberwow/native/output/*
+screenshots/
+git/
