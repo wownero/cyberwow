@@ -30,6 +30,9 @@ popd
 git clone https://github.com/fuwa0529/cyberwow/
 cd cyberwow
 
+mkdir -p cyberwow/native/output/arm64
+mkdir -p cyberwow/native/output/x86_64
+
 # Copy wownerod that we just built
 cp $PATH_TO_WOWNEROD cyberwow/native/output/arm64/
 # Generate a dummy x86_64 bin
