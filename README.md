@@ -19,7 +19,7 @@ docker create -it --name wownero-android wownero-android bash
 docker cp wownero-android:/src/build/release/bin .
 ```
 
-The binary needed is in `./bin/wownerod`.
+The binary needed is `./bin/wownerod`.
 
 ### Install flutter and make sure it's in path
 
@@ -31,7 +31,7 @@ git clone https://github.com/fuwa0529/cyberwow/
 cd cyberwow
 
 # Copy wownerod that we just built
-cp $PATH_TO_WOWNEROD cyberwow/native/output/a4m64/
+cp $PATH_TO_WOWNEROD cyberwow/native/output/arm64/
 # Generate a dummy x86_64 bin
 touch cyberwow/native/output/x86_64/wownerod
 
