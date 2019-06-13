@@ -31,11 +31,11 @@ git clone https://github.com/fuwa0529/cyberwow/
 cd cyberwow
 
 # Copy wownerod that we just built
-cp $PATH_TO_WOWNEROD cyberwow/cyberwow/native/output/a4m64/
+cp $PATH_TO_WOWNEROD cyberwow/native/output/a4m64/
 # Generate a dummy x86_64 bin
-touch cyberwow/cyberwow/native/output/x86_64/wownerod
+touch cyberwow/native/output/x86_64/wownerod
 
 make build
 ```
 
-Resulting apk is in `cyberwow/cyberwow/build/app/outputs/apk/release/app-release.apk`.
+Resulting apk is in `cyberwow/build/app/outputs/apk/release/app-release.apk`.
