@@ -2,6 +2,8 @@
 
 A dumb android full node for Wownero.
 
+<a href='https://play.google.com/store/apps/details?id=org.wownero.cyberwow'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height='80'/></a>
+
 ## How to build
 
 ### Compile wownerod for android-arm64
