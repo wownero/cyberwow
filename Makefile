@@ -19,6 +19,9 @@ test-android:
 
 test-c: c push test-android
 
+collect:
+	cp ../vendor/wownero/bin/wownerod cyberwow/native/output/arm64/
+
 build:
 	cd cyberwow && \
 	flutter build apk --target-platform android-arm64
