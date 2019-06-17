@@ -44,3 +44,9 @@ make build
 ```
 
 Resulting apk is in `cyberwow/build/app/outputs/apk/release/app-release.apk`.
+
+### Donations
+
+Author's WOW address:
+
+    Wo4E4waWvcBTJ4Q1xWSD1n5BQuDLRcEJ97ABLMYF15kf28R6KNu8fi6R8jr3ePn5g5LjXBQwY4pjbfErtgmzKpKx1ZdLtVejy
