@@ -27,13 +27,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'helper.dart';
+import '../config.dart';
 
 Stream<String> runBinary (String name) async* {
   final newPath = await getBinaryPath(name);
 
   final appDocDir = await getApplicationDocumentsDirectory();
   final appDocPath = appDocDir.path;
-  const appPath = 'wownerod';
   final binDir = new Directory(appDocDir.path + "/" + appPath);
 
   await binDir.create();

@@ -20,6 +20,7 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 const outputBin = 'wownerod';
+const appPath = 'wownerod';
 
 const arch = 'arm64';
 // const arch = 'x86_64';
