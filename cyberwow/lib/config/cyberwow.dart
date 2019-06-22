@@ -25,4 +25,5 @@ final config = CryptoConfig
 (
   'wownerod',
   'wownerod',
+  'Follow the white rabbit.',
 );

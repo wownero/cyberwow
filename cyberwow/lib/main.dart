@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   Future<void> buildStateMachine(BlankState _blankState) async {
-    const loadingText = "Follow the white rabbit.";
+    final loadingText = config.splash;
     LoadingState _loadingState = await _blankState.next(loadingText);
 
     final binName = config.outputBin;

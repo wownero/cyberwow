@@ -22,9 +22,11 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 class CryptoConfig {
   final String outputBin;
   final String appPath;
+  final String splash;
   CryptoConfig
   (
     this.outputBin,
     this.appPath,
+    this.splash,
   );
 }
