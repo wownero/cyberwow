@@ -25,14 +25,18 @@ class CryptoConfig {
   final String outputBin;
   final String appPath;
   final String splash;
+  final int splashDelay;
   final Color textColor;
   final Color backgroundColor;
+  final List<String> extraArgs;
   CryptoConfig
   (
     this.outputBin,
     this.appPath,
     this.splash,
+    this.splashDelay,
     this.textColor,
     this.backgroundColor,
+    this.extraArgs,
   );
 }

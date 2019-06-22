@@ -28,6 +28,8 @@ final config = CryptoConfig
   'wownerod',
   'wownerod',
   'Follow the white rabbit.',
-   Colors.green.withOpacity(1.0),
-   Colors.black,
+  70,
+  Colors.green.withOpacity(1.0),
+  Colors.black,
+  [],
 );

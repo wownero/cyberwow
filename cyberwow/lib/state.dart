@@ -92,7 +92,7 @@ class LoadingState extends HookedState {
 
       for (String char in chars) {
         append(char);
-        await Future.delayed(const Duration(milliseconds: 70), () => "1");
+        await Future.delayed(Duration(milliseconds: config.splashDelay), () => "1");
       }
 
       await Future.delayed(const Duration(seconds: 2), () => "1");

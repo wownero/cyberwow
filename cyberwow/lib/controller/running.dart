@@ -56,7 +56,7 @@ Stream<String> runBinary (String name) async* {
     "--data-dir",
     binDir.path,
     "--non-interactive",
-  ] + extraArgs;
+  ] + extraArgs + config.extraArgs;
 
   print('args: ' + args.toString());
 
