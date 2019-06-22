@@ -19,6 +19,8 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+import 'package:flutter/material.dart';
+
 import 'prototype.dart';
 
 final config = CryptoConfig
@@ -26,4 +28,6 @@ final config = CryptoConfig
   'wownerod',
   'wownerod',
   'Follow the white rabbit.',
+   Colors.green.withOpacity(1.0),
+   Colors.black,
 );

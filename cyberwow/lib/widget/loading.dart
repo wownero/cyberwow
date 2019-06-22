@@ -22,6 +22,7 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 
 import '../state.dart';
+import '../config.dart';
 
 Widget buildLoading(BuildContext context, LoadingState state) {
   return Scaffold(
@@ -32,7 +33,7 @@ Widget buildLoading(BuildContext context, LoadingState state) {
     body: new Container
     (
       padding: const EdgeInsets.all(10.0),
-      color: Colors.black,
+      color: config.backgroundColor,
       child: Align
       (
         alignment: Alignment.topLeft,
@@ -54,7 +55,7 @@ Widget buildLoading(BuildContext context, LoadingState state) {
                     fontFamily: 'RobotoMono',
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green.withOpacity(1.0),
+                    color: config.textColor,
                   ),
                 )
               )

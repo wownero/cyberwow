@@ -19,14 +19,20 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+import 'package:flutter/material.dart';
+
 class CryptoConfig {
   final String outputBin;
   final String appPath;
   final String splash;
+  final Color textColor;
+  final Color backgroundColor;
   CryptoConfig
   (
     this.outputBin,
     this.appPath,
     this.splash,
+    this.textColor,
+    this.backgroundColor,
   );
 }
