@@ -19,10 +19,10 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-import 'config/prototype.dart';
-import 'config/cyberwow.dart' as cryptoConfig;
+import 'prototype.dart';
 
-final config = cryptoConfig.config;
-
-const arch = 'arm64';
-// const arch = 'x86_64';
+final config = CryptoConfig
+(
+  'wownerod',
+  'wownerod',
+);

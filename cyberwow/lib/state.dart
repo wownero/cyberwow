@@ -106,7 +106,7 @@ class LoadingState extends HookedState {
       }
     }
 
-    final outputBinExists = await binaryExists(outputBin);
+    final outputBinExists = await binaryExists(config.outputBin);
     if (outputBinExists) {
       await load();
     }

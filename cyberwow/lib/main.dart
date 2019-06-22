@@ -80,8 +80,8 @@ class _MyHomePageState extends State<MyHomePage>
     const loadingText = "Follow the white rabbit.";
     LoadingState _loadingState = await _blankState.next(loadingText);
 
-    const binName = outputBin;
-    const resourcePath = 'native/output/' + arch + '/' + binName;
+    final binName = config.outputBin;
+    final resourcePath = 'native/output/' + arch + '/' + binName;
     final bundle = DefaultAssetBundle.of(context);
     final loading = deployBinary(bundle, resourcePath, binName);
 

@@ -34,7 +34,7 @@ Stream<String> runBinary (String name) async* {
 
   final appDocDir = await getApplicationDocumentsDirectory();
   final appDocPath = appDocDir.path;
-  final binDir = new Directory(appDocDir.path + "/" + appPath);
+  final binDir = new Directory(appDocDir.path + "/" + config.appPath);
 
   await binDir.create();
 
