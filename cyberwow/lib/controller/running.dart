@@ -39,12 +39,10 @@ Stream<String> runBinary (String name) async* {
   await binDir.create();
 
   // print('binDir: ' + binDir.path);
-  const debugArgs =
+  const List<String> debugArgs =
   [
-    "--add-exclusive-node",
-    "192.168.10.100",
   ];
-  const releaseArgs =
+  const List<String> releaseArgs =
   [
     "--restricted-rpc"
   ];
