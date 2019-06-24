@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp
     (
-      title: 'Flutter Demo',
+      title: 'CyberWOW',
       theme: ThemeData
       (
         primarySwatch: Colors.purple,
