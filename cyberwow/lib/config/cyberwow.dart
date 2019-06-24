@@ -31,5 +31,5 @@ final config = CryptoConfig
   70,
   Colors.green.withOpacity(1.0),
   Colors.black,
-  [],
+  ['--prune-blockchain'],
 );
