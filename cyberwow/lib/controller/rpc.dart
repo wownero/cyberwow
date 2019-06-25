@@ -52,7 +52,7 @@ Future<http.Response> rpc(String method) async {
     );
   }
   catch (e) {
-    print(e);
+    // print(e);
   }
 
   return response;

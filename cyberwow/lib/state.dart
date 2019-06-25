@@ -156,12 +156,14 @@ class SyncingState extends HookedState {
 
       // final _offline = await rpc.offline();
       // print('syncing: offline ${_offline}');
+
       final bool initState = line.contains('Initializing core');
       if (initState)
         print('is init state');
       if (_targetHeight == 0 && (!initState) && _height > minimumHeight) break;
     }
 
+    print('syncing: loop exit');
 
     SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
     _next.height = await rpc.height();
