@@ -21,10 +21,8 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:convert';
 
 import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 Future<String> getBinaryPath(String name) async {
@@ -37,36 +35,3 @@ Future<bool> binaryExists(String name) async {
   return new File(binPath).exists();
 }
 
-Future<int> targetHeight() async {
-  var url = '';
-  if (kReleaseMode) {
-    url = 'http://127.0.0.1:34568/json_rpc';
-  } else {
-    url = 'http://192.168.10.100:34568/json_rpc';
-  }
-
-  final body = json.encode
-  (
-    {
-      'jsonrpc': '2.0',
-      'id': '0',
-      'method': 'sync_info',
-    }
-  );
-
-  var response = await http.post
-  ( url,
-    body: body
-  );
-
-  // print('Response status: ${response.statusCode}');
-  if (response.statusCode != 200) {
-    return -1;
-  } else {
-    final responseBody = json.decode(response.body)['result'];
-    final targetHeight = responseBody["target_height"];
-    // print('height: ${responseBody["height"]}');
-
-    return targetHeight;
-  }
-}

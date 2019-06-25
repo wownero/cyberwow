@@ -45,7 +45,7 @@ Widget buildSynced(BuildContext context, SyncedState state) {
               (
                 child: Text
                 (
-                  'Synced',
+                  '${state.height}',
                   style: TextStyle
                   (
                     fontFamily: 'RobotoMono',

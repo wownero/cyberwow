@@ -29,6 +29,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'controller/helper.dart';
+import 'controller/rpc.dart' as rpc;
 import 'config.dart';
 
 abstract class AppState {
@@ -145,13 +146,14 @@ class SyncingState extends HookedState {
       append(line);
       print(line);
 
-      final _targetHeight = await targetHeight();
+      final _targetHeight = await rpc.targetHeight();
 
       if (_targetHeight == 0) break;
     }
 
 
     SyncedState _next = SyncedState(setState, stdout, processOutput);
+    _next.height = await rpc.height();
     setState(_next);
     return _next;
   }
@@ -159,6 +161,7 @@ class SyncingState extends HookedState {
 
 class SyncedState extends HookedState {
   String stdout;
+  int height;
   Stream<String> processOutput;
 
   SyncedState(f, this.stdout, this.processOutput) : super (f);
@@ -167,8 +170,9 @@ class SyncedState extends HookedState {
     print("Synced next");
 
     while (true) {
-      final _targetHeight = await targetHeight();
+      final _targetHeight = await rpc.targetHeight();
       if (_targetHeight != 0) break;
+      height = await rpc.height();
 
       await Future.delayed(const Duration(seconds: 2), () => "1");
     }
@@ -201,14 +205,14 @@ class ReSyncingState extends HookedState {
       append(line);
       print(line);
 
-      final _targetHeight = await targetHeight();
+      final _targetHeight = await rpc.targetHeight();
 
       if (_targetHeight == 0) break;
     }
 
     print('resync: await exit');
-
     SyncedState _next = SyncedState(setState, stdout, processOutput);
+    _next.height = await rpc.height();
     setState(_next);
     return _next;
   }
