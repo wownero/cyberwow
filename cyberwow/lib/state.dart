@@ -36,7 +36,7 @@ abstract class AppState {
   (
     T Function(BlankState) useBlankState,
     T Function(LoadingState) useLoadingState,
-    T Function(RunningState) useRunningState,
+    T Function(SyncingState) useSyncingState,
     T Function(SyncedState) useSyncedState,
   )
   {
@@ -46,8 +46,8 @@ abstract class AppState {
     if (this is LoadingState) {
       return useLoadingState(this);
     }
-    if (this is RunningState) {
-      return useRunningState(this);
+    if (this is SyncingState) {
+      return useSyncingState(this);
     }
     if (this is SyncedState) {
       return useSyncedState(this);
@@ -86,7 +86,7 @@ class LoadingState extends HookedState {
   }
 
 
-  Future<RunningState> next(Stream<String> loadingProgress, String status) async {
+  Future<SyncingState> next(Stream<String> loadingProgress, String status) async {
     Future<void> showBanner() async {
       var chars = [];
       banner.runes.forEach((int rune) {
@@ -118,16 +118,16 @@ class LoadingState extends HookedState {
       await Future.wait([load(), showBanner()]);
     }
 
-    RunningState _next = RunningState(setState, status);
+    SyncingState _next = SyncingState(setState, status);
     setState(_next);
     return _next;
   }
 }
 
-class RunningState extends HookedState {
+class SyncingState extends HookedState {
   String status;
 
-  RunningState(f, this.status) : super (f);
+  SyncingState(f, this.status) : super (f);
 
   void append(String msg) {
     this.status += msg;
@@ -135,7 +135,7 @@ class RunningState extends HookedState {
   }
 
   Future<SyncedState> next(Stream<String> processOutput) async {
-    print("RunningState.next");
+    print("SyncingState.next");
 
     await for (var line in processOutput) {
       append(line);

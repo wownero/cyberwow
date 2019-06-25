@@ -28,10 +28,10 @@ import 'dart:async';
 import 'state.dart';
 import 'config.dart';
 import 'controller/loading.dart';
-import 'controller/running.dart';
+import 'controller/syncing.dart';
 import 'widget/loading.dart';
 import 'widget/blank.dart';
-import 'widget/running.dart';
+import 'widget/syncing.dart';
 import 'widget/synced.dart';
 
 void main() => runApp(MyApp());
@@ -86,10 +86,10 @@ class _MyHomePageState extends State<MyHomePage>
     final bundle = DefaultAssetBundle.of(context);
     final loading = deployBinary(bundle, resourcePath, binName);
 
-    RunningState _runningState = await _loadingState.next(loading, '');
+    SyncingState _syncingState = await _loadingState.next(loading, '');
 
-    final running = runBinary(binName);
-    SyncedState _syncedState = await _runningState.next(running);
+    final syncing = runBinary(binName);
+    SyncedState _syncedState = await _syncingState.next(syncing);
 
     await _syncedState.next();
   }
@@ -121,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage>
       (
         (s) => buildBlank(context, s),
         (s) => buildLoading(context, s),
-        (s) => buildRunning(context, s),
+        (s) => buildSyncing(context, s),
         (s) => buildSynced(context, s),
       ),
     );
