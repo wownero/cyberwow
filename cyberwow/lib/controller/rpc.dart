@@ -111,3 +111,17 @@ Future<bool> offline() async {
     return responseBody["offline"];
   }
 }
+
+Future<int> outgoing_connections_count() async {
+  var response = await getInfo();
+
+  if (response == null) return -1;
+
+  // print('Response status: ${response.statusCode}');
+  if (response.statusCode != 200) {
+    return -1;
+  } else {
+    final responseBody = json.decode(response.body)['result'];
+    return responseBody["outgoing_connections_count"];
+  }
+}
