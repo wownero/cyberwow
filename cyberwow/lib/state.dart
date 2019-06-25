@@ -160,15 +160,16 @@ class SyncingState extends HookedState {
         print('syncing: target height ${_targetHeight}');
 
         final _height = await rpc.height();
-        print('syncing: height ${_height}');
+        // print('syncing: height ${_height}');
 
         // final _offline = await rpc.offline();
         // print('syncing: offline ${_offline}');
 
         final _out_peers = await rpc.outgoing_connections_count();
-        print('syncing: out_peers ${_out_peers}');
+        // print('syncing: out_peers ${_out_peers}');
 
-        if (_targetHeight == 0 && _out_peers > 0) {
+        // here doc is wrong, targetHeight could match height when synced
+        if ((_targetHeight == 0 || _targetHeight == _height) && _out_peers > 0) {
           synced = true;
           break;
         }
@@ -218,7 +219,12 @@ class SyncedState extends HookedState {
     logStdout();
 
     await for (var _targetHeight in refresh.targetHeight(getNotification)) {
-      if (_targetHeight > 0) {
+      // print('re-sync: target height ${_targetHeight}');
+
+      final _height = await rpc.height();
+      // print('re-sync: height ${_height}');
+
+      if (_targetHeight > 0 && _targetHeight != _height) {
         synced = false;
         break;
       }
@@ -263,7 +269,12 @@ class ReSyncingState extends HookedState {
 
     Future<void> checkSync() async {
       await for (var _targetHeight in refresh.targetHeight(getNotification)) {
-        if (_targetHeight == 0) {
+        // print('re-sync: target height ${_targetHeight}');
+
+        final _height = await rpc.height();
+        // print('re-sync: height ${_height}');
+
+        if (_targetHeight == 0 || _targetHeight == _height) {
           synced = true;
           break;
         }
