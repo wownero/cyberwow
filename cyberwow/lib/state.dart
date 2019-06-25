@@ -208,10 +208,9 @@ class ReSyncingState extends HookedState {
 
     Future<void> printStdout() async {
       await for (var line in processOutput) {
+        if (synced) break;
         append(line);
         print(line);
-
-        if (synced) break;
       }
     }
 
