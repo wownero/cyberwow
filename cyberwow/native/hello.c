@@ -13,7 +13,7 @@ int main()
     i++;
     sleep(1);
 
-    /* if (i > 3) break; */
+    if (i > 3) break;
   }
   return 0;
 }
