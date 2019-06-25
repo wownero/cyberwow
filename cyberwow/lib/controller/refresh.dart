@@ -28,7 +28,7 @@ typedef GetNotificationFunc = AppLifecycleState Function();
 Stream<int> targetHeight(GetNotificationFunc getNotification) async* {
   while (true) {
     final _appState = getNotification();
-    print('refresh targetHeight: app state: ${_appState}');
+    // print('refresh targetHeight: app state: ${_appState}');
 
     if (_appState == AppLifecycleState.resumed) {
       final _targetHeight = await rpc.targetHeight();

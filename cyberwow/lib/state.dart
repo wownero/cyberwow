@@ -151,13 +151,14 @@ class SyncingState extends HookedState {
 
       final _targetHeight = await rpc.targetHeight();
       // final _height = await rpc.height();
-      print('syncing: target height ${_targetHeight}');
+      // print('syncing: target height ${_targetHeight}');
       // print('syncing: height ${_height}');
 
       // final _offline = await rpc.offline();
       // print('syncing: offline ${_offline}');
-
-      if (_targetHeight == 0) break;
+      final bool initState = line.contains('Initializing core');
+      print('is init state');
+      if (_targetHeight == 0 && (!initState)) break;
     }
 
 
@@ -172,17 +173,43 @@ class SyncedState extends HookedState {
   String stdout;
   int height;
   Stream<String> processOutput;
+  bool synced = true;
 
   SyncedState(f, s, this.stdout, this.processOutput) : super (f, s);
+
+  void updateHeight(int h) {
+    if (height != h) {
+      height = h;
+      setState(this);
+    }
+  }
 
   Future<ReSyncingState> next() async {
     print("Synced next");
 
-    await for (var _targetHeight in refresh.targetHeight(getNotification)) {
-      if (_targetHeight > 0) break;
+    Future<void> logStdout() async {
+      await for (var line in processOutput) {
+        if (!synced) break;
+        // print('synced: print stdout loop');
+        stdout += line;
+        print(line);
+      }
     }
 
-    // print('synced: loop exit');
+    logStdout();
+
+    await for (var _targetHeight in refresh.targetHeight(getNotification)) {
+      if (_targetHeight > 0) {
+        synced = false;
+        break;
+      }
+      // print('synced loop');
+      updateHeight(await rpc.height());
+      // print('synced: targetheight: ${_targetHeight}');
+      // print('synced: height: ${height}');
+    }
+
+    print('synced: loop exit');
 
     ReSyncingState _next = ReSyncingState(setState, getNotification, stdout, processOutput);
     setState(_next);
@@ -209,6 +236,7 @@ class ReSyncingState extends HookedState {
     Future<void> printStdout() async {
       await for (var line in processOutput) {
         if (synced) break;
+        // print('re-syncing: print stdout loop');
         append(line);
         print(line);
       }
@@ -220,6 +248,7 @@ class ReSyncingState extends HookedState {
           synced = true;
           break;
         }
+        // print('re-syncing: checkSync loop');
       }
     }
 
