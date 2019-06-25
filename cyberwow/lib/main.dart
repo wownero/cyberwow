@@ -33,6 +33,7 @@ import 'widget/loading.dart';
 import 'widget/blank.dart';
 import 'widget/syncing.dart';
 import 'widget/synced.dart';
+import 'widget/resyncing.dart';
 
 void main() => runApp(MyApp());
 
@@ -73,6 +74,11 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 
+  AppState _getState() {
+    return _state;
+  }
+
+
   void _updateLoading(LoadingState state, String msg) {
     print('updateLoading: ' + msg);
   }
@@ -88,10 +94,21 @@ class _MyHomePageState extends State<MyHomePage>
 
     SyncingState _syncingState = await _loadingState.next(loading, '');
 
-    final syncing = runBinary(binName);
-    SyncedState _syncedState = await _syncingState.next(syncing);
+    final syncing = runBinary(binName).asBroadcastStream();
 
+    SyncedState _syncedState = await _syncingState.next(syncing);
     await _syncedState.next();
+
+    while (true) {
+      await _getState().use
+      (
+        (s) => () => 0,
+        (s) => () => 0,
+        (s) => () => 0,
+        (s) => s.next(),
+        (s) => s.next(),
+      );
+    }
   }
 
   @override
@@ -123,6 +140,7 @@ class _MyHomePageState extends State<MyHomePage>
         (s) => buildLoading(context, s),
         (s) => buildSyncing(context, s),
         (s) => buildSynced(context, s),
+        (s) => buildReSyncing(context, s),
       ),
     );
   }

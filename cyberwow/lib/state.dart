@@ -38,6 +38,7 @@ abstract class AppState {
     T Function(LoadingState) useLoadingState,
     T Function(SyncingState) useSyncingState,
     T Function(SyncedState) useSyncedState,
+    T Function(ReSyncingState) useReSyncingState,
   )
   {
     if (this is BlankState) {
@@ -51,6 +52,9 @@ abstract class AppState {
     }
     if (this is SyncedState) {
       return useSyncedState(this);
+    }
+    if (this is ReSyncingState) {
+      return useReSyncingState(this);
     }
     throw Exception('Invalid state');
   }
@@ -103,7 +107,7 @@ class LoadingState extends HookedState {
     }
 
     Future<void> load() async {
-      print("LoadingState.next");
+      print("Loading next");
       await for (var line in loadingProgress) {
         // append(line);
         print(line);
@@ -125,48 +129,87 @@ class LoadingState extends HookedState {
 }
 
 class SyncingState extends HookedState {
-  String status;
+  String stdout;
 
-  SyncingState(f, this.status) : super (f);
+  SyncingState(f, this.stdout) : super (f);
 
   void append(String msg) {
-    this.status += msg;
+    this.stdout += msg;
     setState(this);
   }
 
   Future<SyncedState> next(Stream<String> processOutput) async {
-    print("SyncingState.next");
+    print("Syncing next");
 
     await for (var line in processOutput) {
       append(line);
       print(line);
-      // print('hi');
 
       final _targetHeight = await targetHeight();
-      print('target_height: ${_targetHeight}');
 
       if (_targetHeight == 0) break;
     }
 
-    SyncedState _next = SyncedState(setState, processOutput);
+
+    SyncedState _next = SyncedState(setState, stdout, processOutput);
     setState(_next);
     return _next;
   }
 }
 
 class SyncedState extends HookedState {
+  String stdout;
   Stream<String> processOutput;
 
-  SyncedState(f, this.processOutput) : super (f);
+  SyncedState(f, this.stdout, this.processOutput) : super (f);
 
-  Future<void> next() async {
-    print("SyncedState.next");
+  Future<ReSyncingState> next() async {
+    print("Synced next");
 
     while (true) {
       final _targetHeight = await targetHeight();
-      print('target_height: ${_targetHeight}');
+      if (_targetHeight != 0) break;
 
       await Future.delayed(const Duration(seconds: 2), () => "1");
     }
+
+    // print('synced: loop exit');
+
+
+    ReSyncingState _next = ReSyncingState(setState, stdout, processOutput);
+    setState(_next);
+    return _next;
+  }
+}
+
+
+class ReSyncingState extends HookedState {
+  String stdout;
+  Stream<String> processOutput;
+
+  ReSyncingState(f, this.stdout, this.processOutput) : super (f);
+
+  void append(String msg) {
+    this.stdout += msg;
+    setState(this);
+  }
+
+  Future<SyncedState> next() async {
+    print("ReSyncing next");
+
+    await for (var line in processOutput) {
+      append(line);
+      print(line);
+
+      final _targetHeight = await targetHeight();
+
+      if (_targetHeight == 0) break;
+    }
+
+    print('resync: await exit');
+
+    SyncedState _next = SyncedState(setState, stdout, processOutput);
+    setState(_next);
+    return _next;
   }
 }
