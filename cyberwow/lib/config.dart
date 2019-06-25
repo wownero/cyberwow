@@ -26,3 +26,4 @@ const config = cryptoConfig.config;
 
 const arch = 'arm64';
 // const arch = 'x86_64';
+const minimumHeight = 10000;

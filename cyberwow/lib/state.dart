@@ -147,8 +147,9 @@ class SyncingState extends HookedState {
       print(line);
 
       final _targetHeight = await rpc.targetHeight();
+      final _height = await rpc.height();
 
-      if (_targetHeight == 0) break;
+      if (_targetHeight == 0 && _height > minimumHeight) break;
     }
 
 
