@@ -59,6 +59,7 @@ Future<http.Response> rpc(String method) async {
 }
 
 Future<http.Response> syncInfo() async {
+  print('rpc sync_info');
   return rpc('sync_info');
 }
 

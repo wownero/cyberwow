@@ -60,18 +60,35 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver
 {
   int _counter = 0;
   // AppState _state = LoadingState("init...");
 
   AppState _state;
+  AppLifecycleState _notification = AppLifecycleState.resumed;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // print('app cycle: ${state}');
+    setState(() { _notification = state; });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   void _setState(AppState newState) {
     setState
     (
       () => _state = newState
     );
+  }
+
+  AppLifecycleState _getNotification() {
+    return _notification;
   }
 
   AppState _getState() {
@@ -117,9 +134,11 @@ class _MyHomePageState extends State<MyHomePage>
     super.initState();
     print("MyHomePageState initState");
 
+    WidgetsBinding.instance.addObserver(this);
+
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
 
-    BlankState _blankState = BlankState(_setState);
+    BlankState _blankState = BlankState(_setState, _getNotification);
     _state = _blankState;
 
     buildStateMachine(_blankState);

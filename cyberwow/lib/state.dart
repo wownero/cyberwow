@@ -62,17 +62,19 @@ abstract class AppState {
 }
 
 typedef SetStateFunc = void Function(AppState);
+typedef GetNotificationFunc = AppLifecycleState Function();
 
 class HookedState extends AppState {
   final SetStateFunc setState;
-  HookedState(this.setState);
+  final GetNotificationFunc getNotification;
+  HookedState(this.setState, this.getNotification);
 }
 
 class BlankState extends HookedState {
-  BlankState(f) : super (f);
+  BlankState(f, s) : super (f, s);
 
   Future<LoadingState> next(String status) async {
-    LoadingState _next = LoadingState(setState, status);
+    LoadingState _next = LoadingState(setState, getNotification, status);
 
     setState(_next);
     return _next;
@@ -83,7 +85,7 @@ class LoadingState extends HookedState {
   String banner;
   String status = '';
 
-  LoadingState(f, this.banner) : super (f);
+  LoadingState(f, s, this.banner) : super (f, s);
 
   void append(String msg) {
     this.status += msg;
@@ -123,7 +125,7 @@ class LoadingState extends HookedState {
       await Future.wait([load(), showBanner()]);
     }
 
-    SyncingState _next = SyncingState(setState, status);
+    SyncingState _next = SyncingState(setState, getNotification, status);
     setState(_next);
     return _next;
   }
@@ -132,7 +134,7 @@ class LoadingState extends HookedState {
 class SyncingState extends HookedState {
   String stdout;
 
-  SyncingState(f, this.stdout) : super (f);
+  SyncingState(f, s, this.stdout) : super (f, s);
 
   void append(String msg) {
     this.stdout += msg;
@@ -148,12 +150,14 @@ class SyncingState extends HookedState {
 
       final _targetHeight = await rpc.targetHeight();
       final _height = await rpc.height();
+      print('syncing: target height ${_targetHeight}');
+      print('syncing: height ${_height}');
 
       if (_targetHeight == 0 && _height > minimumHeight) break;
     }
 
 
-    SyncedState _next = SyncedState(setState, stdout, processOutput);
+    SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
     _next.height = await rpc.height();
     setState(_next);
     return _next;
@@ -165,23 +169,24 @@ class SyncedState extends HookedState {
   int height;
   Stream<String> processOutput;
 
-  SyncedState(f, this.stdout, this.processOutput) : super (f);
+  SyncedState(f, s, this.stdout, this.processOutput) : super (f, s);
 
   Future<ReSyncingState> next() async {
     print("Synced next");
 
     while (true) {
-      final _targetHeight = await rpc.targetHeight();
-      if (_targetHeight > 0) break;
-      height = await rpc.height();
+      if (getNotification() == AppLifecycleState.resumed) {
+        final _targetHeight = await rpc.targetHeight();
+        if (_targetHeight > 0) break;
+        height = await rpc.height();
+      }
 
       await Future.delayed(const Duration(seconds: 2), () => "1");
     }
 
     // print('synced: loop exit');
 
-
-    ReSyncingState _next = ReSyncingState(setState, stdout, processOutput);
+    ReSyncingState _next = ReSyncingState(setState, getNotification, stdout, processOutput);
     setState(_next);
     return _next;
   }
@@ -192,7 +197,7 @@ class ReSyncingState extends HookedState {
   String stdout;
   Stream<String> processOutput;
 
-  ReSyncingState(f, this.stdout, this.processOutput) : super (f);
+  ReSyncingState(f, s, this.stdout, this.processOutput) : super (f, s);
 
   void append(String msg) {
     this.stdout += msg;
@@ -212,7 +217,7 @@ class ReSyncingState extends HookedState {
     }
 
     print('resync: await exit');
-    SyncedState _next = SyncedState(setState, stdout, processOutput);
+    SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
     _next.height = await rpc.height();
     setState(_next);
     return _next;
