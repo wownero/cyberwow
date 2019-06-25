@@ -11,6 +11,10 @@ run:
 c:
 	clang -target x86_64-linux-android21 cyberwow/native/hello.c -o cyberwow/native/output/x86_64/wownerod
 
+build-c: c
+	cd cyberwow && \
+	flutter clean
+
 push:
 	adb push cyberwow/native/output/hello /data/local/tmp
 
