@@ -37,6 +37,7 @@ abstract class AppState {
     T Function(BlankState) useBlankState,
     T Function(LoadingState) useLoadingState,
     T Function(RunningState) useRunningState,
+    T Function(SyncedState) useSyncedState,
   )
   {
     if (this is BlankState) {
@@ -47,6 +48,9 @@ abstract class AppState {
     }
     if (this is RunningState) {
       return useRunningState(this);
+    }
+    if (this is SyncedState) {
+      return useSyncedState(this);
     }
     throw Exception('Invalid state');
   }
@@ -130,12 +134,39 @@ class RunningState extends HookedState {
     setState(this);
   }
 
-  Future<void> next(Stream<String> runningOutput) async {
+  Future<SyncedState> next(Stream<String> processOutput) async {
     print("RunningState.next");
 
-    await for (var line in runningOutput) {
+    await for (var line in processOutput) {
       append(line);
       print(line);
+      // print('hi');
+
+      final _targetHeight = await targetHeight();
+      print('target_height: ${_targetHeight}');
+
+      if (_targetHeight == 0) break;
+    }
+
+    SyncedState _next = SyncedState(setState, processOutput);
+    setState(_next);
+    return _next;
+  }
+}
+
+class SyncedState extends HookedState {
+  Stream<String> processOutput;
+
+  SyncedState(f, this.processOutput) : super (f);
+
+  Future<void> next() async {
+    print("SyncedState.next");
+
+    while (true) {
+      final _targetHeight = await targetHeight();
+      print('target_height: ${_targetHeight}');
+
+      await Future.delayed(const Duration(seconds: 2), () => "1");
     }
   }
 }

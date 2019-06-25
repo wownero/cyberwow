@@ -32,6 +32,7 @@ import 'controller/running.dart';
 import 'widget/loading.dart';
 import 'widget/blank.dart';
 import 'widget/running.dart';
+import 'widget/synced.dart';
 
 void main() => runApp(MyApp());
 
@@ -88,7 +89,9 @@ class _MyHomePageState extends State<MyHomePage>
     RunningState _runningState = await _loadingState.next(loading, '');
 
     final running = runBinary(binName);
-    await _runningState.next(running);
+    SyncedState _syncedState = await _runningState.next(running);
+
+    await _syncedState.next();
   }
 
   @override
@@ -119,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage>
         (s) => buildBlank(context, s),
         (s) => buildLoading(context, s),
         (s) => buildRunning(context, s),
+        (s) => buildSynced(context, s),
       ),
     );
   }
