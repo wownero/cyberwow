@@ -26,18 +26,25 @@ import '../config.dart';
 
 Widget buildSynced(BuildContext context, SyncedState state) {
   return Scaffold(
+
     body: new Container
     (
       padding: const EdgeInsets.all(10.0),
       color: config.backgroundColor,
       child: Align
       (
-        alignment: Alignment.topLeft,
+        alignment: Alignment.center,
         child: Column
         (
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>
           [
+            Spacer(),
+            Image.asset
+            ('assets/wownero_symbol.png',
+              height: 200,
+            ),
+            Spacer(),
             new Expanded
             (
               flex: 1,
@@ -45,7 +52,7 @@ Widget buildSynced(BuildContext context, SyncedState state) {
               (
                 child: Text
                 (
-                  'Synced: ${state.height}',
+                  '${state.height}',
                   style: TextStyle
                   (
                     fontFamily: 'RobotoMono',
@@ -55,7 +62,7 @@ Widget buildSynced(BuildContext context, SyncedState state) {
                   ),
                 )
               )
-            )
+            ),
           ],
         ),
       ),
