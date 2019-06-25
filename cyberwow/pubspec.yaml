@@ -46,6 +46,7 @@ flutter:
   assets:
    - native/output/x86_64/wownerod
    - native/output/arm64/wownerod
+   - assets/wownero_symbol.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
