@@ -9,7 +9,7 @@ run:
 
 # clang -target aarch64-linux-android21 cyberwow/native/hello.c -o cyberwow/native/output/hello
 c:
-	clang -target x86_64-linux-android21 cyberwow/native/hello.c -o cyberwow/native/output/hello
+	clang -target x86_64-linux-android21 cyberwow/native/hello.c -o cyberwow/native/output/x86_64/wownerod
 
 push:
 	adb push cyberwow/native/output/hello /data/local/tmp
