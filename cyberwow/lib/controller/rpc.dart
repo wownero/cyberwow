@@ -90,3 +90,24 @@ Future<int> height() async {
     return responseBody["height"];
   }
 }
+
+
+
+Future<http.Response> getInfo() async {
+  print('rpc get_info');
+  return rpc('get_info');
+}
+
+Future<bool> offline() async {
+  var response = await getInfo();
+
+  if (response == null) return true;
+
+  // print('Response status: ${response.statusCode}');
+  if (response.statusCode != 200) {
+    return true;
+  } else {
+    final responseBody = json.decode(response.body)['result'];
+    return responseBody["offline"];
+  }
+}

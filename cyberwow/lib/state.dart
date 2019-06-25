@@ -151,7 +151,10 @@ class SyncingState extends HookedState {
       final _targetHeight = await rpc.targetHeight();
       final _height = await rpc.height();
       print('syncing: target height ${_targetHeight}');
-      print('syncing: height ${_height}');
+      // print('syncing: height ${_height}');
+
+      // final _offline = await rpc.offline();
+      // print('syncing: offline ${_offline}');
 
       if (_targetHeight == 0 && _height > minimumHeight) break;
     }
@@ -175,7 +178,10 @@ class SyncedState extends HookedState {
     print("Synced next");
 
     while (true) {
-      if (getNotification() == AppLifecycleState.resumed) {
+      final _appState = getNotification();
+      // print('synced: app state: ${_appState}');
+
+      if (_appState == AppLifecycleState.resumed) {
         final _targetHeight = await rpc.targetHeight();
         if (_targetHeight > 0) break;
         height = await rpc.height();
@@ -212,7 +218,6 @@ class ReSyncingState extends HookedState {
       print(line);
 
       final _targetHeight = await rpc.targetHeight();
-
       if (_targetHeight == 0) break;
     }
 
