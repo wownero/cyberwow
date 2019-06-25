@@ -178,17 +178,8 @@ class SyncedState extends HookedState {
   Future<ReSyncingState> next() async {
     print("Synced next");
 
-    while (true) {
-      final _appState = getNotification();
-      // print('synced: app state: ${_appState}');
-
-      if (_appState == AppLifecycleState.resumed) {
-        final _targetHeight = await rpc.targetHeight();
-        if (_targetHeight > 0) break;
-        height = await rpc.height();
-      }
-
-      await Future.delayed(const Duration(seconds: 2), () => "1");
+    await for (var _targetHeight in refresh.targetHeight(getNotification)) {
+      if (_targetHeight > 0) break;
     }
 
     // print('synced: loop exit');

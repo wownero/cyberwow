@@ -32,7 +32,7 @@ Stream<int> targetHeight(GetNotificationFunc getNotification) async* {
 
     if (_appState == AppLifecycleState.resumed) {
       final _targetHeight = await rpc.targetHeight();
-      yield _targetHeight
+      yield _targetHeight;
     }
 
     await Future.delayed(const Duration(seconds: 2), () => "1");
