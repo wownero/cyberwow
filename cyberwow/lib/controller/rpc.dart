@@ -30,8 +30,10 @@ Future<http.Response> rpc(String method) async {
   if (kReleaseMode) {
     url = 'http://127.0.0.1:34568/json_rpc';
   } else {
-    url = 'http://192.168.10.100:34568/json_rpc';
+    url = 'http://192.168.10.101:34568/json_rpc';
   }
+
+  url = 'http://127.0.0.1:34568/json_rpc';
 
   final body = json.encode
   (
@@ -42,10 +44,16 @@ Future<http.Response> rpc(String method) async {
     }
   );
 
-  var response = await http.post
-  ( url,
-    body: body
-  );
+  var response;
+  try {
+    response = await http.post
+    ( url,
+      body: body
+    );
+  }
+  catch (e) {
+    print(e);
+  }
 
   return response;
 }
@@ -56,6 +64,8 @@ Future<http.Response> syncInfo() async {
 
 Future<int> targetHeight() async {
   var response = await syncInfo();
+
+  if (response == null) return -1;
 
   // print('Response status: ${response.statusCode}');
   if (response.statusCode != 200) {
@@ -68,6 +78,8 @@ Future<int> targetHeight() async {
 
 Future<int> height() async {
   var response = await syncInfo();
+
+  if (response == null) return -1;
 
   // print('Response status: ${response.statusCode}');
   if (response.statusCode != 200) {

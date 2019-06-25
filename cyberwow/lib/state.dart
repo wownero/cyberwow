@@ -171,7 +171,7 @@ class SyncedState extends HookedState {
 
     while (true) {
       final _targetHeight = await rpc.targetHeight();
-      if (_targetHeight != 0) break;
+      if (_targetHeight > 0) break;
       height = await rpc.height();
 
       await Future.delayed(const Duration(seconds: 2), () => "1");
