@@ -22,7 +22,7 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 import 'config/prototype.dart';
 import 'config/cyberwow.dart' as cryptoConfig;
 
-final config = cryptoConfig.config;
+const config = cryptoConfig.config;
 
 const arch = 'arm64';
 // const arch = 'x86_64';

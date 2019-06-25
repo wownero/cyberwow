@@ -29,7 +29,7 @@ class CryptoConfig {
   final Color textColor;
   final Color backgroundColor;
   final List<String> extraArgs;
-  CryptoConfig
+  const CryptoConfig
   (
     this.outputBin,
     this.appPath,

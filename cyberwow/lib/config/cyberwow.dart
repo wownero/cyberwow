@@ -23,13 +23,13 @@ import 'package:flutter/material.dart';
 
 import 'prototype.dart';
 
-final config = CryptoConfig
+const config = CryptoConfig
 (
   'wownerod',
   'wownerod',
   'Follow the white rabbit.',
   70,
-  Colors.green.withOpacity(1.0),
+  Colors.green,
   Colors.black,
   ['--prune-blockchain'],
 );
