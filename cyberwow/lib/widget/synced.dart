@@ -56,7 +56,7 @@ Widget buildSynced(BuildContext context, SyncedState state) {
                   style: TextStyle
                   (
                     fontFamily: 'RobotoMono',
-                    fontSize: 17,
+                    fontSize: 40,
                     fontWeight: FontWeight.bold,
                     color: config.textColor,
                   ),
