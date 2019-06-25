@@ -134,6 +134,7 @@ class LoadingState extends HookedState {
 
 class SyncingState extends HookedState {
   String stdout;
+  bool synced = false;
 
   SyncingState(f, s, this.stdout) : super (f, s);
 
@@ -145,23 +146,38 @@ class SyncingState extends HookedState {
   Future<SyncedState> next(Stream<String> processOutput) async {
     print("Syncing next");
 
-    await for (var line in processOutput) {
-      append(line);
-      print(line);
-
-      final _targetHeight = await rpc.targetHeight();
-      final _height = await rpc.height();
-      // print('syncing: target height ${_targetHeight}');
-      // print('syncing: height ${_height}');
-
-      // final _offline = await rpc.offline();
-      // print('syncing: offline ${_offline}');
-
-      final _out_peers = await rpc.outgoing_connections_count();
-      // print('syncing: out_peers ${_out_peers}');
-
-      if (_targetHeight == 0 && _out_peers > 0) break;
+    Future<void> printStdout() async {
+      await for (var line in processOutput) {
+        if (synced) break;
+        // print('syncing: print stdout loop');
+        append(line);
+        print(line);
+      }
     }
+
+    Future<void> checkSync() async {
+      await for (var _targetHeight in refresh.targetHeight(getNotification)) {
+        print('syncing: target height ${_targetHeight}');
+
+        final _height = await rpc.height();
+        print('syncing: height ${_height}');
+
+        // final _offline = await rpc.offline();
+        // print('syncing: offline ${_offline}');
+
+        final _out_peers = await rpc.outgoing_connections_count();
+        print('syncing: out_peers ${_out_peers}');
+
+        if (_targetHeight == 0 && _out_peers > 0) {
+          synced = true;
+          break;
+        }
+        // print('syncing: checkSync loop');
+      }
+    }
+
+    printStdout();
+    await checkSync();
 
     print('syncing: loop exit');
 
