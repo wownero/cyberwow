@@ -30,6 +30,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'controller/helper.dart';
 import 'controller/rpc.dart' as rpc;
+import 'controller/refresh.dart' as refresh;
 import 'config.dart';
 
 abstract class AppState {
@@ -202,6 +203,7 @@ class SyncedState extends HookedState {
 class ReSyncingState extends HookedState {
   String stdout;
   Stream<String> processOutput;
+  bool synced = false;
 
   ReSyncingState(f, s, this.stdout, this.processOutput) : super (f, s);
 
@@ -213,13 +215,26 @@ class ReSyncingState extends HookedState {
   Future<SyncedState> next() async {
     print("ReSyncing next");
 
-    await for (var line in processOutput) {
-      append(line);
-      print(line);
+    Future<void> printStdout() async {
+      await for (var line in processOutput) {
+        append(line);
+        print(line);
 
-      final _targetHeight = await rpc.targetHeight();
-      if (_targetHeight == 0) break;
+        if (synced) break;
+      }
     }
+
+    Future<void> checkSync() async {
+      await for (var _targetHeight in refresh.targetHeight(getNotification)) {
+        if (_targetHeight == 0) {
+          synced = true;
+          break;
+        }
+      }
+    }
+
+    printStdout();
+    await checkSync();
 
     print('resync: await exit');
     SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
