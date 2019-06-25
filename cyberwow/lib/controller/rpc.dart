@@ -59,7 +59,7 @@ Future<http.Response> rpc(String method) async {
 }
 
 Future<http.Response> syncInfo() async {
-  print('rpc sync_info');
+  // print('rpc sync_info');
   return rpc('sync_info');
 }
 
@@ -94,7 +94,7 @@ Future<int> height() async {
 
 
 Future<http.Response> getInfo() async {
-  print('rpc get_info');
+  // print('rpc get_info');
   return rpc('get_info');
 }
 
