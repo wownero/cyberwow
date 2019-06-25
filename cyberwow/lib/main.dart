@@ -99,12 +99,13 @@ class _MyHomePageState extends State<MyHomePage>
     SyncedState _syncedState = await _syncingState.next(syncing);
     await _syncedState.next();
 
-    while (true) {
+    var validState = true;
+    while (validState) {
       await _getState().use
       (
-        (s) => () => 0,
-        (s) => () => 0,
-        (s) => () => 0,
+        (s) => () => validState = false,
+        (s) => () => validState = false,
+        (s) => () => validState = false,
         (s) => s.next(),
         (s) => s.next(),
       );
