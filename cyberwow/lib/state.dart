@@ -228,7 +228,7 @@ class SyncedState extends HookedState {
       final _height = await rpc.height();
       // print('re-sync: height ${_height}');
 
-      if (_targetHeight > 0 && _targetHeight != _height) {
+      if (_targetHeight > _height) {
         synced = false;
         break;
       }
