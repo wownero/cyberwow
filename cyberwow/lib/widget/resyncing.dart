@@ -32,7 +32,7 @@ Widget buildReSyncing(BuildContext context, ReSyncingState state) {
     //   // title: Text(widget.title),
     //   title: Text('CyberWOW'),
     // ),
-    body: new Container
+    body: Container
     (
       // padding: const EdgeInsets.all(10.0),
       color: config.backgroundColor,
@@ -44,10 +44,10 @@ Widget buildReSyncing(BuildContext context, ReSyncingState state) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>
           [
-            new Expanded
+            Expanded
             (
               flex: 1,
-              child: new SingleChildScrollView
+              child: SingleChildScrollView
               (
                 scrollDirection: Axis.vertical,
                 reverse: true,

@@ -27,7 +27,7 @@ import '../config.dart';
 Widget buildSynced(BuildContext context, SyncedState state) {
   return Scaffold(
 
-    body: new Container
+    body: Container
     (
       padding: const EdgeInsets.all(10.0),
       color: config.backgroundColor,
@@ -51,10 +51,10 @@ Widget buildSynced(BuildContext context, SyncedState state) {
             (
               flex: 7,
             ),
-            new Expanded
+            Expanded
             (
               flex: 15,
-              child: new SingleChildScrollView
+              child: SingleChildScrollView
               (
                 child: Text
                 (

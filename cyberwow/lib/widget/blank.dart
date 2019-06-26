@@ -26,7 +26,7 @@ import '../config.dart';
 
 Widget buildBlank(BuildContext context, BlankState state) {
   return Scaffold(
-    body: new Container
+    body: Container
     (
       color: config.backgroundColor,
     ),

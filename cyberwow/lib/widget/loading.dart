@@ -30,7 +30,7 @@ Widget buildLoading(BuildContext context, LoadingState state) {
     //   // title: Text(widget.title),
     //   title: Text('WOW'),
     // ),
-    body: new Container
+    body: Container
     (
       padding: const EdgeInsets.all(10.0),
       color: config.backgroundColor,
@@ -42,10 +42,10 @@ Widget buildLoading(BuildContext context, LoadingState state) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>
           [
-            new Expanded
+            Expanded
             (
               flex: 1,
-              child: new SingleChildScrollView
+              child: SingleChildScrollView
               (
                 child: Text
                 (
