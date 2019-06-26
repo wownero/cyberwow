@@ -112,7 +112,7 @@ Future<bool> offline() async {
   }
 }
 
-Future<int> outgoing_connections_count() async {
+Future<int> outgoingConnectionsCount() async {
   var response = await getInfo();
 
   if (response == null) return -1;
@@ -123,5 +123,19 @@ Future<int> outgoing_connections_count() async {
   } else {
     final responseBody = json.decode(response.body)['result'];
     return responseBody["outgoing_connections_count"];
+  }
+}
+
+Future<int> incomingConnectionsCount() async {
+  var response = await getInfo();
+
+  if (response == null) return -1;
+
+  // print('Response status: ${response.statusCode}');
+  if (response.statusCode != 200) {
+    return -1;
+  } else {
+    final responseBody = json.decode(response.body)['result'];
+    return responseBody["incoming_connections_count"];
   }
 }

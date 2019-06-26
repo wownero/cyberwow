@@ -34,4 +34,3 @@ Future<bool> binaryExists(String name) async {
   final binPath = await getBinaryPath(name);
   return new File(binPath).exists();
 }
-

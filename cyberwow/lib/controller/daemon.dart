@@ -19,13 +19,27 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-import 'config/prototype.dart';
-import 'config/cyberwow.dart' as cryptoConfig;
+import 'dart:async';
+import 'dart:convert';
 
-const config = cryptoConfig.config;
+import 'rpc.dart' as rpc;
 
-const arch = 'arm64';
-// const arch = 'x86_64';
-const minimumHeight = 118361;
+Future<bool> isConnected() async {
+  final _outPeers = await rpc.outgoingConnectionsCount();
+  final _inPeers = await rpc.incomingConnectionsCount();
 
-const isPC = arch == 'x86_64';
+  // print('_outPeers: ${_outPeers}');
+  return _outPeers + _inPeers > 0;
+}
+
+Future<bool> isSynced() async {
+  final _targetHeight = await rpc.targetHeight();
+  final _height = await rpc.height();
+  return _targetHeight >= 0 && _targetHeight <= _height;
+}
+
+Future<bool> isNotSynced() async {
+  final _targetHeight = await rpc.targetHeight();
+  final _height = await rpc.height();
+  return _targetHeight > _height;
+}

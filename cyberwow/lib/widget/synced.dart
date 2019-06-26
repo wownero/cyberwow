@@ -39,12 +39,18 @@ Widget buildSynced(BuildContext context, SyncedState state) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>
           [
-            Spacer(),
+            Spacer
+            (
+              flex: 3,
+            ),
             Image.asset
             ('assets/wownero_symbol.png',
               height: 200,
             ),
-            Spacer(),
+            Spacer
+            (
+              flex: 2,
+            ),
             new Expanded
             (
               flex: 1,
@@ -62,6 +68,22 @@ Widget buildSynced(BuildContext context, SyncedState state) {
                   ),
                 )
               )
+            ),
+            Spacer
+            (
+              flex: 1,
+            ),
+            SizedBox
+            (
+              height: 30.0,
+              width: 30.0,
+              child: (state.connected) ?
+              Container() :
+              CircularProgressIndicator(),
+            ),
+            Spacer
+            (
+              flex: 1,
             ),
           ],
         ),

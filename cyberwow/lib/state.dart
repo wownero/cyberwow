@@ -30,6 +30,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'controller/helper.dart';
 import 'controller/rpc.dart' as rpc;
+import 'controller/daemon.dart' as daemon;
 import 'controller/refresh.dart' as refresh;
 import 'config.dart';
 
@@ -159,25 +160,25 @@ class SyncingState extends HookedState {
     }
 
     Future<void> checkSync() async {
-      await for (var _targetHeight in refresh.targetHeight(getNotification)) {
-        print('syncing: target height ${_targetHeight}');
+      await for (var _null in refresh.pull(getNotification)) {
+        // print('syncing: target height ${_targetHeight}');
 
-        final _height = await rpc.height();
-        // print('syncing: height ${_height}');
-
-        // final _offline = await rpc.offline();
-        // print('syncing: offline ${_offline}');
-
-        final _out_peers = await rpc.outgoing_connections_count();
-        // print('syncing: out_peers ${_out_peers}');
 
         // here doc is wrong, targetHeight could match height when synced
         // potential bug, targetHeight could be smaller then height
-        if ((_targetHeight >= 0 && _targetHeight <= _height) && _out_peers > 0) {
+        final _isConnected = await daemon.isConnected();
+        final _isSynced = await daemon.isSynced();
+
+        if (_isConnected && _isSynced) {
           synced = true;
           break;
         }
         // print('syncing: checkSync loop');
+
+        if (isPC) {
+          synced = true;
+          break;
+        }
       }
     }
 
@@ -198,12 +199,20 @@ class SyncedState extends HookedState {
   int height;
   Stream<String> processOutput;
   bool synced = true;
+  bool connected = true;
 
   SyncedState(f, s, this.stdout, this.processOutput) : super (f, s);
 
   void updateHeight(int h) {
     if (height != h) {
       height = h;
+      setState(this);
+    }
+  }
+
+  void updateConnected(bool c) {
+    if (connected != c) {
+      connected = c;
       setState(this);
     }
   }
@@ -222,21 +231,19 @@ class SyncedState extends HookedState {
 
     logStdout();
 
-    await for (var _targetHeight in refresh.targetHeight(getNotification)) {
-      // print('re-sync: target height ${_targetHeight}');
-
-      final _height = await rpc.height();
-      // print('re-sync: height ${_height}');
-
-      if (_targetHeight > _height) {
-        synced = false;
-        break;
+    Future<void> checkSync() async  {
+      await for (var _null in refresh.pull(getNotification)) {
+        if (await daemon.isNotSynced() && (!isPC)) {
+          synced = false;
+          break;
+        }
+        // print('synced loop');
+        updateHeight(await rpc.height());
+        updateConnected(await daemon.isConnected());
       }
-      // print('synced loop');
-      updateHeight(await rpc.height());
-      // print('synced: targetheight: ${_targetHeight}');
-      // print('synced: height: ${height}');
     }
+
+    await checkSync();
 
     print('synced: loop exit');
 
@@ -272,13 +279,9 @@ class ReSyncingState extends HookedState {
     }
 
     Future<void> checkSync() async {
-      await for (var _targetHeight in refresh.targetHeight(getNotification)) {
-        // print('re-sync: target height ${_targetHeight}');
+      await for (var _null in refresh.pull(getNotification)) {
 
-        final _height = await rpc.height();
-        // print('re-sync: height ${_height}');
-
-        if (_targetHeight >= 0 && _targetHeight <= _height) {
+        if (await daemon.isSynced()) {
           synced = true;
           break;
         }
