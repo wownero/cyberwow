@@ -174,11 +174,6 @@ class SyncingState extends HookedState {
           break;
         }
         // print('syncing: checkSync loop');
-
-        if (isPC) {
-          synced = true;
-          break;
-        }
       }
     }
 
@@ -234,7 +229,7 @@ class SyncedState extends HookedState {
 
     Future<void> checkSync() async  {
       await for (var _null in refresh.pull(getNotification)) {
-        if (await daemon.isNotSynced() && (!isPC)) {
+        if (await daemon.isNotSynced()) {
           synced = false;
           break;
         }
