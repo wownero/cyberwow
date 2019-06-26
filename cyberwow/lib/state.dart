@@ -212,6 +212,7 @@ class SyncedState extends HookedState {
 
   void updateConnected(bool c) {
     if (connected != c) {
+      // print('update connected: connected: ${connected}, c: ${c}');
       connected = c;
       setState(this);
     }

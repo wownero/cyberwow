@@ -41,7 +41,7 @@ Widget buildSynced(BuildContext context, SyncedState state) {
           [
             Spacer
             (
-              flex: 3,
+              flex: 21,
             ),
             Image.asset
             ('assets/wownero_symbol.png',
@@ -49,11 +49,11 @@ Widget buildSynced(BuildContext context, SyncedState state) {
             ),
             Spacer
             (
-              flex: 2,
+              flex: 8,
             ),
             new Expanded
             (
-              flex: 1,
+              flex: 15,
               child: new SingleChildScrollView
               (
                 child: Text
@@ -75,15 +75,11 @@ Widget buildSynced(BuildContext context, SyncedState state) {
             ),
             SizedBox
             (
-              height: 30.0,
-              width: 30.0,
+              height: 20.0,
+              width: 20.0,
               child: (state.connected) ?
               Container() :
               CircularProgressIndicator(),
-            ),
-            Spacer
-            (
-              flex: 1,
             ),
           ],
         ),
