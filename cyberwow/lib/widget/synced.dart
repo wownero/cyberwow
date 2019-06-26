@@ -41,15 +41,15 @@ Widget buildSynced(BuildContext context, SyncedState state) {
           [
             Spacer
             (
-              flex: 21,
+              flex: 17,
             ),
             Image.asset
             ('assets/wownero_symbol.png',
-              height: 200,
+              height: 220,
             ),
             Spacer
             (
-              flex: 8,
+              flex: 7,
             ),
             new Expanded
             (
@@ -62,7 +62,7 @@ Widget buildSynced(BuildContext context, SyncedState state) {
                   style: TextStyle
                   (
                     fontFamily: 'RobotoMono',
-                    fontSize: 40,
+                    fontSize: 35,
                     fontWeight: FontWeight.bold,
                     color: config.textColor,
                   ),
@@ -79,7 +79,10 @@ Widget buildSynced(BuildContext context, SyncedState state) {
               width: 20.0,
               child: (state.connected) ?
               Container() :
-              CircularProgressIndicator(),
+              CircularProgressIndicator
+              (
+                strokeWidth: 2,
+              ),
             ),
           ],
         ),
