@@ -150,6 +150,9 @@ class SyncingState extends HookedState {
       await for (var line in processOutput) {
         if (synced) break;
         // print('syncing: print stdout loop');
+
+
+
         append(line);
         print(line);
       }
@@ -169,7 +172,8 @@ class SyncingState extends HookedState {
         // print('syncing: out_peers ${_out_peers}');
 
         // here doc is wrong, targetHeight could match height when synced
-        if ((_targetHeight == 0 || _targetHeight == _height) && _out_peers > 0) {
+        // potential bug, targetHeight could be smaller then height
+        if ((_targetHeight >= 0 && _targetHeight <= _height) && _out_peers > 0) {
           synced = true;
           break;
         }
@@ -274,7 +278,7 @@ class ReSyncingState extends HookedState {
         final _height = await rpc.height();
         // print('re-sync: height ${_height}');
 
-        if (_targetHeight == 0 || _targetHeight == _height) {
+        if (_targetHeight >= 0 && _targetHeight <= _height) {
           synced = true;
           break;
         }
