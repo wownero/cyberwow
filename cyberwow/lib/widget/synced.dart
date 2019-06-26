@@ -29,7 +29,7 @@ Widget buildSynced(BuildContext context, SyncedState state) {
 
     body: Container
     (
-      padding: const EdgeInsets.all(10.0),
+      padding: EdgeInsets.only(bottom: 10.0),
       color: config.backgroundColor,
       child: Align
       (
