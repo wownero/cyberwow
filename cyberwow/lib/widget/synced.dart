@@ -54,8 +54,9 @@ Widget buildSynced(BuildContext context, SyncedState state) {
             Expanded
             (
               flex: 15,
-              child: SingleChildScrollView
+              child: AnimatedSwitcher
               (
+                duration: Duration(milliseconds: 500),
                 child: Text
                 (
                   '${state.height}',
@@ -66,6 +67,7 @@ Widget buildSynced(BuildContext context, SyncedState state) {
                     fontWeight: FontWeight.bold,
                     color: config.textColor,
                   ),
+                  key: ValueKey<int>(state.height),
                 )
               )
             ),
