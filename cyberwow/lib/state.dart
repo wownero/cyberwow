@@ -182,8 +182,9 @@ class SyncingState extends HookedState {
 
     print('syncing: loop exit');
 
+    final _height = await rpc.height();
     SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
-    _next.height = await rpc.height();
+    _next.height = _height;
     setState(_next);
     return _next;
   }
