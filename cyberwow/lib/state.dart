@@ -199,21 +199,6 @@ class SyncedState extends HookedState {
 
   SyncedState(f, s, this.stdout, this.processOutput) : super (f, s);
 
-  void updateHeight(int h) {
-    if (height != h) {
-      height = h;
-      setState(this);
-    }
-  }
-
-  void updateConnected(bool c) {
-    if (connected != c) {
-      // print('update connected: connected: ${connected}, c: ${c}');
-      connected = c;
-      setState(this);
-    }
-  }
-
   Future<ReSyncingState> next() async {
     print("Synced next");
 
@@ -235,8 +220,9 @@ class SyncedState extends HookedState {
           break;
         }
         // print('synced loop');
-        updateHeight(await rpc.height());
-        updateConnected(await daemon.isConnected());
+        height = await rpc.height();
+        connected = await daemon.isConnected();
+        setState(this);
       }
     }
 
