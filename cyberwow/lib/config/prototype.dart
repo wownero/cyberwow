@@ -28,6 +28,7 @@ class CryptoConfig {
   final int splashDelay;
   final Color textColor;
   final Color backgroundColor;
+  final int port;
   final List<String> extraArgs;
   const CryptoConfig
   (
@@ -37,6 +38,7 @@ class CryptoConfig {
     this.splashDelay,
     this.textColor,
     this.backgroundColor,
+    this.port,
     this.extraArgs,
   );
 }

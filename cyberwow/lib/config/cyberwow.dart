@@ -31,5 +31,6 @@ const config = CryptoConfig
   70,
   Colors.green,
   Colors.black,
+  34568,
   ['--prune-blockchain'],
 );

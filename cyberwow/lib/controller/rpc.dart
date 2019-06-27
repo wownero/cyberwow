@@ -25,15 +25,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
-Future<http.Response> rpc(String method) async {
-  var url = '';
-  if (kReleaseMode) {
-    url = 'http://127.0.0.1:34568/json_rpc';
-  } else {
-    url = 'http://192.168.10.101:34568/json_rpc';
-  }
+import '../config.dart';
 
-  url = 'http://127.0.0.1:34568/json_rpc';
+Future<http.Response> rpc(String method) async {
+  final url = 'http://127.0.0.1:${config.port}/json_rpc';
 
   final body = json.encode
   (
