@@ -32,9 +32,10 @@ const config = CryptoConfig
   Colors.green,
   Colors.black,
   34568,
-  ['--prune-blockchain',
-   '--max-concurrency=1',
-   '--fast-block-sync',
-   '--block-sync-size=5',
+  [
+    '--prune-blockchain',
+    '--max-concurrency=1',
+    '--fast-block-sync=1',
+    '--block-sync-size=5',
   ],
 );
