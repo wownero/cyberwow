@@ -58,12 +58,12 @@ with nixpkgs;
     # jetbrains.jdk
     # zulu
     jdk
-    dart_dev
+    # dart_dev
     gnumake
     entr
     androidenv.androidPkgs_9_0.platform-tools
   ]
-  ++ android-studio-deps
+  # ++ android-studio-deps
   )
 
 ; multiPkgs = pkgs: (with pkgs;
