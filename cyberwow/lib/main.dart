@@ -146,6 +146,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver
 
   Future<bool> _exitApp(BuildContext context) async {
     print("MyHomePageState _exitApp");
+    WidgetsBinding.instance.removeObserver(this);
     exit(0);
   }
 
