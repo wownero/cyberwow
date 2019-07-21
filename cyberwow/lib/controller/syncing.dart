@@ -62,4 +62,7 @@ Stream<String> runBinary (String name) async* {
   await for (var line in outputProcess.stdout.transform(utf8.decoder)) {
     yield line;
   }
+
+  // the app should never reach here
+  exit(1);
 }
