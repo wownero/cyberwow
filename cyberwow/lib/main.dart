@@ -21,6 +21,8 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 
 import 'dart:io';
 import 'dart:async';
@@ -35,9 +37,15 @@ import 'widget/syncing.dart';
 import 'widget/synced.dart';
 import 'widget/resyncing.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  Logger.root.level = kReleaseMode ? Level.INFO : Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+      print('${rec.level.name}: ${rec.time}: ${rec.message}');
+  });
+  runApp(CyberWOW_App());
+}
 
-class MyApp extends StatelessWidget {
+class CyberWOW_App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp
@@ -47,20 +55,20 @@ class MyApp extends StatelessWidget {
       (
         primarySwatch: Colors.purple,
       ),
-      home: MyHomePage(title: 'CyberWOW'),
+      home: CyberWOW_Page(title: 'CyberWOW'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class CyberWOW_Page extends StatefulWidget {
+  CyberWOW_Page({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _CyberWOW_PageState createState() => _CyberWOW_PageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver
+class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserver
 {
   int _counter = 0;
   // AppState _state = LoadingState("init...");
@@ -70,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // print('app cycle: ${state}');
+    log.fine('app cycle: ${state}');
     setState(() { _notification = state; });
   }
 
@@ -97,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver
 
 
   void _updateLoading(LoadingState state, String msg) {
-    print('updateLoading: ' + msg);
+    log.fine('updateLoading: ' + msg);
   }
 
   Future<void> buildStateMachine(BlankState _blankState) async {
@@ -132,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver
   @override
   void initState() {
     super.initState();
-    print("MyHomePageState initState");
+    log.fine("CyberWOW_PageState initState");
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -145,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver
   }
 
   Future<bool> _exitApp(BuildContext context) async {
-    print("MyHomePageState _exitApp");
+    log.info("CyberWOW_PageState _exitApp");
     WidgetsBinding.instance.removeObserver(this);
     exit(0);
   }

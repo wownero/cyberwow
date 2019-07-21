@@ -56,7 +56,7 @@ Stream<String> runBinary (String name) async* {
     "--non-interactive",
   ] + extraArgs + config.extraArgs;
 
-  print('args: ' + args.toString());
+  log.info('args: ' + args.toString());
 
   final outputProcess = await Process.start(newPath, args);
   await for (var line in outputProcess.stdout.transform(utf8.decoder)) {
@@ -64,5 +64,6 @@ Stream<String> runBinary (String name) async* {
   }
 
   // the app should never reach here
+  log.severe('Daemon is gone!');
   exit(1);
 }

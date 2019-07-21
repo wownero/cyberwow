@@ -112,10 +112,10 @@ class LoadingState extends HookedState {
     }
 
     Future<void> load() async {
-      print("Loading next");
+      log.fine("Loading next");
       await for (var line in loadingProgress) {
         // append(line);
-        print(line);
+        log.info(line);
       }
     }
 
@@ -145,7 +145,7 @@ class SyncingState extends HookedState {
   }
 
   Future<SyncedState> next(Stream<String> processOutput) async {
-    print("Syncing next");
+    log.fine("Syncing next");
 
     Future<void> printStdout() async {
       await for (var line in processOutput) {
@@ -155,7 +155,7 @@ class SyncingState extends HookedState {
 
 
         append(line);
-        print(line);
+        log.info(line);
       }
     }
 
@@ -180,7 +180,7 @@ class SyncingState extends HookedState {
     printStdout();
     await checkSync();
 
-    print('syncing: loop exit');
+    log.fine('syncing: loop exit');
 
     final _height = await rpc.height();
     SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
@@ -200,14 +200,14 @@ class SyncedState extends HookedState {
   SyncedState(f, s, this.stdout, this.processOutput) : super (f, s);
 
   Future<ReSyncingState> next() async {
-    print("Synced next");
+    log.fine("Synced next");
 
     Future<void> logStdout() async {
       await for (var line in processOutput) {
         if (!synced) break;
         // print('synced: print stdout loop');
         stdout += line;
-        print(line);
+        log.info(line);
       }
     }
 
@@ -228,7 +228,7 @@ class SyncedState extends HookedState {
 
     await checkSync();
 
-    print('synced: loop exit');
+    log.fine('synced: loop exit');
 
     ReSyncingState _next = ReSyncingState(setState, getNotification, stdout, processOutput);
     setState(_next);
@@ -250,14 +250,14 @@ class ReSyncingState extends HookedState {
   }
 
   Future<SyncedState> next() async {
-    print("ReSyncing next");
+    log.fine("ReSyncing next");
 
     Future<void> printStdout() async {
       await for (var line in processOutput) {
         if (synced) break;
         // print('re-syncing: print stdout loop');
         append(line);
-        print(line);
+        log.info(line);
       }
     }
 
@@ -275,7 +275,7 @@ class ReSyncingState extends HookedState {
     printStdout();
     await checkSync();
 
-    print('resync: await exit');
+    log.fine('resync: await exit');
     SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
     _next.height = await rpc.height();
     setState(_next);
