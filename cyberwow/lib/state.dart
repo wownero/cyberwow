@@ -197,7 +197,10 @@ class SyncedState extends HookedState {
   Stream<String> processOutput;
   bool synced = true;
   bool connected = true;
-  String daemonInfo = 'daemonInfo';
+  String getInfo = 'getInfo';
+  String syncInfo = 'syncInfo';
+  String getConnections = 'getConnections';
+  String getTransactionPool = 'getTransactionPool';
 
   SyncedState(f, s, this.stdout, this.processOutput) : super (f, s);
 
@@ -224,7 +227,10 @@ class SyncedState extends HookedState {
         // print('synced loop');
         height = await rpc.height();
         connected = await daemon.isConnected();
-        daemonInfo = await rpc.getInfoString();
+        getInfo = await rpc.getInfoString();
+        // syncInfo = await rpc.syncInfoString();
+        getConnections = await rpc.getConnectionsString();
+        // getTransactionPool = await rpc.getTransactionPoolString();
         syncState();
       }
     }

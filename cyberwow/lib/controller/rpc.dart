@@ -53,10 +53,56 @@ Future<http.Response> rpc(String method) async {
   return response;
 }
 
-Future<http.Response> syncInfo() async {
-  // print('rpc sync_info');
-  return rpc('sync_info');
+Future<String> rpcString(String method) async {
+  var response = await rpc(method);
+
+  if (response == null) return '';
+
+  if (response.statusCode != 200) {
+    return '';
+  } else {
+    final _result = json.decode(response.body)['result'];
+
+    final JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    return encoder.convert(_result);
+  }
 }
+
+Future<http.Response> rpcOther(String method) async {
+  final url = 'http://127.0.0.1:${config.port}/json_rpc';
+
+  var response;
+  try {
+    response = await http.post
+    ( url,
+    );
+  }
+  catch (e) {
+    // print(e);
+  }
+
+  return response;
+}
+
+Future<String> rpcOtherString(String method) async {
+  var response = await rpcOther(method);
+
+  if (response == null) return '';
+
+  if (response.statusCode != 200) {
+    return '';
+  } else {
+    final _result = json.decode(response.body);
+
+    final JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    return encoder.convert(_result);
+  }
+}
+
+
+
+Future<http.Response> syncInfo() async => rpc('sync_info');
+Future<String> syncInfoString() async => rpcString('sync_info');
 
 Future<int> targetHeight() async {
   var response = await syncInfo();
@@ -87,28 +133,8 @@ Future<int> height() async {
 }
 
 
-
-Future<http.Response> getInfo() async {
-  // print('rpc get_info');
-  return rpc('get_info');
-}
-
-
-Future<String> getInfoString() async {
-  var response = await getInfo();
-
-  if (response == null) return '';
-
-  if (response.statusCode != 200) {
-    return '';
-  } else {
-    final _getInfo = json.decode(response.body)['result'];
-
-    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-    String _prettyInfo = encoder.convert(_getInfo);
-    return _prettyInfo;
-  }
-}
+Future<http.Response> getInfo() async => rpc('get_info');
+Future<String> getInfoString() async => rpcString('get_info');
 
 Future<bool> offline() async {
   var response = await getInfo();
@@ -151,3 +177,30 @@ Future<int> incomingConnectionsCount() async {
     return responseBody["incoming_connections_count"];
   }
 }
+
+
+// Future<http.Response> getInfo() async {
+//   // print('rpc get_info');
+//   return rpc('get_info');
+// }
+
+
+// Future<String> getInfoString() async {
+//   var response = await getInfo();
+
+//   if (response == null) return '';
+
+//   if (response.statusCode != 200) {
+//     return '';
+//   } else {
+//     final _getInfo = json.decode(response.body)['result'];
+
+//     JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+//     String _prettyInfo = encoder.convert(_getInfo);
+//     return _prettyInfo;
+//   }
+// }
+
+
+Future<String> getConnectionsString() async => rpcString('get_connections');
+Future<String> getTransactionPoolString() async => rpcOtherString('get_transaction_pool');

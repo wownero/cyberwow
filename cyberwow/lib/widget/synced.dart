@@ -90,7 +90,7 @@ Widget summary(SyncedState state) {
   );
 }
 
-Widget getInfo(SyncedState state) {
+Widget rpcView(String title, String body) {
   return Container
   (
     padding: const EdgeInsets.all(10.0),
@@ -103,6 +103,22 @@ Widget getInfo(SyncedState state) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>
         [
+          Text
+          (
+            title,
+            style: TextStyle
+            (
+              fontFamily: 'RobotoMono',
+              fontSize: 35,
+              fontWeight: FontWeight.bold,
+              color: config.textColor,
+            ),
+          ),
+          Container(
+            height: 1,
+            color: config.textColor,
+            margin: const EdgeInsets.only(bottom: 20, top: 20),
+          ),
           Expanded
           (
             flex: 1,
@@ -111,7 +127,7 @@ Widget getInfo(SyncedState state) {
               scrollDirection: Axis.vertical,
               child: Text
               (
-                state.daemonInfo,
+                body,
                 style: TextStyle
                 (
                   fontFamily: 'RobotoMono',
@@ -127,6 +143,11 @@ Widget getInfo(SyncedState state) {
   );
 }
 
+Widget getInfo(SyncedState state) => rpcView('daemon info', state.getInfo);
+Widget getConnections(SyncedState state) => rpcView('connections', state.getConnections);
+Widget syncInfo(SyncedState state) => rpcView('sync info', state.syncInfo);
+Widget getTransactionPool(SyncedState state) => rpcView('transaction pool', state.getTransactionPool);
+
 Widget pageView (SyncedState state, PageController controller) {
   return PageView (
     controller: controller,
@@ -134,6 +155,9 @@ Widget pageView (SyncedState state, PageController controller) {
     [
       summary(state),
       getInfo(state),
+      getConnections(state),
+      // syncInfo(state),
+      // getTransactionPool(state),
     ],
   );
 }
