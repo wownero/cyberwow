@@ -75,6 +75,9 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
   AppState _state;
   AppLifecycleState _notification = AppLifecycleState.resumed;
+  final syncedPageController = PageController(
+    initialPage: 0,
+  );
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -168,7 +171,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
         (s) => buildBlank(context, s),
         (s) => buildLoading(context, s),
         (s) => buildSyncing(context, s),
-        (s) => buildSynced(context, s),
+        (s) => buildSynced(context, s, syncedPageController),
         (s) => buildReSyncing(context, s),
       ),
     );

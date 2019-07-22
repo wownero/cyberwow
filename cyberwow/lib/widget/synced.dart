@@ -24,71 +24,86 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../config.dart';
 
-Widget buildSynced(BuildContext context, SyncedState state) {
-  return Scaffold(
-
-    body: Container
+Widget summary(BuildContext context, SyncedState state) {
+  return Container
+  (
+    padding: EdgeInsets.only(bottom: 10.0),
+    color: config.backgroundColor,
+    child: Align
     (
-      padding: EdgeInsets.only(bottom: 10.0),
-      color: config.backgroundColor,
-      child: Align
+      alignment: Alignment.center,
+      child: Column
       (
-        alignment: Alignment.center,
-        child: Column
-        (
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>
-          [
-            Spacer
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>
+        [
+          Spacer
+          (
+            flex: 17,
+          ),
+          Image.asset
+          ('assets/wownero_symbol.png',
+            height: 220,
+          ),
+          Spacer
+          (
+            flex: 7,
+          ),
+          Expanded
+          (
+            flex: 15,
+            child: AnimatedSwitcher
             (
-              flex: 17,
-            ),
-            Image.asset
-            ('assets/wownero_symbol.png',
-              height: 220,
-            ),
-            Spacer
-            (
-              flex: 7,
-            ),
-            Expanded
-            (
-              flex: 15,
-              child: AnimatedSwitcher
+              duration: Duration(milliseconds: 500),
+              child: Text
               (
-                duration: Duration(milliseconds: 500),
-                child: Text
+                '${state.height}',
+                style: TextStyle
                 (
-                  '${state.height}',
-                  style: TextStyle
-                  (
-                    fontFamily: 'RobotoMono',
-                    fontSize: 35,
-                    fontWeight: FontWeight.bold,
-                    color: config.textColor,
-                  ),
-                  key: ValueKey<int>(state.height),
-                )
+                  fontFamily: 'RobotoMono',
+                  fontSize: 35,
+                  fontWeight: FontWeight.bold,
+                  color: config.textColor,
+                ),
+                key: ValueKey<int>(state.height),
               )
-            ),
-            Spacer
+            )
+          ),
+          Spacer
+          (
+            flex: 1,
+          ),
+          SizedBox
+          (
+            height: 20.0,
+            width: 20.0,
+            child: (state.connected) ?
+            Container() :
+            CircularProgressIndicator
             (
-              flex: 1,
+              strokeWidth: 2,
             ),
-            SizedBox
-            (
-              height: 20.0,
-              width: 20.0,
-              child: (state.connected) ?
-              Container() :
-              CircularProgressIndicator
-              (
-                strokeWidth: 2,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
+    ),
+  );
+}
+
+Widget buildSynced(BuildContext context, SyncedState state, PageController controller) {
+  return Scaffold
+  (
+    body: PageView
+    (
+      controller: controller,
+      children:
+      [
+        summary(context, state),
+        Container
+        (
+          child: Text('Hello'),
+        ),
+      ],
     ),
   );
 }

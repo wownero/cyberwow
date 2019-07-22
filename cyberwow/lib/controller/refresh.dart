@@ -19,9 +19,13 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+import 'package:logging/logging.dart';
+
 import 'dart:ui';
 import 'dart:async';
 import 'rpc.dart' as rpc;
+
+import '../config.dart';
 
 typedef GetNotificationFunc = AppLifecycleState Function();
 
@@ -42,7 +46,7 @@ Stream<int> targetHeight(GetNotificationFunc getNotification) async* {
 Stream<Null> pull(GetNotificationFunc getNotification) async* {
   while (true) {
     final _appState = getNotification();
-    // print('refresh targetHeight: app state: ${_appState}');
+    log.finer('refresh targetHeight: app state: ${_appState}');
 
     if (_appState == AppLifecycleState.resumed) {
       yield null;

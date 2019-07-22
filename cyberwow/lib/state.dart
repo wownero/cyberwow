@@ -150,9 +150,7 @@ class SyncingState extends HookedState {
     Future<void> printStdout() async {
       await for (var line in processOutput) {
         if (synced) break;
-        // print('syncing: print stdout loop');
-
-
+        log.finest('syncing: print stdout loop');
 
         append(line);
         log.info(line);
@@ -161,8 +159,7 @@ class SyncingState extends HookedState {
 
     Future<void> checkSync() async {
       await for (var _null in refresh.pull(getNotification)) {
-        // print('syncing: target height ${_targetHeight}');
-
+        log.finer('syncing: checkSync loop');
 
         // here doc is wrong, targetHeight could match height when synced
         // potential bug, targetHeight could be smaller then height
@@ -173,7 +170,6 @@ class SyncingState extends HookedState {
           synced = true;
           break;
         }
-        // print('syncing: checkSync loop');
       }
     }
 
