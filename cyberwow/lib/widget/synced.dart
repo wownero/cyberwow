@@ -24,7 +24,7 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../config.dart';
 
-Widget summary(BuildContext context, SyncedState state) {
+Widget summary(SyncedState state) {
   return Container
   (
     padding: EdgeInsets.only(bottom: 10.0),
@@ -90,20 +90,27 @@ Widget summary(BuildContext context, SyncedState state) {
   );
 }
 
+Widget helloPage(SyncedState state) {
+  return Container
+  (
+    child: Text('HelloPage'),
+  );
+}
+
+Widget pageView (SyncedState state, PageController controller) {
+  return PageView (
+    controller: controller,
+    children:
+    [
+      summary(state),
+      helloPage(state),
+    ],
+  );
+}
+
 Widget buildSynced(BuildContext context, SyncedState state, PageController controller) {
   return Scaffold
   (
-    body: PageView
-    (
-      controller: controller,
-      children:
-      [
-        summary(context, state),
-        Container
-        (
-          child: Text('Hello'),
-        ),
-      ],
-    ),
+    body: pageView(state, controller)
   );
 }
