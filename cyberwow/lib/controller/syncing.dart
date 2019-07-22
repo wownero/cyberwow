@@ -63,6 +63,8 @@ Stream<String> runBinary (String name) async* {
     yield line;
   }
 
+  if (isPC) return;
+
   // the app should never reach here
   log.severe('Daemon is gone!');
   exit(1);
