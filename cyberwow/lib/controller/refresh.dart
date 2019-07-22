@@ -29,20 +29,6 @@ import '../config.dart';
 
 typedef GetNotificationFunc = AppLifecycleState Function();
 
-Stream<int> targetHeight(GetNotificationFunc getNotification) async* {
-  while (true) {
-    final _appState = getNotification();
-    // print('refresh targetHeight: app state: ${_appState}');
-
-    if (_appState == AppLifecycleState.resumed) {
-      final _targetHeight = await rpc.targetHeight();
-      yield _targetHeight;
-    }
-
-    await Future.delayed(const Duration(seconds: 2), () => "1");
-  }
-}
-
 Stream<Null> pull(GetNotificationFunc getNotification) async* {
   while (true) {
     final _appState = getNotification();
@@ -50,8 +36,9 @@ Stream<Null> pull(GetNotificationFunc getNotification) async* {
 
     if (_appState == AppLifecycleState.resumed) {
       yield null;
+      await Future.delayed(const Duration(milliseconds: 400), () => null);
+    } else {
+      await Future.delayed(const Duration(seconds: 2), () => null);
     }
-
-    await Future.delayed(const Duration(seconds: 2), () => "1");
   }
 }
