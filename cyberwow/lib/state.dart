@@ -197,6 +197,7 @@ class SyncedState extends HookedState {
   Stream<String> processOutput;
   bool synced = true;
   bool connected = true;
+  String daemonInfo = 'daemonInfo';
 
   SyncedState(f, s, this.stdout, this.processOutput) : super (f, s);
 
@@ -223,6 +224,7 @@ class SyncedState extends HookedState {
         // print('synced loop');
         height = await rpc.height();
         connected = await daemon.isConnected();
+        daemonInfo = await rpc.getInfoString();
         syncState();
       }
     }

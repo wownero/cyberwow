@@ -93,7 +93,37 @@ Widget summary(SyncedState state) {
 Widget helloPage(SyncedState state) {
   return Container
   (
-    child: Text('HelloPage'),
+    padding: const EdgeInsets.all(10.0),
+    color: config.backgroundColor,
+    child: Align
+    (
+      alignment: Alignment.topLeft,
+      child: Column
+      (
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>
+        [
+          Expanded
+          (
+            flex: 1,
+            child: SingleChildScrollView
+            (
+              scrollDirection: Axis.vertical,
+              child: Text
+              (
+                state.daemonInfo,
+                style: TextStyle
+                (
+                  fontFamily: 'RobotoMono',
+                  fontSize: 11,
+                  color: config.textColor,
+                ),
+              )
+            )
+          )
+        ],
+      ),
+    ),
   );
 }
 
@@ -102,8 +132,8 @@ Widget pageView (SyncedState state, PageController controller) {
     controller: controller,
     children:
     [
-      summary(state),
       helloPage(state),
+      summary(state),
     ],
   );
 }

@@ -93,6 +93,23 @@ Future<http.Response> getInfo() async {
   return rpc('get_info');
 }
 
+
+Future<String> getInfoString() async {
+  var response = await getInfo();
+
+  if (response == null) return '';
+
+  if (response.statusCode != 200) {
+    return '';
+  } else {
+    final _getInfo = json.decode(response.body)['result'];
+
+    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    String _prettyInfo = encoder.convert(_getInfo);
+    return _prettyInfo;
+  }
+}
+
 Future<bool> offline() async {
   var response = await getInfo();
 
