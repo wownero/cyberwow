@@ -38,7 +38,7 @@ import 'widget/synced.dart';
 import 'widget/resyncing.dart';
 
 void main() {
-  Logger.root.level = kReleaseMode ? Level.INFO : Level.ALL;
+  Logger.root.level = kReleaseMode ? Level.INFO : Level.FINE;
   Logger.root.onRecord.listen((LogRecord rec) {
       print('${rec.level.name}: ${rec.time}: ${rec.message}');
   });
