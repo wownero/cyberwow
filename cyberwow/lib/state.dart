@@ -70,8 +70,14 @@ class HookedState extends AppState {
   final SetStateFunc setState;
   final GetNotificationFunc getNotification;
   HookedState(this.setState, this.getNotification);
+
   syncState() {
     setState(this);
+  }
+
+  HookedState moveState(HookedState _next) {
+    setState(_next);
+    return _next;
   }
 }
 
@@ -80,9 +86,7 @@ class BlankState extends HookedState {
 
   Future<LoadingState> next(String status) async {
     LoadingState _next = LoadingState(setState, getNotification, status);
-
-    setState(_next);
-    return _next;
+    return moveState(_next);
   }
 }
 
@@ -131,8 +135,7 @@ class LoadingState extends HookedState {
     }
 
     SyncingState _next = SyncingState(setState, getNotification, status);
-    setState(_next);
-    return _next;
+    return moveState(_next);
   }
 }
 
@@ -184,8 +187,7 @@ class SyncingState extends HookedState {
     final _height = await rpc.height();
     SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
     _next.height = _height;
-    setState(_next);
-    return _next;
+    return moveState(_next);
   }
 }
 
@@ -230,8 +232,7 @@ class SyncedState extends HookedState {
     log.fine('synced: loop exit');
 
     ReSyncingState _next = ReSyncingState(setState, getNotification, stdout, processOutput);
-    setState(_next);
-    return _next;
+    return moveState(_next);
   }
 }
 
@@ -277,7 +278,6 @@ class ReSyncingState extends HookedState {
     log.fine('resync: await exit');
     SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
     _next.height = await rpc.height();
-    setState(_next);
-    return _next;
+    return moveState(_next);
   }
 }
