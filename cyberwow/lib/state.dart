@@ -70,6 +70,9 @@ class HookedState extends AppState {
   final SetStateFunc setState;
   final GetNotificationFunc getNotification;
   HookedState(this.setState, this.getNotification);
+  syncState() {
+    setState(this);
+  }
 }
 
 class BlankState extends HookedState {
@@ -91,7 +94,7 @@ class LoadingState extends HookedState {
 
   void append(String msg) {
     this.status += msg;
-    setState(this);
+    syncState();
   }
 
 
@@ -141,7 +144,7 @@ class SyncingState extends HookedState {
 
   void append(String msg) {
     this.stdout += msg;
-    setState(this);
+    syncState();
   }
 
   Future<SyncedState> next(Stream<String> processOutput) async {
@@ -218,7 +221,7 @@ class SyncedState extends HookedState {
         // print('synced loop');
         height = await rpc.height();
         connected = await daemon.isConnected();
-        setState(this);
+        syncState();
       }
     }
 
@@ -242,7 +245,7 @@ class ReSyncingState extends HookedState {
 
   void append(String msg) {
     this.stdout += msg;
-    setState(this);
+    syncState();
   }
 
   Future<SyncedState> next() async {
