@@ -90,7 +90,7 @@ Widget summary(SyncedState state) {
   );
 }
 
-Widget helloPage(SyncedState state) {
+Widget getInfo(SyncedState state) {
   return Container
   (
     padding: const EdgeInsets.all(10.0),
@@ -132,8 +132,8 @@ Widget pageView (SyncedState state, PageController controller) {
     controller: controller,
     children:
     [
-      helloPage(state),
       summary(state),
+      getInfo(state),
     ],
   );
 }
