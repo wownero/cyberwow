@@ -159,15 +159,15 @@ Widget getInfo(SyncedState state) => rpcView('info', state.getInfo);
 Widget getConnections(SyncedState state) => rpcView('connections', state.getConnections);
 Widget syncInfo(SyncedState state) => rpcView('sync info', state.syncInfo);
 Widget getTransactionPool(SyncedState state) =>
-  rpcView('transaction pool', pretty(state.getTransactionPool));
+  rpcView('pool', pretty(state.getTransactionPool));
 
 Widget pageView (SyncedState state, PageController controller) {
   return PageView (
     controller: controller,
     children:
     [
-      getTransactionPool(state),
       summary(state),
+      getTransactionPool(state),
       getInfo(state),
       getConnections(state),
       // syncInfo(state),
