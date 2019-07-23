@@ -57,7 +57,7 @@ Future<http.Response> rpc(String method) async {
   return response;
 }
 
-Future<String> rpcString(String method) async {
+Future<String> rpcString(String method, {String field}) async {
   var response = await rpc(method);
 
   if (response == null) return '';
@@ -66,9 +66,10 @@ Future<String> rpcString(String method) async {
     return '';
   } else {
     final _result = json.decode(response.body)['result'];
+    final _field = field == null ? _result : _result[field];
 
     final JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-    return encoder.convert(_result);
+    return encoder.convert(_field);
   }
 }
 
@@ -88,7 +89,7 @@ Future<http.Response> rpcOther(String method) async {
   return response;
 }
 
-Future<String> rpcOtherString(String method) async {
+Future<String> rpcOtherString(String method, {String field}) async {
   var response = await rpcOther(method);
 
   if (response == null) return '';
@@ -96,10 +97,11 @@ Future<String> rpcOtherString(String method) async {
   if (response.statusCode != 200) {
     return '';
   } else {
-    final _result = json.decode(response.body);
+    final _body= json.decode(response.body);
+    final _field = field == null ? _body: _body[field];
 
     final JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-    return encoder.convert(_result);
+    return encoder.convert(_field);
   }
 }
 
@@ -206,5 +208,5 @@ Future<int> incomingConnectionsCount() async {
 // }
 
 
-Future<String> getConnectionsString() async => rpcString('get_connections');
+Future<String> getConnectionsString() async => rpcString('get_connections', field: 'connections');
 Future<String> getTransactionPoolString() async => rpcOtherString('get_transaction_pool');
