@@ -200,7 +200,7 @@ class SyncedState extends HookedState {
   String getInfo = 'getInfo';
   String syncInfo = 'syncInfo';
   String getConnections = 'getConnections';
-  String getTransactionPool = 'getTransactionPool';
+  List<dynamic> getTransactionPool = [];
 
   SyncedState(f, s, this.stdout, this.processOutput) : super (f, s);
 
@@ -232,9 +232,9 @@ class SyncedState extends HookedState {
         getConnections = await rpc.getConnectionsString();
         // getTransactionPool = await rpc.getTransactionPoolString();
 
-        final getTransactionPool = await rpc.getTransactionPoolSimple();
+        getTransactionPool = await rpc.getTransactionPoolSimple();
 
-        log.fine('getTransactionPool: $getTransactionPool');
+        // log.fine('getTransactionPool: $getTransactionPool');
         syncState();
       }
     }

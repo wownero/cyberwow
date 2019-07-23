@@ -26,6 +26,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 import '../config.dart';
+import '../helper.dart';
 
 int rpcID = 0;
 
@@ -68,8 +69,7 @@ Future<String> rpcString(String method, {String field}) async {
     final _result = json.decode(response.body)['result'];
     final _field = field == null ? _result : _result[field];
 
-    final JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-    return encoder.convert(_field);
+    return pretty(_field);
   }
 }
 
@@ -180,8 +180,7 @@ Future<String> rpcOtherString(String method, {String field}) async {
     final _body= json.decode(response.body);
     final _field = field == null ? _body: _body[field];
 
-    final JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-    return encoder.convert(_field);
+    return pretty(_field);
   }
 }
 

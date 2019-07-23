@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 
 import '../state.dart';
 import '../config.dart';
+import '../helper.dart';
 
 Widget summary(SyncedState state) {
   return Container
@@ -157,18 +158,19 @@ Widget rpcView(String title, String body) {
 Widget getInfo(SyncedState state) => rpcView('info', state.getInfo);
 Widget getConnections(SyncedState state) => rpcView('connections', state.getConnections);
 Widget syncInfo(SyncedState state) => rpcView('sync info', state.syncInfo);
-Widget getTransactionPool(SyncedState state) => rpcView('transaction pool', state.getTransactionPool);
+Widget getTransactionPool(SyncedState state) =>
+  rpcView('transaction pool', pretty(state.getTransactionPool));
 
 Widget pageView (SyncedState state, PageController controller) {
   return PageView (
     controller: controller,
     children:
     [
+      getTransactionPool(state),
       summary(state),
       getInfo(state),
       getConnections(state),
       // syncInfo(state),
-      // getTransactionPool(state),
     ],
   );
 }
