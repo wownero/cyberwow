@@ -32,5 +32,8 @@ const arch = 'arm64';
 // const arch = 'x86_64';
 const minimumHeight = 118361;
 
-const isPC = arch == 'x86_64';
+const isEmu = arch == 'x86_64';
+const emuHost = '192.168.10.100';
+
+const host = isEmu ? emuHost : '127.0.0.1';
 

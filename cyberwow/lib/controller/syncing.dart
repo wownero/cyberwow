@@ -63,7 +63,7 @@ Stream<String> runBinary (String name) async* {
     yield line;
   }
 
-  if (isPC) return;
+  if (isEmu) return;
 
   // the app should never reach here
   log.severe('Daemon is gone!');

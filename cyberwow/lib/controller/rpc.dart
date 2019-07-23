@@ -30,7 +30,7 @@ import '../config.dart';
 int rpcID = 0;
 
 Future<http.Response> rpc(String method) async {
-  final url = 'http://127.0.0.1:${config.port}/json_rpc';
+  final url = 'http://${host}:${config.port}/json_rpc';
 
   rpcID += 1;
 
@@ -154,7 +154,7 @@ Future<String> getConnectionsString() async => rpcString('get_connections', fiel
 
 
 Future<http.Response> rpcOther(String method) async {
-  final url = 'http://127.0.0.1:${config.port}/json_rpc';
+  final url = 'http://${host}:${config.port}/json_rpc';
 
   var response;
   try {
