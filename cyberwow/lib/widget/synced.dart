@@ -103,37 +103,43 @@ Widget rpcView(String title, String body) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>
         [
-          Text
-          (
-            title,
-            style: TextStyle
-            (
-              fontFamily: 'RobotoMono',
-              fontSize: 35,
-              fontWeight: FontWeight.bold,
-              color: config.textColor,
-            ),
-          ),
-          Container(
-            height: 1,
-            color: config.textColor,
-            margin: const EdgeInsets.only(bottom: 20, top: 20),
-          ),
           Expanded
           (
             flex: 1,
             child: SingleChildScrollView
             (
               scrollDirection: Axis.vertical,
-              child: Text
+              child: Column
               (
-                body,
-                style: TextStyle
-                (
-                  fontFamily: 'RobotoMono',
-                  fontSize: 11,
-                  color: config.textColor,
-                ),
+                children: <Widget>
+                [
+                  Text
+                  (
+                    title,
+                    style: TextStyle
+                    (
+                      fontFamily: 'RobotoMono',
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: config.textColor,
+                    ),
+                  ),
+                  Container(
+                    height: 1,
+                    color: config.textColor,
+                    margin: const EdgeInsets.only(bottom: 20, top: 20),
+                  ),
+                  Text
+                  (
+                    body,
+                    style: TextStyle
+                    (
+                      fontFamily: 'RobotoMono',
+                      fontSize: 11,
+                      color: config.textColor,
+                    ),
+                  )
+                ],
               )
             )
           )
