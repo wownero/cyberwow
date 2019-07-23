@@ -73,40 +73,6 @@ Future<String> rpcString(String method, {String field}) async {
   }
 }
 
-Future<http.Response> rpcOther(String method) async {
-  final url = 'http://127.0.0.1:${config.port}/json_rpc';
-
-  var response;
-  try {
-    response = await http.post
-    ( url,
-    );
-  }
-  catch (e) {
-    // print(e);
-  }
-
-  return response;
-}
-
-Future<String> rpcOtherString(String method, {String field}) async {
-  var response = await rpcOther(method);
-
-  if (response == null) return '';
-
-  if (response.statusCode != 200) {
-    return '';
-  } else {
-    final _body= json.decode(response.body);
-    final _field = field == null ? _body: _body[field];
-
-    final JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-    return encoder.convert(_field);
-  }
-}
-
-
-
 Future<http.Response> syncInfo() async => rpc('sync_info');
 Future<String> syncInfoString() async => rpcString('sync_info');
 
@@ -184,29 +150,55 @@ Future<int> incomingConnectionsCount() async {
   }
 }
 
-
-// Future<http.Response> getInfo() async {
-//   // print('rpc get_info');
-//   return rpc('get_info');
-// }
-
-
-// Future<String> getInfoString() async {
-//   var response = await getInfo();
-
-//   if (response == null) return '';
-
-//   if (response.statusCode != 200) {
-//     return '';
-//   } else {
-//     final _getInfo = json.decode(response.body)['result'];
-
-//     JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-//     String _prettyInfo = encoder.convert(_getInfo);
-//     return _prettyInfo;
-//   }
-// }
-
-
 Future<String> getConnectionsString() async => rpcString('get_connections', field: 'connections');
-Future<String> getTransactionPoolString() async => rpcOtherString('get_transaction_pool');
+
+
+Future<http.Response> rpcOther(String method) async {
+  final url = 'http://127.0.0.1:${config.port}/json_rpc';
+
+  var response;
+  try {
+    response = await http.post
+    ( url,
+    );
+  }
+  catch (e) {
+    // print(e);
+  }
+
+  return response;
+}
+
+Future<String> rpcOtherString(String method, {String field}) async {
+  var response = await rpcOther(method);
+
+  if (response == null) return '';
+
+  if (response.statusCode != 200) {
+    return '';
+  } else {
+    final _body= json.decode(response.body);
+    final _field = field == null ? _body: _body[field];
+
+    final JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+    return encoder.convert(_field);
+  }
+}
+
+
+// Future<String> getTransactionPoolString() async => rpcOtherString('get_transaction_pool');
+
+Future<http.Response> getTransactionPool() async => rpc('get_transaction_pool');
+Future<Map<String, dynamic>> getTransactionPoolSimple() async {
+  var response = await getTransactionPool();
+
+  if (response == null) return {};
+
+  // print('Response status: ${response.statusCode}');
+  if (response.statusCode != 200) {
+    return {};
+  } else {
+    final responseBody = json.decode(response.body);
+    return responseBody;
+  }
+}
