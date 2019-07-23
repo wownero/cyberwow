@@ -200,14 +200,19 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
   } else {
     final responseBody = json.decode(response.body);
     var result = responseBody['transactions'];
-    result.forEach
-    (
-      (tx) {
-        tx.remove('tx_blob');
-        tx.remove('tx_json');
-        tx.remove('last_failed_id_hash');
-      }
-    );
-    return result;
+    if (result == null) {
+      return [];
+    }
+    else {
+      result.forEach
+      (
+        (tx) {
+          tx.remove('tx_blob');
+          tx.remove('tx_json');
+          tx.remove('last_failed_id_hash');
+        }
+      );
+      return result;
+    }
   }
 }
