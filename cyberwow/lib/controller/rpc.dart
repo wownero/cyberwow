@@ -210,6 +210,7 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
           tx.remove('tx_blob');
           tx.remove('tx_json');
           tx.remove('last_failed_id_hash');
+          tx.remove('max_used_block_id_hash');
         }
       );
       return result;
