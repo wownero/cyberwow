@@ -29,7 +29,8 @@ Future<bool> isConnected() async {
   final _outPeers = await rpc.outgoingConnectionsCount();
   final _inPeers = await rpc.incomingConnectionsCount();
 
-  // print('_outPeers: ${_outPeers}');
+  log.finest('outPeers: ${_outPeers}');
+  log.finest('inPeers: ${_inPeers}');
   return _outPeers + _inPeers > 0;
 }
 
