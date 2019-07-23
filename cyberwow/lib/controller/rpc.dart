@@ -58,7 +58,7 @@ Future<http.Response> rpc(String method) async {
 }
 
 Future<String> rpcString(String method, {String field}) async {
-  var response = await rpc(method);
+  final response = await rpc(method);
 
   if (response == null) return '';
 
@@ -77,7 +77,7 @@ Future<http.Response> syncInfo() async => rpc('sync_info');
 Future<String> syncInfoString() async => rpcString('sync_info');
 
 Future<int> targetHeight() async {
-  var response = await syncInfo();
+  final response = await syncInfo();
 
   if (response == null) return -1;
 
@@ -91,7 +91,7 @@ Future<int> targetHeight() async {
 }
 
 Future<int> height() async {
-  var response = await syncInfo();
+  final response = await syncInfo();
 
   if (response == null) return -1;
 
@@ -109,7 +109,7 @@ Future<http.Response> getInfo() async => rpc('get_info');
 Future<String> getInfoString() async => rpcString('get_info');
 
 Future<bool> offline() async {
-  var response = await getInfo();
+  final response = await getInfo();
 
   if (response == null) return true;
 
@@ -123,7 +123,7 @@ Future<bool> offline() async {
 }
 
 Future<int> outgoingConnectionsCount() async {
-  var response = await getInfo();
+  final response = await getInfo();
 
   if (response == null) return -1;
 
@@ -137,7 +137,7 @@ Future<int> outgoingConnectionsCount() async {
 }
 
 Future<int> incomingConnectionsCount() async {
-  var response = await getInfo();
+  final response = await getInfo();
 
   if (response == null) return -1;
 
@@ -170,7 +170,7 @@ Future<http.Response> rpcOther(String method) async {
 }
 
 Future<String> rpcOtherString(String method, {String field}) async {
-  var response = await rpcOther(method);
+  final response = await rpcOther(method);
 
   if (response == null) return '';
 
@@ -188,9 +188,10 @@ Future<String> rpcOtherString(String method, {String field}) async {
 
 // Future<String> getTransactionPoolString() async => rpcOtherString('get_transaction_pool');
 
-Future<http.Response> getTransactionPool() async => rpc('get_transaction_pool');
+Future<http.Response> getTransactionPool() async => rpcOther('get_transaction_pool');
 Future<Map<String, dynamic>> getTransactionPoolSimple() async {
-  var response = await getTransactionPool();
+  final response = await getTransactionPool();
+  log.finer('getTransactionPoolSimple response: $response');
 
   if (response == null) return {};
 

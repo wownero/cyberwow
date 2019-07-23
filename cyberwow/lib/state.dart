@@ -231,6 +231,10 @@ class SyncedState extends HookedState {
         // syncInfo = await rpc.syncInfoString();
         getConnections = await rpc.getConnectionsString();
         // getTransactionPool = await rpc.getTransactionPoolString();
+
+        final getTransactionPool = await rpc.getTransactionPoolSimple();
+
+        log.fine('getTransactionPool: $getTransactionPool');
         syncState();
       }
     }
