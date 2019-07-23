@@ -143,7 +143,7 @@ Widget rpcView(String title, String body) {
   );
 }
 
-Widget getInfo(SyncedState state) => rpcView('daemon info', state.getInfo);
+Widget getInfo(SyncedState state) => rpcView('info', state.getInfo);
 Widget getConnections(SyncedState state) => rpcView('connections', state.getConnections);
 Widget syncInfo(SyncedState state) => rpcView('sync info', state.syncInfo);
 Widget getTransactionPool(SyncedState state) => rpcView('transaction pool', state.getTransactionPool);
