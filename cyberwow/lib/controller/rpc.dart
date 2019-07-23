@@ -154,7 +154,7 @@ Future<String> getConnectionsString() async => rpcString('get_connections', fiel
 
 
 Future<http.Response> rpcOther(String method) async {
-  final url = 'http://${host}:${config.port}/json_rpc';
+  final url = 'http://${host}:${config.port}/${method}';
 
   var response;
   try {
@@ -189,17 +189,26 @@ Future<String> rpcOtherString(String method, {String field}) async {
 // Future<String> getTransactionPoolString() async => rpcOtherString('get_transaction_pool');
 
 Future<http.Response> getTransactionPool() async => rpcOther('get_transaction_pool');
-Future<Map<String, dynamic>> getTransactionPoolSimple() async {
+Future<List<dynamic>> getTransactionPoolSimple() async {
   final response = await getTransactionPool();
-  log.finer('getTransactionPoolSimple response: $response');
+  // log.finer('getTransactionPoolSimple response: $response');
 
-  if (response == null) return {};
+  if (response == null) return [];
 
   // print('Response status: ${response.statusCode}');
   if (response.statusCode != 200) {
-    return {};
+    return [];
   } else {
     final responseBody = json.decode(response.body);
-    return responseBody;
+    var result = responseBody['transactions'];
+    result.forEach
+    (
+      (tx) {
+        tx.remove('tx_blob');
+        tx.remove('tx_json');
+        tx.remove('last_failed_id_hash');
+      }
+    );
+    return result;
   }
 }
