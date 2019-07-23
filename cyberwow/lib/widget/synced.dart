@@ -113,6 +113,11 @@ Widget rpcView(String title, String body) {
               (
                 children: <Widget>
                 [
+
+                  Container(
+                    height: 0,
+                    margin: const EdgeInsets.only(bottom: 15),
+                  ),
                   Text
                   (
                     title,
