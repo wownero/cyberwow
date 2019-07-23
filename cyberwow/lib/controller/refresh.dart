@@ -29,14 +29,14 @@ import '../config.dart';
 
 typedef GetNotificationFunc = AppLifecycleState Function();
 
-Stream<Null> pull(GetNotificationFunc getNotification) async* {
+Stream<Null> pull(GetNotificationFunc getNotification, String puller) async* {
   while (true) {
     final _appState = getNotification();
-    log.finer('refresh targetHeight: app state: ${_appState}');
+    log.finer('refresh pull by ${puller}: app state: ${_appState}');
 
     if (_appState == AppLifecycleState.resumed) {
       yield null;
-      await Future.delayed(const Duration(milliseconds: 400), () => null);
+      await Future.delayed(const Duration(milliseconds: 1000), () => null);
     } else {
       await Future.delayed(const Duration(seconds: 2), () => null);
     }

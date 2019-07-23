@@ -164,8 +164,8 @@ class SyncingState extends HookedState {
     }
 
     Future<void> checkSync() async {
-      await for (var _null in refresh.pull(getNotification)) {
-        log.finer('syncing: checkSync loop');
+      await for (var _null in refresh.pull(getNotification, 'syncingState')) {
+        log.finer('SyncingState: checkSync loop');
 
         // here doc is wrong, targetHeight could match height when synced
         // potential bug, targetHeight could be smaller then height
@@ -219,12 +219,12 @@ class SyncedState extends HookedState {
     logStdout();
 
     Future<void> checkSync() async  {
-      await for (var _null in refresh.pull(getNotification)) {
+      await for (var _null in refresh.pull(getNotification, 'syncedState')) {
         if (await daemon.isNotSynced()) {
           synced = false;
           break;
         }
-        // print('synced loop');
+        // log.finer('SyncedState: checkSync loop');
         height = await rpc.height();
         connected = await daemon.isConnected();
         getInfo = await rpc.getInfoString();
@@ -270,7 +270,7 @@ class ReSyncingState extends HookedState {
     }
 
     Future<void> checkSync() async {
-      await for (var _null in refresh.pull(getNotification)) {
+      await for (var _null in refresh.pull(getNotification, 'ReSyncingState')) {
 
         if (await daemon.isSynced()) {
           synced = true;
