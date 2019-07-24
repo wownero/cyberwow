@@ -22,6 +22,6 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 import 'dart:convert';
 
 String pretty(dynamic x) {
-  final JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+  final JsonEncoder encoder = new JsonEncoder.withIndent('    ');
   return encoder.convert(x);
 }
