@@ -156,7 +156,7 @@ class SyncingState extends HookedState {
     syncState();
   }
 
-  Future<SyncedState> next(Stream<String> processOutput) async {
+  Future<SyncedState> next(StreamSink<String> processInput, Stream<String> processOutput) async {
     log.fine("Syncing next");
 
     Future<void> printStdout() async {
@@ -191,7 +191,7 @@ class SyncingState extends HookedState {
     log.fine('syncing: loop exit');
 
     final _height = await rpc.height();
-    SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
+    SyncedState _next = SyncedState(setState, getNotification, stdout, processInput, processOutput);
     _next.height = _height;
     return moveState(_next);
   }
@@ -200,6 +200,7 @@ class SyncingState extends HookedState {
 class SyncedState extends HookedState {
   Queue<String> stdout;
   int height;
+  StreamSink<String> processInput;
   Stream<String> processOutput;
   bool synced = true;
   bool connected = true;
@@ -208,7 +209,7 @@ class SyncedState extends HookedState {
   List<dynamic> getConnections = [];
   List<dynamic> getTransactionPool = [];
 
-  SyncedState(f, s, this.stdout, this.processOutput) : super (f, s);
+  SyncedState(f, s, this.stdout, this.processInput, this.processOutput) : super (f, s);
 
   Future<ReSyncingState> next() async {
     log.fine("Synced next");
@@ -240,6 +241,8 @@ class SyncedState extends HookedState {
 
         getTransactionPool = await rpc.getTransactionPoolSimple();
 
+        // processInput.add('help\n');
+
         // log.fine('getTransactionPool: $getTransactionPool');
         syncState();
       }
@@ -249,7 +252,7 @@ class SyncedState extends HookedState {
 
     log.fine('synced: loop exit');
 
-    ReSyncingState _next = ReSyncingState(setState, getNotification, stdout, processOutput);
+    ReSyncingState _next = ReSyncingState(setState, getNotification, stdout, processInput, processOutput);
     return moveState(_next);
   }
 }
@@ -257,10 +260,11 @@ class SyncedState extends HookedState {
 
 class ReSyncingState extends HookedState {
   Queue<String> stdout;
+  StreamSink<String> processInput;
   Stream<String> processOutput;
   bool synced = false;
 
-  ReSyncingState(f, s, this.stdout, this.processOutput) : super (f, s);
+  ReSyncingState(f, s, this.stdout, this.processInput, this.processOutput) : super (f, s);
 
   void append(String msg) {
     stdout.addLast(msg);
@@ -297,7 +301,7 @@ class ReSyncingState extends HookedState {
     await checkSync();
 
     log.fine('resync: await exit');
-    SyncedState _next = SyncedState(setState, getNotification, stdout, processOutput);
+    SyncedState _next = SyncedState(setState, getNotification, stdout, processInput, processOutput);
     _next.height = await rpc.height();
     return moveState(_next);
   }

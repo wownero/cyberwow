@@ -30,7 +30,7 @@ import 'helper.dart';
 import '../config.dart' as config;
 import '../logging.dart';
 
-Stream<String> runBinary (String name) async* {
+Stream<String> runBinary (String name, {Stream<String> input}) async* {
   final newPath = await getBinaryPath(name);
 
   final appDocDir = await getApplicationDocumentsDirectory();
@@ -60,6 +60,9 @@ Stream<String> runBinary (String name) async* {
   log.info('args: ' + args.toString());
 
   final outputProcess = await Process.start(newPath, args);
+  if (input != null) {
+    outputProcess.stdin.addStream(input.transform(utf8.encoder));
+  }
   await for (final line in outputProcess.stdout.transform(utf8.decoder)) {
     yield line;
   }
