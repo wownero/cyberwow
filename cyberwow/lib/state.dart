@@ -200,7 +200,7 @@ class SyncedState extends HookedState {
   bool connected = true;
   String getInfo = 'getInfo';
   String syncInfo = 'syncInfo';
-  String getConnections = 'getConnections';
+  List<dynamic> getConnections = [];
   List<dynamic> getTransactionPool = [];
 
   SyncedState(f, s, this.stdout, this.processOutput) : super (f, s);
@@ -230,7 +230,7 @@ class SyncedState extends HookedState {
         connected = await daemon.isConnected();
         getInfo = await rpc.getInfoString();
         // syncInfo = await rpc.syncInfoString();
-        getConnections = await rpc.getConnectionsString();
+        getConnections = await rpc.getConnectionsSimple();
         // getTransactionPool = await rpc.getTransactionPoolString();
 
         getTransactionPool = await rpc.getTransactionPoolSimple();

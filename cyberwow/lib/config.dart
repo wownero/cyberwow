@@ -37,3 +37,5 @@ const emuHost = '192.168.10.100';
 
 const host = isEmu ? emuHost : '127.0.0.1';
 
+const int hashLength = 12;
+

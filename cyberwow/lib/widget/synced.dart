@@ -156,7 +156,8 @@ Widget rpcView(String title, String body) {
 }
 
 Widget getInfo(SyncedState state) => rpcView('info', state.getInfo);
-Widget getConnections(SyncedState state) => rpcView('connections', state.getConnections);
+Widget getConnections(SyncedState state) =>
+  rpcView('connections', pretty(state.getConnections));
 Widget syncInfo(SyncedState state) => rpcView('sync info', state.syncInfo);
 Widget getTransactionPool(SyncedState state) =>
   rpcView('tx pool', pretty(state.getTransactionPool));

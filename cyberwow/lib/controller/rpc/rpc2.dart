@@ -38,7 +38,7 @@ Future<http.Response> rpc2(String method) async {
     );
   }
   catch (e) {
-    // print(e);
+    log.warning(e);
   }
 
   return response;
@@ -73,21 +73,42 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
     return [];
   } else {
     final responseBody = json.decode(response.body);
-    var result = responseBody['transactions'];
+    final result = responseBody['transactions'];
     if (result == null) {
       return [];
     }
     else {
-      result.forEach
+      return result.map
       (
-        (tx) {
-          tx.remove('tx_blob');
-          tx.remove('tx_json');
-          tx.remove('last_failed_id_hash');
-          tx.remove('max_used_block_id_hash');
+        (x) {
+          const _remove =
+          [
+            'tx_blob',
+            'tx_json',
+            'last_failed_id_hash',
+            'max_used_block_id_hash',
+          ];
+
+          return Map.fromIterable
+          (
+            x.keys.where
+            (
+              (k) => !_remove.contains(k)
+            ),
+            value: (k) => x[k],
+          ).map
+          (
+            (k, v) {
+              if (k == 'id_hash') {
+                return MapEntry(k, v.substring(0, 12) + '...');
+              } else {
+                return MapEntry(k, v);
+              }
+            }
+          )
+          ;
         }
-      );
-      return result;
+      ).toList();
     }
   }
 }
