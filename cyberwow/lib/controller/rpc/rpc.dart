@@ -86,6 +86,21 @@ Future<dynamic> height() => rpc('sync_info', field: 'height');
 
 
 Future<http.Response> getInfo() => rpc('get_info');
+
+Future<Map<String, dynamic>> getInfoSimple() async {
+  final Map<String, dynamic> _getInfo = await rpc('get_info');
+  return _getInfo.map
+  (
+    (k, v) {
+      if (k == 'top_block_hash') {
+        return MapEntry(k, v.substring(0, config.hashLength) + '...');
+      } else {
+        return MapEntry(k, v);
+      }
+    }
+  );
+}
+
 Future<String> getInfoString() => rpcString('get_info');
 
 Future<dynamic> offline() => rpc('get_info', field: 'offline');
@@ -112,7 +127,7 @@ Future<List<dynamic>> getConnectionsSimple() async {
       (
         (k, v) {
           if (k == 'connection_id') {
-            return MapEntry(k, v.substring(0, 12) + '...');
+            return MapEntry(k, v.substring(0, config.hashLength) + '...');
           } else {
             return MapEntry(k, v);
           }

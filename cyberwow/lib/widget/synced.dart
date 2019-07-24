@@ -91,7 +91,7 @@ Widget summary(SyncedState state) {
   );
 }
 
-Widget rpcView(String title, String body) {
+Widget rpcView(String title, dynamic body) {
   return Container
   (
     padding: const EdgeInsets.all(10.0),
@@ -137,7 +137,7 @@ Widget rpcView(String title, String body) {
                   ),
                   Text
                   (
-                    body,
+                    pretty(body),
                     style: TextStyle
                     (
                       fontFamily: 'RobotoMono',
@@ -156,11 +156,9 @@ Widget rpcView(String title, String body) {
 }
 
 Widget getInfo(SyncedState state) => rpcView('info', state.getInfo);
-Widget getConnections(SyncedState state) =>
-  rpcView('connections', pretty(state.getConnections));
+Widget getConnections(SyncedState state) => rpcView('connections', state.getConnections);
 Widget syncInfo(SyncedState state) => rpcView('sync info', state.syncInfo);
-Widget getTransactionPool(SyncedState state) =>
-  rpcView('tx pool', pretty(state.getTransactionPool));
+Widget getTransactionPool(SyncedState state) => rpcView('tx pool', state.getTransactionPool);
 
 Widget pageView (SyncedState state, PageController controller) {
   return PageView (

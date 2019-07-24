@@ -100,7 +100,7 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
           (
             (k, v) {
               if (k == 'id_hash') {
-                return MapEntry(k, v.substring(0, 12) + '...');
+                return MapEntry(k, v.substring(0, config.hashLength) + '...');
               } else {
                 return MapEntry(k, v);
               }
