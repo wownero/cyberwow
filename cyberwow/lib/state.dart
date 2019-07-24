@@ -190,6 +190,8 @@ class SyncingState extends HookedState {
 
     log.fine('syncing: loop exit');
 
+    // processInput.add('exit');
+
     final _height = await rpc.height();
     SyncedState _next = SyncedState(setState, getNotification, stdout, processInput, processOutput);
     _next.height = _height;
@@ -210,6 +212,11 @@ class SyncedState extends HookedState {
   List<dynamic> getTransactionPool = [];
 
   SyncedState(f, s, this.stdout, this.processInput, this.processOutput) : super (f, s);
+
+  void appendInput(String line) {
+    stdout.addLast('> ' + line + '\n');
+    processInput.add(line);
+  }
 
   Future<ReSyncingState> next() async {
     log.fine("Synced next");
@@ -241,7 +248,7 @@ class SyncedState extends HookedState {
 
         getTransactionPool = await rpc.getTransactionPoolSimple();
 
-        // processInput.add('help\n');
+        // appendInput('help');
 
         // log.fine('getTransactionPool: $getTransactionPool');
         syncState();

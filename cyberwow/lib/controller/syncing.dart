@@ -54,16 +54,25 @@ Stream<String> runBinary (String name, {Stream<String> input}) async* {
   [
     "--data-dir",
     binDir.path,
-    "--non-interactive",
   ] + extraArgs + config.c.extraArgs;
 
   log.info('args: ' + args.toString());
 
   final outputProcess = await Process.start(newPath, args);
+
+  Future<void> printInput() async {
+    await for (final line in input) {
+      log.finest('process input: ' + line);
+      outputProcess.stdin.writeln(line);
+      outputProcess.stdin.flush();
+    }
+  }
+
   if (input != null) {
-    outputProcess.stdin.addStream(input.transform(utf8.encoder));
+    printInput();
   }
   await for (final line in outputProcess.stdout.transform(utf8.decoder)) {
+    log.finest('process output: ' + line);
     yield line;
   }
 
