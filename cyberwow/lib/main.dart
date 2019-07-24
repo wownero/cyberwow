@@ -139,6 +139,9 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
         (s) => s.next(),
       );
     }
+
+    log.severe('Reached invalid state!');
+    exit(1);
   }
 
   @override
