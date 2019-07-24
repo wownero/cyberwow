@@ -58,37 +58,30 @@ Future<http.Response> rpc(String method) async {
   return response;
 }
 
-Future<String> rpcString(String method, {String field}) async {
+Future<dynamic> rpcDynamic(String method, {String field}) async {
   final response = await rpc(method);
 
-  if (response == null) return '';
+  if (response == null) return null;
 
   if (response.statusCode != 200) {
-    return '';
+    return null;
   } else {
     final _result = json.decode(response.body)['result'];
     final _field = field == null ? _result : _result[field];
 
-    return pretty(_field);
+    return _field;
   }
+}
+
+Future<String> rpcString(String method, {String field}) async {
+  final _field = await rpcDynamic(method, field: field);
+  return pretty(_field);
 }
 
 Future<http.Response> syncInfo() async => rpc('sync_info');
 Future<String> syncInfoString() async => rpcString('sync_info');
 
-Future<int> targetHeight() async {
-  final response = await syncInfo();
-
-  if (response == null) return -1;
-
-  // print('Response status: ${response.statusCode}');
-  if (response.statusCode != 200) {
-    return -1;
-  } else {
-    final responseBody = json.decode(response.body)['result'];
-    return responseBody["target_height"];
-  }
-}
+Future<int> targetHeight() => rpcDynamic('sync_info', field: 'target_height');
 
 Future<int> height() async {
   final response = await syncInfo();
@@ -150,6 +143,7 @@ Future<int> incomingConnectionsCount() async {
   }
 }
 
+// Future<http.Response>> getConnections() async => rpc('get_connections', field: 'connections');
 Future<String> getConnectionsString() async => rpcString('get_connections', field: 'connections');
 
 
