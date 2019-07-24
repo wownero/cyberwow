@@ -25,7 +25,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-import 'helper.dart';
+import '../helper.dart';
 
 Stream<String> deployBinary (AssetBundle bundle, String path, String name) async* {
   final binData = await bundle.load(path);

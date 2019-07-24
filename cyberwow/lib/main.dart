@@ -30,8 +30,8 @@ import 'dart:async';
 import 'state.dart';
 import 'config.dart' as config;
 import 'logging.dart';
-import 'controller/loading.dart';
-import 'controller/syncing.dart';
+import 'controller/process/deploy.dart' as process;
+import 'controller/process/run.dart' as process;
 import 'widget/loading.dart';
 import 'widget/blank.dart';
 import 'widget/syncing.dart';
@@ -119,12 +119,12 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     final binName = config.c.outputBin;
     final resourcePath = 'native/output/' + config.arch + '/' + binName;
     final bundle = DefaultAssetBundle.of(context);
-    final loading = deployBinary(bundle, resourcePath, binName);
+    final loading = process.deployBinary(bundle, resourcePath, binName);
 
     SyncingState _syncingState = await _loadingState.next(loading, '');
 
     final StreamController<String> inputStreamController = StreamController();
-    final syncing = runBinary(binName, input: inputStreamController.stream).asBroadcastStream();
+    final syncing = process.runBinary(binName, input: inputStreamController.stream).asBroadcastStream();
 
     SyncedState _syncedState = await _syncingState.next(inputStreamController.sink, syncing);
     await _syncedState.next();
