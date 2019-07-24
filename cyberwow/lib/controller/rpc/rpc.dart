@@ -25,8 +25,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
-import '../config.dart';
-import '../helper.dart';
+import '../../config.dart';
+import '../../helper.dart';
 
 int rpcID = 0;
 
@@ -153,67 +153,3 @@ Future<int> incomingConnectionsCount() async {
 Future<String> getConnectionsString() async => rpcString('get_connections', field: 'connections');
 
 
-Future<http.Response> rpcOther(String method) async {
-  final url = 'http://${host}:${config.port}/${method}';
-
-  var response;
-  try {
-    response = await http.post
-    ( url,
-    );
-  }
-  catch (e) {
-    // print(e);
-  }
-
-  return response;
-}
-
-Future<String> rpcOtherString(String method, {String field}) async {
-  final response = await rpcOther(method);
-
-  if (response == null) return '';
-
-  if (response.statusCode != 200) {
-    return '';
-  } else {
-    final _body= json.decode(response.body);
-    final _field = field == null ? _body: _body[field];
-
-    return pretty(_field);
-  }
-}
-
-
-// Future<String> getTransactionPoolString() async => rpcOtherString('get_transaction_pool');
-
-Future<http.Response> getTransactionPool() async => rpcOther('get_transaction_pool');
-Future<List<dynamic>> getTransactionPoolSimple() async {
-  final response = await getTransactionPool();
-  // log.finer('getTransactionPoolSimple response: $response');
-
-  if (response == null) return [];
-
-  // print('Response status: ${response.statusCode}');
-  if (response.statusCode != 200) {
-    return [];
-  } else {
-    final responseBody = json.decode(response.body);
-    var result = responseBody['transactions'];
-    if (result == null) {
-      return [];
-    }
-    else {
-      result.forEach
-      (
-        (tx) {
-          tx.remove('tx_blob');
-          tx.remove('tx_json');
-          tx.remove('last_failed_id_hash');
-          tx.remove('max_used_block_id_hash');
-        }
-      );
-      return result;
-    }
-  }
-}

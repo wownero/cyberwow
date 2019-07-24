@@ -23,7 +23,7 @@ import 'package:logging/logging.dart';
 
 import 'dart:ui';
 import 'dart:async';
-import 'rpc.dart' as rpc;
+import 'rpc/rpc.dart' as rpc;
 
 import '../config.dart';
 

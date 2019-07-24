@@ -22,7 +22,7 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 import 'dart:async';
 import 'dart:convert';
 
-import 'rpc.dart' as rpc;
+import 'rpc/rpc.dart' as rpc;
 import '../config.dart';
 
 Future<bool> isConnected() async {

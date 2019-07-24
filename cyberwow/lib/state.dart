@@ -29,7 +29,8 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'controller/helper.dart';
-import 'controller/rpc.dart' as rpc;
+import 'controller/rpc/rpc.dart' as rpc;
+import 'controller/rpc/rpc2.dart' as rpc;
 import 'controller/daemon.dart' as daemon;
 import 'controller/refresh.dart' as refresh;
 import 'config.dart';
