@@ -27,14 +27,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'helper.dart';
-import '../config.dart';
+import '../config.dart' as config;
+import '../logging.dart';
 
 Stream<String> runBinary (String name) async* {
   final newPath = await getBinaryPath(name);
 
   final appDocDir = await getApplicationDocumentsDirectory();
   final appDocPath = appDocDir.path;
-  final binDir = new Directory(appDocDir.path + "/" + config.appPath);
+  final binDir = new Directory(appDocDir.path + "/" + config.c.appPath);
 
   await binDir.create();
 
@@ -54,7 +55,7 @@ Stream<String> runBinary (String name) async* {
     "--data-dir",
     binDir.path,
     "--non-interactive",
-  ] + extraArgs + config.extraArgs;
+  ] + extraArgs + config.c.extraArgs;
 
   log.info('args: ' + args.toString());
 
@@ -63,7 +64,7 @@ Stream<String> runBinary (String name) async* {
     yield line;
   }
 
-  if (isEmu) return;
+  if (config.isEmu) return;
 
   // the app should never reach here
   log.severe('Daemon is gone!');

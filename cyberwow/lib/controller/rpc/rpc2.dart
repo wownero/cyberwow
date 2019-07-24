@@ -25,11 +25,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
-import '../../config.dart';
+import '../../config.dart' as config;
 import '../../helper.dart';
+import '../../logging.dart';
 
 Future<http.Response> rpc2(String method) async {
-  final url = 'http://${host}:${config.port}/${method}';
+  final url = 'http://${config.host}:${config.c.port}/${method}';
 
   var response;
   try {

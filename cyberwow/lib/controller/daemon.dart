@@ -23,7 +23,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'rpc/rpc.dart' as rpc;
-import '../config.dart';
+import '../config.dart' as config;
+import '../logging.dart';
 
 Future<bool> isConnected() async {
   final _outPeers = await rpc.outgoingConnectionsCount();
@@ -37,7 +38,7 @@ Future<bool> isConnected() async {
 Future<bool> isSynced() async {
   final _targetHeight = await rpc.targetHeight();
   final _height = await rpc.height();
-  return _targetHeight >= 0 && _targetHeight <= _height && _height > minimumHeight;
+  return _targetHeight >= 0 && _targetHeight <= _height && _height > config.minimumHeight;
 }
 
 Future<bool> isNotSynced() async {

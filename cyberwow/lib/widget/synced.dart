@@ -22,14 +22,14 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 import 'package:flutter/material.dart';
 
 import '../state.dart';
-import '../config.dart';
+import '../config.dart' as config;
 import '../helper.dart';
 
 Widget summary(SyncedState state) {
   return Container
   (
     padding: EdgeInsets.only(bottom: 10.0),
-    color: config.backgroundColor,
+    color: config.c.backgroundColor,
     child: Align
     (
       alignment: Alignment.center,
@@ -64,7 +64,7 @@ Widget summary(SyncedState state) {
                   fontFamily: 'RobotoMono',
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
-                  color: config.textColor,
+                  color: config.c.textColor,
                 ),
                 key: ValueKey<int>(state.height),
               )
@@ -95,7 +95,7 @@ Widget rpcView(String title, String body) {
   return Container
   (
     padding: const EdgeInsets.all(10.0),
-    color: config.backgroundColor,
+    color: config.c.backgroundColor,
     child: Align
     (
       alignment: Alignment.topLeft,
@@ -127,12 +127,12 @@ Widget rpcView(String title, String body) {
                       fontFamily: 'RobotoMono',
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
-                      color: config.textColor,
+                      color: config.c.textColor,
                     ),
                   ),
                   Container(
                     height: 1,
-                    color: config.textColor,
+                    color: config.c.textColor,
                     margin: const EdgeInsets.only(bottom: 20, top: 20),
                   ),
                   Text
@@ -142,7 +142,7 @@ Widget rpcView(String title, String body) {
                     (
                       fontFamily: 'RobotoMono',
                       fontSize: 11,
-                      color: config.textColor,
+                      color: config.c.textColor,
                     ),
                   )
                 ],

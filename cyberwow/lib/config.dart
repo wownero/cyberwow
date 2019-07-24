@@ -19,14 +19,10 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-import 'package:logging/logging.dart';
-
 import 'config/prototype.dart';
 import 'config/cyberwow.dart' as cryptoConfig;
 
-final Logger log = new Logger('Default');
-
-const config = cryptoConfig.config;
+const c = cryptoConfig.config;
 
 const arch = 'arm64';
 // const arch = 'x86_64';

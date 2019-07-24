@@ -33,7 +33,8 @@ import 'controller/rpc/rpc.dart' as rpc;
 import 'controller/rpc/rpc2.dart' as rpc;
 import 'controller/daemon.dart' as daemon;
 import 'controller/refresh.dart' as refresh;
-import 'config.dart';
+import 'config.dart' as config;
+import 'logging.dart';
 
 abstract class AppState {
   T use<T>
@@ -113,7 +114,7 @@ class LoadingState extends HookedState {
 
       for (String char in chars) {
         append(char);
-        await Future.delayed(Duration(milliseconds: config.splashDelay), () => "1");
+        await Future.delayed(Duration(milliseconds: config.c.splashDelay), () => "1");
       }
 
       await Future.delayed(const Duration(seconds: 2), () => "1");
@@ -127,7 +128,7 @@ class LoadingState extends HookedState {
       }
     }
 
-    final outputBinExists = await binaryExists(config.outputBin);
+    final outputBinExists = await binaryExists(config.c.outputBin);
     if (outputBinExists) {
       await load();
     }

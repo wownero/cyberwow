@@ -25,13 +25,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
-import '../../config.dart';
+import '../../config.dart' as config;
 import '../../helper.dart';
+import '../../logging.dart';
 
 int rpcID = 0;
 
 Future<http.Response> rpcHTTP(String method) async {
-  final url = 'http://${host}:${config.port}/json_rpc';
+  final url = 'http://${config.host}:${config.c.port}/json_rpc';
 
   rpcID += 1;
 
