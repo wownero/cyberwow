@@ -80,6 +80,8 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     initialPage: 0,
   );
 
+  final StreamController<String> inputStreamController = StreamController();
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     log.fine('app cycle: ${state}');
@@ -123,7 +125,6 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     SyncingState _syncingState = await _loadingState.next(loading, '');
 
-    final StreamController<String> inputStreamController = StreamController();
     final syncing = process.runBinary(binName, input: inputStreamController.stream).asBroadcastStream();
 
     SyncedState _syncedState = await _syncingState.next(inputStreamController.sink, syncing);
@@ -163,7 +164,12 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   Future<bool> _exitApp(BuildContext context) async {
     log.info("CyberWOW_PageState _exitApp");
     WidgetsBinding.instance.removeObserver(this);
-    exit(0);
+    inputStreamController.sink.add('exit');
+    await Future.delayed(const Duration(seconds: 10), () => null);
+
+    // the process controller should call exit(0) for us
+    log.warning('Daemon took too long to shut down!');
+    exit(1);
   }
 
   @override

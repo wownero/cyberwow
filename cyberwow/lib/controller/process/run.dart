@@ -79,6 +79,6 @@ Stream<String> runBinary (String name, {Stream<String> input}) async* {
   if (config.isEmu) return;
 
   // the app should never reach here
-  log.severe('Daemon is gone!');
-  exit(1);
+  log.info('Daemon exited gracefully.');
+  exit(0);
 }
