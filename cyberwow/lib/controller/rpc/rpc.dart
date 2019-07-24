@@ -84,7 +84,6 @@ Future<String> syncInfoString() => rpcString('sync_info');
 Future<dynamic> targetHeight() => rpc('sync_info', field: 'target_height');
 Future<dynamic> height() => rpc('sync_info', field: 'height');
 
-
 Future<http.Response> getInfo() => rpc('get_info');
 
 Future<Map<String, dynamic>> getInfoSimple() async {
@@ -108,21 +107,12 @@ Future<dynamic> offline() => rpc('get_info', field: 'offline');
 Future<dynamic> outgoingConnectionsCount() => rpc('get_info', field: 'outgoing_connections_count');
 Future<dynamic> incomingConnectionsCount() => rpc('get_info', field: 'incoming_connections_count');
 
-// Future<http.Response>> getConnections() async => rpcHTTP('get_connections', field: 'connections');
 Future<List<dynamic>> getConnectionsSimple() async {
   final List<dynamic> _connections = await rpc('get_connections', field: 'connections');
 
   return _connections.map
   (
     (x) {
-      const _remove =
-      [
-        // 'tx_blob',
-        // 'tx_json',
-        // 'last_failed_id_hash',
-        // 'max_used_block_id_hash',
-      ];
-
       return x.map
       (
         (k, v) {
