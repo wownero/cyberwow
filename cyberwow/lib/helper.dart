@@ -25,3 +25,12 @@ String pretty(dynamic x) {
   final JsonEncoder encoder = new JsonEncoder.withIndent('    ');
   return encoder.convert(x);
 }
+
+
+int asInt(dynamic x) => x == null ? 0 : x;
+
+bool asBool(dynamic x) => x == null ? false : x;
+
+List<dynamic> asList(dynamic x) => x == null ? [] : x;
+
+Map<String, dynamic> asMap(dynamic x) => x == null ? {} : x;

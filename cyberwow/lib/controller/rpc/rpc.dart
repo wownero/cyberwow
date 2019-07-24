@@ -81,13 +81,14 @@ Future<String> rpcString(String method, {String field}) async {
 Future<http.Response> syncInfo() => rpc('sync_info');
 Future<String> syncInfoString() => rpcString('sync_info');
 
-Future<int> targetHeight() => rpc('sync_info', field: 'target_height').then((x) => x as int);
-Future<int> height() => rpc('sync_info', field: 'height').then((x) => x as int);
+Future<int> targetHeight() => rpc('sync_info', field: 'target_height').then(asInt);
+Future<int> height() => rpc('sync_info', field: 'height').then(asInt);
 
 Future<http.Response> getInfo() => rpc('get_info');
 
 Future<Map<String, dynamic>> getInfoSimple() async {
-  final Map<String, dynamic> _getInfo = await rpc('get_info');
+  final _getInfo = await rpc('get_info').then(asMap);
+
   return _getInfo.map
   (
     (k, v) {
@@ -102,17 +103,15 @@ Future<Map<String, dynamic>> getInfoSimple() async {
 
 Future<String> getInfoString() => rpcString('get_info');
 
-Future<bool> offline() => rpc('get_info', field: 'offline').then((x) => x as bool);
+Future<bool> offline() => rpc('get_info', field: 'offline').then(asBool);
 
 Future<int> outgoingConnectionsCount() =>
-  rpc('get_info', field: 'outgoing_connections_count')
-  .then((x) => x as int);
+  rpc('get_info', field: 'outgoing_connections_count').then(asInt);
 Future<int> incomingConnectionsCount() =>
-  rpc('get_info', field: 'incoming_connections_count')
-  .then((x) => x as int);
+  rpc('get_info', field: 'incoming_connections_count').then(asInt);
 
 Future<List<dynamic>> getConnectionsSimple() async {
-  final List<dynamic> _connections = await rpc('get_connections', field: 'connections');
+  final _connections = await rpc('get_connections', field: 'connections').then(asList);
 
   return _connections.map
   (
