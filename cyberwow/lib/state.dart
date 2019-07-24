@@ -122,7 +122,7 @@ class LoadingState extends HookedState {
 
     Future<void> load() async {
       log.fine("Loading next");
-      await for (var line in loadingProgress) {
+      await for (final line in loadingProgress) {
         // append(line);
         log.info(line);
       }
@@ -156,7 +156,7 @@ class SyncingState extends HookedState {
     log.fine("Syncing next");
 
     Future<void> printStdout() async {
-      await for (var line in processOutput) {
+      await for (final line in processOutput) {
         if (synced) break;
         log.finest('syncing: print stdout loop');
 
@@ -166,7 +166,7 @@ class SyncingState extends HookedState {
     }
 
     Future<void> checkSync() async {
-      await for (var _null in refresh.pull(getNotification, 'syncingState')) {
+      await for (final _null in refresh.pull(getNotification, 'syncingState')) {
         log.finer('SyncingState: checkSync loop');
 
         // here doc is wrong, targetHeight could match height when synced
@@ -210,7 +210,7 @@ class SyncedState extends HookedState {
     log.fine("Synced next");
 
     Future<void> logStdout() async {
-      await for (var line in processOutput) {
+      await for (final line in processOutput) {
         if (!synced) break;
         // print('synced: print stdout loop');
         stdout += line;
@@ -221,7 +221,7 @@ class SyncedState extends HookedState {
     logStdout();
 
     Future<void> checkSync() async  {
-      await for (var _null in refresh.pull(getNotification, 'syncedState')) {
+      await for (final _null in refresh.pull(getNotification, 'syncedState')) {
         if (await daemon.isNotSynced()) {
           synced = false;
           break;
@@ -267,7 +267,7 @@ class ReSyncingState extends HookedState {
     log.fine("ReSyncing next");
 
     Future<void> printStdout() async {
-      await for (var line in processOutput) {
+      await for (final line in processOutput) {
         if (synced) break;
         // print('re-syncing: print stdout loop');
         append(line);
@@ -276,7 +276,7 @@ class ReSyncingState extends HookedState {
     }
 
     Future<void> checkSync() async {
-      await for (var _null in refresh.pull(getNotification, 'ReSyncingState')) {
+      await for (final _null in refresh.pull(getNotification, 'ReSyncingState')) {
 
         if (await daemon.isSynced()) {
           synced = true;

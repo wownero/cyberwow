@@ -45,18 +45,17 @@ Future<http.Response> rpcHTTP(String method) async {
     }
   );
 
-  var response;
   try {
-    response = await http.post
+    final response = await http.post
     ( url,
       body: body
     );
+    return response;
   }
   catch (e) {
-    // print(e);
+    log.warning(e);
+    return null;
   }
-
-  return response;
 }
 
 Future<dynamic> rpc(String method, {String field}) async {

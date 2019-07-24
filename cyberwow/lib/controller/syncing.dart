@@ -60,7 +60,7 @@ Stream<String> runBinary (String name) async* {
   log.info('args: ' + args.toString());
 
   final outputProcess = await Process.start(newPath, args);
-  await for (var line in outputProcess.stdout.transform(utf8.decoder)) {
+  await for (final line in outputProcess.stdout.transform(utf8.decoder)) {
     yield line;
   }
 

@@ -32,17 +32,16 @@ import '../../logging.dart';
 Future<http.Response> rpc2(String method) async {
   final url = 'http://${config.host}:${config.c.port}/${method}';
 
-  var response;
   try {
-    response = await http.post
+    final response = await http.post
     ( url,
     );
+    return response;
   }
   catch (e) {
     log.warning(e);
+    return null;
   }
-
-  return response;
 }
 
 Future<String> rpc2String(String method, {String field}) async {
