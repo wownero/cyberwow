@@ -53,7 +53,7 @@ Widget buildReSyncing(BuildContext context, ReSyncingState state) {
                 reverse: true,
                 child: Text
                 (
-                  state.stdout,
+                  state.stdout.join(),
                   style: TextStyle
                   (
                     fontFamily: 'RobotoMono',

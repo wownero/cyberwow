@@ -24,6 +24,7 @@ import 'dart:io';
 import 'dart:developer';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:collection';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -136,19 +137,22 @@ class LoadingState extends HookedState {
       await Future.wait([load(), showBanner()]);
     }
 
-    SyncingState _next = SyncingState(setState, getNotification, status);
+    SyncingState _next = SyncingState(setState, getNotification);
     return moveState(_next);
   }
 }
 
 class SyncingState extends HookedState {
-  String stdout;
+  Queue<String> stdout = Queue();
   bool synced = false;
 
-  SyncingState(f, s, this.stdout) : super (f, s);
+  SyncingState(f, s) : super (f, s);
 
   void append(String msg) {
-    this.stdout += msg;
+    stdout.addLast(msg);
+    while (stdout.length > config.stdoutLineBufferSize) {
+      stdout.removeFirst();
+    }
     syncState();
   }
 
@@ -194,7 +198,7 @@ class SyncingState extends HookedState {
 }
 
 class SyncedState extends HookedState {
-  String stdout;
+  Queue<String> stdout;
   int height;
   Stream<String> processOutput;
   bool synced = true;
@@ -213,7 +217,7 @@ class SyncedState extends HookedState {
       await for (final line in processOutput) {
         if (!synced) break;
         // print('synced: print stdout loop');
-        stdout += line;
+        stdout.addLast(line);
         log.info(line);
       }
     }
@@ -252,14 +256,17 @@ class SyncedState extends HookedState {
 
 
 class ReSyncingState extends HookedState {
-  String stdout;
+  Queue<String> stdout;
   Stream<String> processOutput;
   bool synced = false;
 
   ReSyncingState(f, s, this.stdout, this.processOutput) : super (f, s);
 
   void append(String msg) {
-    this.stdout += msg;
+    stdout.addLast(msg);
+    while (stdout.length > config.stdoutLineBufferSize) {
+      stdout.removeFirst();
+    }
     syncState();
   }
 
