@@ -235,13 +235,6 @@ class SyncedState extends HookedState {
       await for (final line in processOutput) {
         if (!synced) break;
 
-        if (isExiting()) {
-          ExitingState _next = ExitingState
-          (
-            setState, getNotification, stdout, processOutput
-          );
-          return moveState(_next);
-        }
         // print('synced: print stdout loop');
         stdout.addLast(line);
         log.info(line);
@@ -252,6 +245,16 @@ class SyncedState extends HookedState {
 
     Future<void> checkSync() async  {
       await for (final _null in refresh.pull(getNotification, 'syncedState')) {
+        if (isExiting()) {
+          log.fine('Synced state detected exiting');
+
+          ExitingState _next = ExitingState
+          (
+            setState, getNotification, stdout, processOutput
+          );
+          return moveState(_next);
+        }
+
         if (await daemon.isNotSynced()) {
           synced = false;
           break;
