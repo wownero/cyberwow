@@ -80,5 +80,5 @@ Stream<String> runBinary (String name, {Stream<String> input}) async* {
 
   // the app should never reach here
   log.info('Daemon exited gracefully.');
-  exit(0);
+  // exit(0);
 }

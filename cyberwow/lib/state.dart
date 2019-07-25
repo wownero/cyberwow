@@ -72,11 +72,13 @@ abstract class AppState {
 
 typedef SetStateFunc = void Function(AppState);
 typedef GetNotificationFunc = AppLifecycleState Function();
+typedef IsExitingFunc = bool Function();
 
 class HookedState extends AppState {
   final SetStateFunc setState;
   final GetNotificationFunc getNotification;
-  HookedState(this.setState, this.getNotification);
+  final IsExitingFunc isExiting;
+  HookedState(this.setState, this.getNotification, this.isExiting);
 
   syncState() {
     setState(this);
@@ -89,10 +91,10 @@ class HookedState extends AppState {
 }
 
 class BlankState extends HookedState {
-  BlankState(f, s) : super (f, s);
+  BlankState(f1, f2, f3) : super (f1, f2, f3);
 
   Future<LoadingState> next(String status) async {
-    LoadingState _next = LoadingState(setState, getNotification, status);
+    LoadingState _next = LoadingState(setState, getNotification, isExiting, status);
     return moveState(_next);
   }
 }
@@ -101,7 +103,7 @@ class LoadingState extends HookedState {
   String banner;
   String status = '';
 
-  LoadingState(f, s, this.banner) : super (f, s);
+  LoadingState(f1, f2, f3, this.banner) : super (f1, f2, f3);
 
   void append(String msg) {
     this.status += msg;
@@ -141,7 +143,7 @@ class LoadingState extends HookedState {
       await Future.wait([load(), showBanner()]);
     }
 
-    SyncingState _next = SyncingState(setState, getNotification);
+    SyncingState _next = SyncingState(setState, getNotification, isExiting);
     return moveState(_next);
   }
 }
@@ -150,7 +152,7 @@ class SyncingState extends HookedState {
   Queue<String> stdout = Queue();
   bool synced = false;
 
-  SyncingState(f, s) : super (f, s);
+  SyncingState(f1, f2, f3) : super (f1, f2, f3);
 
   void append(String msg) {
     stdout.addLast(msg);
@@ -160,9 +162,9 @@ class SyncingState extends HookedState {
     syncState();
   }
 
-  Future<SyncedState> next
+  Future<HookedState> next
   (
-    StreamSink<String> processInput, Stream<String> processOutput, IsExitingFunc isExiting
+    StreamSink<String> processInput, Stream<String> processOutput
   ) async {
     log.fine("Syncing next");
 
@@ -180,6 +182,11 @@ class SyncingState extends HookedState {
       await for (final _null in refresh.pull(getNotification, 'syncingState')) {
         log.finer('SyncingState: checkSync loop');
 
+        if (isExiting()) {
+          log.fine('Syncing state detected exiting');
+          break;
+        }
+
         // here doc is wrong, targetHeight could match height when synced
         // potential bug, targetHeight could be smaller then height
         final _isConnected = await daemon.isConnected();
@@ -195,6 +202,14 @@ class SyncingState extends HookedState {
     printStdout();
     await checkSync();
 
+    if (isExiting()) {
+      ExitingState _next = ExitingState
+      (
+        setState, getNotification, isExiting, stdout, processOutput
+      );
+      return moveState(_next);
+    }
+
     log.fine('syncing: loop exit');
 
     // processInput.add('exit');
@@ -205,8 +220,6 @@ class SyncingState extends HookedState {
     return moveState(_next);
   }
 }
-
-typedef IsExitingFunc = bool Function();
 
 class SyncedState extends HookedState {
   Queue<String> stdout;
@@ -219,16 +232,15 @@ class SyncedState extends HookedState {
   String syncInfo = 'syncInfo';
   List<dynamic> getConnections = [];
   List<dynamic> getTransactionPool = [];
-  final IsExitingFunc isExiting;
 
-  SyncedState(f, s, this.isExiting, this.stdout, this.processInput, this.processOutput) : super (f, s);
+  SyncedState(f1, f2, f3, this.stdout, this.processInput, this.processOutput) : super (f1, f2, f3);
 
   void appendInput(String line) {
     stdout.addLast('> ' + line + '\n');
     processInput.add(line);
   }
 
-  Future<ReSyncingState> next() async {
+  Future<HookedState> next() async {
     log.fine("Synced next");
 
     Future<void> logStdout() async {
@@ -247,12 +259,7 @@ class SyncedState extends HookedState {
       await for (final _null in refresh.pull(getNotification, 'syncedState')) {
         if (isExiting()) {
           log.fine('Synced state detected exiting');
-
-          ExitingState _next = ExitingState
-          (
-            setState, getNotification, stdout, processOutput
-          );
-          return moveState(_next);
+          break;
         }
 
         if (await daemon.isNotSynced()) {
@@ -278,6 +285,14 @@ class SyncedState extends HookedState {
 
     await checkSync();
 
+    if (isExiting()) {
+      ExitingState _next = ExitingState
+      (
+        setState, getNotification, isExiting, stdout, processOutput
+      );
+      return moveState(_next);
+    }
+
     log.fine('synced: loop exit');
 
     ReSyncingState _next = ReSyncingState
@@ -294,9 +309,8 @@ class ReSyncingState extends HookedState {
   StreamSink<String> processInput;
   Stream<String> processOutput;
   bool synced = false;
-  final IsExitingFunc isExiting;
 
-  ReSyncingState(f, s, this.isExiting, this.stdout, this.processInput, this.processOutput) : super (f, s);
+  ReSyncingState(f1, f2, f3, this.stdout, this.processInput, this.processOutput) : super (f1, f2, f3);
 
   void append(String msg) {
     stdout.addLast(msg);
@@ -306,7 +320,7 @@ class ReSyncingState extends HookedState {
     syncState();
   }
 
-  Future<SyncedState> next() async {
+  Future<HookedState> next() async {
     log.fine("ReSyncing next");
 
     Future<void> printStdout() async {
@@ -320,6 +334,10 @@ class ReSyncingState extends HookedState {
 
     Future<void> checkSync() async {
       await for (final _null in refresh.pull(getNotification, 'ReSyncingState')) {
+        if (isExiting()) {
+          log.fine('ReSyncing state detected exiting');
+          break;
+        }
 
         if (await daemon.isSynced()) {
           synced = true;
@@ -331,6 +349,14 @@ class ReSyncingState extends HookedState {
 
     printStdout();
     await checkSync();
+
+    if (isExiting()) {
+      ExitingState _next = ExitingState
+      (
+        setState, getNotification, isExiting, stdout, processOutput
+      );
+      return moveState(_next);
+    }
 
     log.fine('resync: await exit');
     SyncedState _next = SyncedState
@@ -346,7 +372,7 @@ class ExitingState extends HookedState {
   Queue<String> stdout;
   Stream<String> processOutput;
 
-  ExitingState(f, s, this.stdout, this.processOutput) : super (f, s);
+  ExitingState(f1, f2, f3, this.stdout, this.processOutput) : super (f1, f2, f3);
 
   void append(String msg) {
     stdout.addLast(msg);
@@ -361,7 +387,7 @@ class ExitingState extends HookedState {
 
     Future<void> printStdout() async {
       await for (final line in processOutput) {
-        log.finest('exiting: print stdout loop');
+        log.info('exiting: print stdout loop');
 
         append(line);
         log.info(line);
@@ -369,5 +395,7 @@ class ExitingState extends HookedState {
     }
 
     await printStdout();
+
+    log.info('exiting state done');
   }
 }

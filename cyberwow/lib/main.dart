@@ -131,13 +131,24 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     SyncingState _syncingState = await _loadingState.next(loading, '');
 
-    final syncing = process.runBinary(binName, input: inputStreamController.stream).asBroadcastStream();
+    final syncing = process
+    .runBinary(binName, input: inputStreamController.stream)
+    .asBroadcastStream();
 
-    SyncedState _syncedState = await _syncingState.next(inputStreamController.sink, syncing, _isExiting);
-    await _syncedState.next();
+    HookedState _syncedNextState = await _syncingState.next(inputStreamController.sink, syncing);
+
+    var exited = false;
+
+    if (_syncedNextState is SyncedState) {
+      SyncedState _syncedState = _syncedNextState;
+      await _syncedState.next();
+    } else {
+      ExitingState _exitingState = _syncedNextState;
+      await _exitingState.wait();
+      exited = true;
+    }
 
     var validState = true;
-    var exited = false;
     while (validState && !exited) {
       await _getState().use
       (
@@ -148,12 +159,18 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
         (s) => s.next(),
         (s) {
           s.wait();
+          log.finer('exit state wait done');
           exited = true;
         }
       );
     }
 
-    if (!exited) {
+    log.finer('state machine finished');
+
+    if (exited) {
+      log.finer('popping navigator');
+      SystemNavigator.pop();
+    } else {
       log.severe('Reached invalid state!');
       exit(1);
     }
@@ -168,7 +185,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
 
-    BlankState _blankState = BlankState(_setState, _getNotification);
+    BlankState _blankState = BlankState(_setState, _getNotification, _isExiting);
     _state = _blankState;
 
     buildStateMachine(_blankState);
