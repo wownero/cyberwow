@@ -383,11 +383,11 @@ class ExitingState extends HookedState {
   }
 
   Future<SyncedState> wait() async {
-    log.fine("Exiting wait");
+    log.finer("Exiting wait");
 
     Future<void> printStdout() async {
       await for (final line in processOutput) {
-        log.info('exiting: print stdout loop');
+        log.finer('exiting: print stdout loop');
 
         append(line);
         log.info(line);
@@ -396,6 +396,6 @@ class ExitingState extends HookedState {
 
     await printStdout();
 
-    log.info('exiting state done');
+    log.finer('exiting state done');
   }
 }

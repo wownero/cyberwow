@@ -157,8 +157,8 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
         (s) => validState = false,
         (s) => s.next(),
         (s) => s.next(),
-        (s) {
-          s.wait();
+        (s) async {
+          await s.wait();
           log.finer('exit state wait done');
           exited = true;
         }
