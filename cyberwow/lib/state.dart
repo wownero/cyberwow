@@ -233,7 +233,8 @@ class SyncedState extends HookedState {
   List<dynamic> getConnections = [];
   List<dynamic> getTransactionPool = [];
 
-  final terminalController = TextEditingController();
+  FocusNode focusNode = FocusNode();
+  TextEditingController textController = TextEditingController();
 
   SyncedState(f1, f2, f3, this.stdout, this.processInput, this.processOutput) : super (f1, f2, f3);
 

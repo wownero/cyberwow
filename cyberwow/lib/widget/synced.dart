@@ -26,6 +26,7 @@ import 'dart:collection';
 import '../state.dart';
 import '../config.dart' as config;
 import '../helper.dart';
+import '../logging.dart';
 
 Widget summary(BuildContext context, SyncedState state) {
   return Container
@@ -145,9 +146,42 @@ Widget getTransactionPool(BuildContext context, SyncedState state) => rpcView(co
 
 
 Widget terminalView(BuildContext context, String title, SyncedState state) {
+  final input = TextFormField
+  (
+    controller: state.textController,
+    textInputAction: TextInputAction.done,
+    autofocus: true,
+    autocorrect: false,
+    focusNode: state.focusNode,
+    decoration:
+    InputDecoration
+    (
+      // border: UnderlineInputBorder // OutlineInputBorder
+      // (
+      // ),
+      // hintText: 'WOW',
+      enabledBorder: UnderlineInputBorder
+      (
+        borderSide: BorderSide
+        (
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
+      border: InputBorder.none,
+    ),
+    onFieldSubmitted: (v) {
+      if (state.textController.text != '') {
+        FocusScope.of(context).requestFocus(state.focusNode);
+        log.finer('terminal input: ${state.textController.text}');
+        state.appendInput(state.textController.text);
+        state.textController.clear();
+      }
+    },
+  );
+
   return Container
   (
-    padding: const EdgeInsets.all(10.0),
+    // padding: const EdgeInsets.all(10.0),
     child: Align
     (
       alignment: Alignment.topLeft,
@@ -162,25 +196,12 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
             child: SingleChildScrollView
             (
               scrollDirection: Axis.vertical,
+              reverse: true,
               child: Column
               (
                 children: <Widget>
                 [
 
-                  Container(
-                    height: 0,
-                    margin: const EdgeInsets.only(bottom: 15),
-                  ),
-                  Text
-                  (
-                    title,
-                    style: Theme.of(context).textTheme.display1,
-                  ),
-                  Container(
-                    height: 1,
-                    color: Theme.of(context).primaryColor,
-                    margin: const EdgeInsets.only(bottom: 20, top: 20),
-                  ),
                   Text
                   (
                     state.stdout.join(),
@@ -190,26 +211,10 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
               )
             )
           ),
-          TextField
+          Container
           (
-            controller: state.terminalController,
-            decoration: InputDecoration
-            (
-              border: OutlineInputBorder
-              (
-                borderSide: BorderSide
-                (
-                ),
-              ),
-              enabledBorder: OutlineInputBorder
-              (
-                borderSide: BorderSide
-                (
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-            autofocus: true,
+            margin: const EdgeInsets.all(10.0),
+            child: input,
           ),
         ],
       ),

@@ -31,6 +31,7 @@ final _theme = ThemeData
   hintColor: Colors.yellow,
   primarySwatch: Colors.green,
   accentColor: Colors.green,
+  cursorColor: Colors.green,
 
   scaffoldBackgroundColor: Colors.black,
 
