@@ -68,11 +68,13 @@ abstract class AppState {
 
 typedef SetStateFunc = void Function(AppState);
 typedef GetNotificationFunc = AppLifecycleState Function();
+typedef IsExitingFunc = bool Function();
 
 class HookedState extends AppState {
   final SetStateFunc setState;
   final GetNotificationFunc getNotification;
-  HookedState(this.setState, this.getNotification);
+  final GetExitingFunc isExiting;
+  HookedState(this.setState, this.getNotification, this.isExiting);
 
   syncState() {
     setState(this);
@@ -311,5 +313,36 @@ class ReSyncingState extends HookedState {
     SyncedState _next = SyncedState(setState, getNotification, stdout, processInput, processOutput);
     _next.height = await rpc.height();
     return moveState(_next);
+  }
+}
+
+class ExitingState extends HookedState {
+  Queue<String> stdout;
+  Stream<String> processOutput;
+
+  ExitingState(f, s, this.stdout, this.processOutput) : super (f, s);
+
+  void append(String msg) {
+    stdout.addLast(msg);
+    while (stdout.length > config.stdoutLineBufferSize) {
+      stdout.removeFirst();
+    }
+    syncState();
+  }
+
+  Future<SyncedState> wait() async {
+    log.fine("Exiting wait");
+
+    Future<void> printStdout() async {
+      await for (final line in processOutput) {
+        if (synced) break;
+        log.finest('exiting: print stdout loop');
+
+        append(line);
+        log.info(line);
+      }
+    }
+
+    await printStdout();
   }
 }
