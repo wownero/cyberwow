@@ -32,12 +32,12 @@ import 'config.dart' as config;
 import 'logging.dart';
 import 'controller/process/deploy.dart' as process;
 import 'controller/process/run.dart' as process;
-import 'widget/loading.dart';
-import 'widget/blank.dart';
-import 'widget/syncing.dart';
-import 'widget/synced.dart';
-import 'widget/resyncing.dart';
-import 'widget/exiting.dart';
+import 'widget/loading.dart' as widget;
+import 'widget/blank.dart' as widget;
+import 'widget/syncing.dart' as widget;
+import 'widget/synced.dart' as widget;
+import 'widget/resyncing.dart' as widget;
+import 'widget/exiting.dart' as widget;
 
 void main() {
   Logger.root.level = kReleaseMode ? Level.INFO : Level.FINE;
@@ -189,12 +189,12 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
       onWillPop: () => _exitApp(context),
       child: _state.use
       (
-        (s) => buildBlank(context, s),
-        (s) => buildLoading(context, s),
-        (s) => buildSyncing(context, s),
-        (s) => buildSynced(context, s, syncedPageController),
-        (s) => buildReSyncing(context, s),
-        (s) => buildExiting(context, s),
+        (s) => widget.buildBlank(context, s),
+        (s) => widget.buildLoading(context, s),
+        (s) => widget.buildSyncing(context, s),
+        (s) => widget.buildSynced(context, s, syncedPageController),
+        (s) => widget.buildReSyncing(context, s),
+        (s) => widget.buildExiting(context, s),
       ),
     );
   }
