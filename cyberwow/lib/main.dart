@@ -169,7 +169,8 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     if (exited) {
       log.finer('popping navigator');
-      SystemNavigator.pop();
+      // SystemNavigator.pop();
+      exit(0);
     } else {
       log.severe('Reached invalid state!');
       exit(1);
