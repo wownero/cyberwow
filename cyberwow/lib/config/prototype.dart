@@ -26,8 +26,7 @@ class CryptoConfig {
   final String appPath;
   final String splash;
   final int splashDelay;
-  final Color textColor;
-  final Color backgroundColor;
+  final ThemeData theme;
   final int port;
   final List<String> extraArgs;
   const CryptoConfig
@@ -36,8 +35,7 @@ class CryptoConfig {
     this.appPath,
     this.splash,
     this.splashDelay,
-    this.textColor,
-    this.backgroundColor,
+    this.theme,
     this.port,
     this.extraArgs,
   );

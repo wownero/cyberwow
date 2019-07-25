@@ -21,15 +21,16 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 
+import 'dart:collection';
+
 import '../state.dart';
 import '../config.dart' as config;
 import '../helper.dart';
 
-Widget summary(SyncedState state) {
+Widget summary(BuildContext context, SyncedState state) {
   return Container
   (
     padding: EdgeInsets.only(bottom: 10.0),
-    color: config.c.backgroundColor,
     child: Align
     (
       alignment: Alignment.center,
@@ -59,13 +60,7 @@ Widget summary(SyncedState state) {
               child: Text
               (
                 '${state.height}',
-                style: TextStyle
-                (
-                  fontFamily: 'RobotoMono',
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                  color: config.c.textColor,
-                ),
+                style: Theme.of(context).textTheme.display1,
                 key: ValueKey<int>(state.height),
               )
             )
@@ -91,11 +86,10 @@ Widget summary(SyncedState state) {
   );
 }
 
-Widget rpcView(String title, dynamic body) {
+Widget rpcView(BuildContext context, String title, dynamic body) {
   return Container
   (
     padding: const EdgeInsets.all(10.0),
-    color: config.c.backgroundColor,
     child: Align
     (
       alignment: Alignment.topLeft,
@@ -122,28 +116,17 @@ Widget rpcView(String title, dynamic body) {
                   Text
                   (
                     title,
-                    style: TextStyle
-                    (
-                      fontFamily: 'RobotoMono',
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                      color: config.c.textColor,
-                    ),
+                    style: Theme.of(context).textTheme.display1,
                   ),
                   Container(
                     height: 1,
-                    color: config.c.textColor,
+                    color: Theme.of(context).primaryColor,
                     margin: const EdgeInsets.only(bottom: 20, top: 20),
                   ),
                   Text
                   (
                     pretty(body),
-                    style: TextStyle
-                    (
-                      fontFamily: 'RobotoMono',
-                      fontSize: 11,
-                      color: config.c.textColor,
-                    ),
+                    style: Theme.of(context).textTheme.body2,
                   )
                 ],
               )
@@ -155,20 +138,98 @@ Widget rpcView(String title, dynamic body) {
   );
 }
 
-Widget getInfo(SyncedState state) => rpcView('info', state.getInfo);
-Widget getConnections(SyncedState state) => rpcView('connections', state.getConnections);
-Widget syncInfo(SyncedState state) => rpcView('sync info', state.syncInfo);
-Widget getTransactionPool(SyncedState state) => rpcView('tx pool', state.getTransactionPool);
+Widget getInfo(BuildContext context, SyncedState state) => rpcView(context, 'info', state.getInfo);
+Widget getConnections(BuildContext context, SyncedState state) => rpcView(context, 'connections', state.getConnections);
+Widget syncInfo(BuildContext context, SyncedState state) => rpcView(context, 'sync info', state.syncInfo);
+Widget getTransactionPool(BuildContext context, SyncedState state) => rpcView(context, 'tx pool', state.getTransactionPool);
 
-Widget pageView (SyncedState state, PageController controller) {
+
+Widget terminalView(BuildContext context, String title, SyncedState state) {
+  return Container
+  (
+    padding: const EdgeInsets.all(10.0),
+    child: Align
+    (
+      alignment: Alignment.topLeft,
+      child: Column
+      (
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>
+        [
+          Expanded
+          (
+            flex: 1,
+            child: SingleChildScrollView
+            (
+              scrollDirection: Axis.vertical,
+              child: Column
+              (
+                children: <Widget>
+                [
+
+                  Container(
+                    height: 0,
+                    margin: const EdgeInsets.only(bottom: 15),
+                  ),
+                  Text
+                  (
+                    title,
+                    style: Theme.of(context).textTheme.display1,
+                  ),
+                  Container(
+                    height: 1,
+                    color: Theme.of(context).primaryColor,
+                    margin: const EdgeInsets.only(bottom: 20, top: 20),
+                  ),
+                  Text
+                  (
+                    state.stdout.join(),
+                    style: Theme.of(context).textTheme.body2,
+                  )
+                ],
+              )
+            )
+          ),
+          TextField
+          (
+            controller: state.terminalController,
+            decoration: InputDecoration
+            (
+              border: OutlineInputBorder
+              (
+                borderSide: BorderSide
+                (
+                ),
+              ),
+              enabledBorder: OutlineInputBorder
+              (
+                borderSide: BorderSide
+                (
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
+            autofocus: true,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+
+Widget terminal(BuildContext context, SyncedState state) => terminalView(context, 'terminal', state);
+
+Widget pageView (BuildContext context, SyncedState state, PageController controller) {
   return PageView (
     controller: controller,
     children:
     [
-      summary(state),
-      getTransactionPool(state),
-      getInfo(state),
-      getConnections(state),
+      terminal(context, state),
+      summary(context, state),
+      getTransactionPool(context, state),
+      getInfo(context, state),
+      getConnections(context, state),
       // syncInfo(state),
     ],
   );
@@ -177,6 +238,6 @@ Widget pageView (SyncedState state, PageController controller) {
 Widget buildSynced(BuildContext context, SyncedState state, PageController controller) {
   return Scaffold
   (
-    body: pageView(state, controller)
+    body: pageView(context, state, controller)
   );
 }

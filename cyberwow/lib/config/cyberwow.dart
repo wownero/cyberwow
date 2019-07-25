@@ -23,14 +23,59 @@ import 'package:flutter/material.dart';
 
 import 'prototype.dart';
 
-const config = CryptoConfig
+final _theme = ThemeData
+(
+  brightness: Brightness.dark,
+
+  primaryColor: Colors.green,
+  hintColor: Colors.yellow,
+  primarySwatch: Colors.green,
+  accentColor: Colors.green,
+
+  scaffoldBackgroundColor: Colors.black,
+
+  fontFamily: 'RobotoMono',
+
+  textTheme: TextTheme
+  (
+    display1: TextStyle
+    (
+      fontSize: 35,
+      fontWeight: FontWeight.bold,
+    ),
+    subhead: TextStyle
+    (
+      fontSize: 17,
+      fontWeight: FontWeight.bold,
+    ),
+    body2: TextStyle
+    (
+      fontSize: 11,
+    ),
+  ).apply
+  (
+    bodyColor: Colors.green,
+    displayColor: Colors.green,
+  ),
+
+  // cursorColor: config.c.textColor,
+  // inputDecorationTheme: InputDecorationTheme
+  // (
+  //   focusedBorder: UnderlineInputBorder
+  //   (
+  //     borderSide: BorderSide(color: config.c.textColor)
+  //   )
+  // )
+);
+
+
+final config = CryptoConfig
 (
   'wownerod',
   'wownerod',
   'Follow the white rabbit.',
   70,
-  Colors.green,
-  Colors.black,
+  _theme,
   34568,
   [
     '--prune-blockchain',

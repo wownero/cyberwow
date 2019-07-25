@@ -33,7 +33,6 @@ Widget buildLoading(BuildContext context, LoadingState state) {
     body: Container
     (
       padding: const EdgeInsets.all(10.0),
-      color: config.c.backgroundColor,
       child: Align
       (
         alignment: Alignment.topLeft,
@@ -50,13 +49,7 @@ Widget buildLoading(BuildContext context, LoadingState state) {
                 child: Text
                 (
                   state.status,
-                  style: TextStyle
-                  (
-                    fontFamily: 'RobotoMono',
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: config.c.textColor,
-                  ),
+                  style: Theme.of(context).textTheme.subhead,
                 )
               )
             )

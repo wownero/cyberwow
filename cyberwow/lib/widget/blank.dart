@@ -28,7 +28,6 @@ Widget buildBlank(BuildContext context, BlankState state) {
   return Scaffold(
     body: Container
     (
-      color: config.c.backgroundColor,
     ),
   );
 }

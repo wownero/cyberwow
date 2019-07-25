@@ -53,10 +53,7 @@ class CyberWOW_App extends StatelessWidget {
     return MaterialApp
     (
       title: 'CyberWOW',
-      theme: ThemeData
-      (
-        primarySwatch: Colors.purple,
-      ),
+      theme: config.c.theme,
       home: CyberWOW_Page(title: 'CyberWOW'),
     );
   }

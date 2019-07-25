@@ -35,7 +35,6 @@ Widget buildSyncing(BuildContext context, SyncingState state) {
     body: Container
     (
       // padding: const EdgeInsets.all(10.0),
-      color: config.c.backgroundColor,
       child: Align
       (
         alignment: Alignment.topLeft,
@@ -54,12 +53,7 @@ Widget buildSyncing(BuildContext context, SyncingState state) {
                 child: Text
                 (
                   state.stdout.join(),
-                  style: TextStyle
-                  (
-                    fontFamily: 'RobotoMono',
-                    fontSize: 11,
-                    color: config.c.textColor,
-                  ),
+                  style: Theme.of(context).textTheme.body2,
                 )
               )
             )
