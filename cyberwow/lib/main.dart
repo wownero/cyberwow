@@ -137,20 +137,26 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     await _syncedState.next();
 
     var validState = true;
-    while (validState) {
+    var exited = false;
+    while (validState && !exited) {
       await _getState().use
       (
-        (s) => () => validState = false,
-        (s) => () => validState = false,
-        (s) => () => validState = false,
+        (s) => validState = false,
+        (s) => validState = false,
+        (s) => validState = false,
         (s) => s.next(),
         (s) => s.next(),
-        (s) => s.wait(),
+        (s) {
+          s.wait();
+          exited = true;
+        }
       );
     }
 
-    log.severe('Reached invalid state!');
-    exit(1);
+    if (!exited) {
+      log.severe('Reached invalid state!');
+      exit(1);
+    }
   }
 
   @override
