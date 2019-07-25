@@ -37,6 +37,7 @@ import 'widget/blank.dart';
 import 'widget/syncing.dart';
 import 'widget/synced.dart';
 import 'widget/resyncing.dart';
+import 'widget/exiting.dart';
 
 void main() {
   Logger.root.level = kReleaseMode ? Level.INFO : Level.FINE;
@@ -71,7 +72,6 @@ class CyberWOW_Page extends StatefulWidget {
 
 class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserver
 {
-  int _counter = 0;
   // AppState _state = LoadingState("init...");
 
   AppState _state;
@@ -79,6 +79,8 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   final syncedPageController = PageController(
     initialPage: 0,
   );
+
+  bool _exiting = false;
 
   final StreamController<String> inputStreamController = StreamController();
 
@@ -105,6 +107,10 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     return _notification;
   }
 
+  bool _isExiting() {
+    return _exiting;
+  }
+
   AppState _getState() {
     return _state;
   }
@@ -127,7 +133,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     final syncing = process.runBinary(binName, input: inputStreamController.stream).asBroadcastStream();
 
-    SyncedState _syncedState = await _syncingState.next(inputStreamController.sink, syncing);
+    SyncedState _syncedState = await _syncingState.next(inputStreamController.sink, syncing, _isExiting);
     await _syncedState.next();
 
     var validState = true;
@@ -139,6 +145,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
         (s) => () => validState = false,
         (s) => s.next(),
         (s) => s.next(),
+        (s) => s.wait(),
       );
     }
 
@@ -164,7 +171,10 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   Future<bool> _exitApp(BuildContext context) async {
     log.info("CyberWOW_PageState _exitApp");
     WidgetsBinding.instance.removeObserver(this);
+
+    _exiting = true;
     inputStreamController.sink.add('exit');
+
     await Future.delayed(const Duration(seconds: 10), () => null);
 
     // the process controller should call exit(0) for us
@@ -184,6 +194,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
         (s) => buildSyncing(context, s),
         (s) => buildSynced(context, s, syncedPageController),
         (s) => buildReSyncing(context, s),
+        (s) => buildExiting(context, s),
       ),
     );
   }
