@@ -225,24 +225,25 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
 
 Widget terminal(BuildContext context, SyncedState state) => terminalView(context, 'terminal', state);
 
-Widget pageView (BuildContext context, SyncedState state, PageController controller) {
+Widget pageView (BuildContext context, SyncedState state) {
   return PageView (
-    controller: controller,
+    controller: state.pageController,
+    onPageChanged: state.onPageChanged,
     children:
     [
       terminal(context, state),
       summary(context, state),
       getTransactionPool(context, state),
-      getInfo(context, state),
       getConnections(context, state),
+      getInfo(context, state),
       // syncInfo(state),
     ],
   );
 }
 
-Widget buildSynced(BuildContext context, SyncedState state, PageController controller) {
+Widget buildSynced(BuildContext context, SyncedState state) {
   return Scaffold
   (
-    body: pageView(context, state, controller)
+    body: pageView(context, state)
   );
 }

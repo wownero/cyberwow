@@ -215,7 +215,10 @@ class SyncingState extends HookedState {
     // processInput.add('exit');
 
     final _height = await rpc.height();
-    SyncedState _next = SyncedState(setState, getNotification, isExiting, stdout, processInput, processOutput);
+    SyncedState _next = SyncedState
+    (
+      setState, getNotification, isExiting, stdout, processInput, processOutput, 1,
+    );
     _next.height = _height;
     return moveState(_next);
   }
@@ -232,15 +235,24 @@ class SyncedState extends HookedState {
   String syncInfo = 'syncInfo';
   List<dynamic> getConnections = [];
   List<dynamic> getTransactionPool = [];
+  int pageIndex;
 
-  FocusNode focusNode = FocusNode();
-  TextEditingController textController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+  final TextEditingController textController = TextEditingController();
+  PageController pageController;
 
-  SyncedState(f1, f2, f3, this.stdout, this.processInput, this.processOutput) : super (f1, f2, f3);
+  SyncedState(f1, f2, f3, this.stdout, this.processInput, this.processOutput, this.pageIndex)
+  : super (f1, f2, f3) {
+    pageController = PageController( initialPage: pageIndex );
+  }
 
   void appendInput(String line) {
     stdout.addLast('> ' + line + '\n');
     processInput.add(line);
+  }
+
+  void onPageChanged(int value) {
+    this.pageIndex = value;
   }
 
   Future<HookedState> next() async {
@@ -300,7 +312,7 @@ class SyncedState extends HookedState {
 
     ReSyncingState _next = ReSyncingState
     (
-      setState, getNotification, isExiting, stdout, processInput, processOutput
+      setState, getNotification, isExiting, stdout, processInput, processOutput, pageIndex
     );
     return moveState(_next);
   }
@@ -312,8 +324,10 @@ class ReSyncingState extends HookedState {
   StreamSink<String> processInput;
   Stream<String> processOutput;
   bool synced = false;
+  final int pageIndex;
 
-  ReSyncingState(f1, f2, f3, this.stdout, this.processInput, this.processOutput) : super (f1, f2, f3);
+  ReSyncingState(f1, f2, f3, this.stdout, this.processInput, this.processOutput, this.pageIndex)
+    : super (f1, f2, f3);
 
   void append(String msg) {
     stdout.addLast(msg);
@@ -364,7 +378,7 @@ class ReSyncingState extends HookedState {
     log.fine('resync: await exit');
     SyncedState _next = SyncedState
     (
-      setState, getNotification, isExiting, stdout, processInput, processOutput
+      setState, getNotification, isExiting, stdout, processInput, processOutput, pageIndex
     );
     _next.height = await rpc.height();
     return moveState(_next);
