@@ -20,6 +20,7 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'dart:collection';
 
@@ -226,9 +227,16 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
 Widget terminal(BuildContext context, SyncedState state) => terminalView(context, 'terminal', state);
 
 Widget pageView (BuildContext context, SyncedState state) {
+  void _onPageChanged(int pageIndex) {
+    if (pageIndex != 0) {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+    }
+    state.onPageChanged(pageIndex);
+  }
+
   return PageView (
     controller: state.pageController,
-    onPageChanged: state.onPageChanged,
+    onPageChanged: _onPageChanged,
     children:
     [
       terminal(context, state),
