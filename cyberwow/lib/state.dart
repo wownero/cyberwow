@@ -115,7 +115,7 @@ class LoadingState extends HookedState {
     Future<void> showBanner() async {
       var chars = [];
       banner.runes.forEach((int rune) {
-          final c = new String.fromCharCode(rune);
+          final c = String.fromCharCode(rune);
           chars.add(c);
       });
 

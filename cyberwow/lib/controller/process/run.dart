@@ -35,7 +35,7 @@ Stream<String> runBinary (String name, {Stream<String> input}) async* {
 
   final appDocDir = await getApplicationDocumentsDirectory();
   final appDocPath = appDocDir.path;
-  final binDir = new Directory(appDocDir.path + "/" + config.c.appPath);
+  final binDir = Directory(appDocDir.path + "/" + config.c.appPath);
 
   await binDir.create();
 
@@ -73,7 +73,7 @@ Stream<String> runBinary (String name, {Stream<String> input}) async* {
   }
   await for (final line in outputProcess.stdout.transform(utf8.decoder)) {
     log.finest('process output: ' + line);
-    yield line.replaceAll(new RegExp(r'\033\[[0-9;]*m'), '');
+    yield line.replaceAll(RegExp(r'\033\[[0-9;]*m'), '');
   }
 
   if (config.isEmu) return;

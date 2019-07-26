@@ -1,3 +1,3 @@
 import 'package:logging/logging.dart';
 
-final Logger log = new Logger('Default');
+final Logger log = Logger('Default');
