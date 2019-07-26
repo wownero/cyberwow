@@ -58,6 +58,8 @@ Future<http.Response> rpcHTTP(String method) async {
   }
 }
 
+dynamic jsonDecode(String responseBody) => json.decode(responseBody);
+
 Future<dynamic> rpc(String method, {String field}) async {
   final response = await rpcHTTP(method);
 
@@ -66,7 +68,8 @@ Future<dynamic> rpc(String method, {String field}) async {
   if (response.statusCode != 200) {
     return null;
   } else {
-    final _result = json.decode(response.body)['result'];
+    final _body = await compute(jsonDecode, response.body);
+    final _result = _body['result'];
     final _field = field == null ? _result : _result[field];
 
     return _field;
