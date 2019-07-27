@@ -37,7 +37,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
-        versionName "0.6.1.2-b"
+        versionName "0.6.1.2-c"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
