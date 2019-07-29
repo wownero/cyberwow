@@ -150,10 +150,9 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
   final input = TextFormField
   (
     controller: state.textController,
-    textInputAction: TextInputAction.done,
+    textInputAction: TextInputAction.next,
     autofocus: true,
     autocorrect: false,
-    focusNode: state.focusNode,
     decoration:
     InputDecoration
     (
@@ -171,11 +170,15 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
       border: InputBorder.none,
     ),
     onFieldSubmitted: (v) {
-      if (state.textController.text != '') {
-        FocusScope.of(context).requestFocus(state.focusNode);
-        log.finer('terminal input: ${state.textController.text}');
-        state.appendInput(state.textController.text);
+      final line = state.textController.text.trim();
+      if (line.isNotEmpty) {
+        log.finer('terminal input: ${line}');
+        state.appendInput(line);
         state.textController.clear();
+      }
+      else {
+        state.textController.clear();
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
       }
     },
   );
