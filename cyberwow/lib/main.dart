@@ -110,11 +110,11 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   }
 
 
-  void _updateLoading(LoadingState state, String msg) {
+  void _updateLoading(LoadingState state, final String msg) {
     log.fine('updateLoading: ' + msg);
   }
 
-  Future<void> buildStateMachine(BlankState _blankState) async {
+  Future<void> buildStateMachine(final BlankState _blankState) async {
     final loadingText = config.c.splash;
     LoadingState _loadingState = await _blankState.next(loadingText);
 
@@ -180,7 +180,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
 
-    BlankState _blankState = BlankState(_setState, _getNotification, _isExiting);
+    final BlankState _blankState = BlankState(_setState, _getNotification, _isExiting);
     _state = _blankState;
 
     buildStateMachine(_blankState);
@@ -202,7 +202,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope
+    return WillPopScope
     (
       onWillPop: () => _exitApp(context),
       child: _state.use

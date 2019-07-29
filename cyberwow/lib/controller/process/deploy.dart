@@ -27,7 +27,12 @@ import 'package:flutter/services.dart';
 
 import '../helper.dart';
 
-Stream<String> deployBinary (AssetBundle bundle, String path, String name) async* {
+Stream<String> deployBinary
+(
+  final AssetBundle bundle,
+  final String path,
+  final String name
+) async* {
   final binData = await bundle.load(path);
   final newPath = await getBinaryPath(name);
 

@@ -29,7 +29,7 @@ import '../../config.dart' as config;
 import '../../helper.dart';
 import '../../logging.dart';
 
-Future<http.Response> rpc2(String method) async {
+Future<http.Response> rpc2(final String method) async {
   final url = 'http://${config.host}:${config.c.port}/${method}';
 
   try {
@@ -44,9 +44,9 @@ Future<http.Response> rpc2(String method) async {
   }
 }
 
-dynamic jsonDecode(String responseBody) => json.decode(responseBody);
+dynamic jsonDecode(final String responseBody) => json.decode(responseBody);
 
-Future<String> rpc2String(String method, {String field}) async {
+Future<String> rpc2String(final String method, {final String field}) async {
   final response = await rpc2(method);
 
   if (response == null) return '';

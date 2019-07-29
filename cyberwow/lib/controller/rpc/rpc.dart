@@ -31,7 +31,7 @@ import '../../logging.dart';
 
 int rpcID = 0;
 
-Future<http.Response> rpcHTTP(String method) async {
+Future<http.Response> rpcHTTP(final String method) async {
   final url = 'http://${config.host}:${config.c.port}/json_rpc';
 
   rpcID += 1;
@@ -58,9 +58,9 @@ Future<http.Response> rpcHTTP(String method) async {
   }
 }
 
-dynamic jsonDecode(String responseBody) => json.decode(responseBody);
+dynamic jsonDecode(final String responseBody) => json.decode(responseBody);
 
-Future<dynamic> rpc(String method, {String field}) async {
+Future<dynamic> rpc(final String method, {final String field}) async {
   final response = await rpcHTTP(method);
 
   if (response == null) return null;
@@ -76,7 +76,7 @@ Future<dynamic> rpc(String method, {String field}) async {
   }
 }
 
-Future<String> rpcString(String method, {String field}) async {
+Future<String> rpcString(final String method, {final String field}) async {
   final _field = await rpc(method, field: field);
   return pretty(_field);
 }

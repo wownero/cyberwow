@@ -30,7 +30,7 @@ import '../logging.dart';
 
 typedef GetNotificationFunc = AppLifecycleState Function();
 
-Stream<Null> pull(GetNotificationFunc getNotification, String puller) async* {
+Stream<Null> pull(GetNotificationFunc getNotification, final String puller) async* {
   while (true) {
     final _appState = getNotification();
     log.finer('refresh pull by ${puller}: app state: ${_appState}');

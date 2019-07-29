@@ -170,7 +170,7 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
       border: InputBorder.none,
     ),
     onFieldSubmitted: (v) {
-      String autoReplace(String x) {
+      String autoReplace(final String x) {
         final words = x.split(' ');
 
         if (words.length == 0) {

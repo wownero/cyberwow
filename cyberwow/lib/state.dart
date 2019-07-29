@@ -100,12 +100,12 @@ class BlankState extends HookedState {
 }
 
 class LoadingState extends HookedState {
-  String banner;
+  final String banner;
   String status = '';
 
   LoadingState(f1, f2, f3, this.banner) : super (f1, f2, f3);
 
-  void append(String msg) {
+  void append(final String msg) {
     this.status += msg;
     syncState();
   }
@@ -149,12 +149,13 @@ class LoadingState extends HookedState {
 }
 
 class SyncingState extends HookedState {
-  Queue<String> stdout = Queue();
+  final Queue<String> stdout = Queue();
+
   bool synced = false;
 
   SyncingState(f1, f2, f3) : super (f1, f2, f3);
 
-  void append(String msg) {
+  void append(final String msg) {
     stdout.addLast(msg);
     while (stdout.length > config.stdoutLineBufferSize) {
       stdout.removeFirst();
@@ -225,20 +226,19 @@ class SyncingState extends HookedState {
 }
 
 class SyncedState extends HookedState {
-  Queue<String> stdout;
+  final Queue<String> stdout;
+  final StreamSink<String> processInput;
+  final Stream<String> processOutput;
+  final TextEditingController textController = TextEditingController();
+
   int height;
-  StreamSink<String> processInput;
-  Stream<String> processOutput;
   bool synced = true;
   bool connected = true;
   Map<String, dynamic> getInfo = {};
-  String syncInfo = 'syncInfo';
   List<dynamic> getConnections = [];
   List<dynamic> getTransactionPool = [];
   int pageIndex;
-
-  final FocusNode focusNode = FocusNode();
-  final TextEditingController textController = TextEditingController();
+  String syncInfo = 'syncInfo';
   PageController pageController;
 
   SyncedState(f1, f2, f3, this.stdout, this.processInput, this.processOutput, this.pageIndex)
@@ -246,12 +246,12 @@ class SyncedState extends HookedState {
     pageController = PageController( initialPage: pageIndex );
   }
 
-  void appendInput(String line) {
+  void appendInput(final String line) {
     stdout.addLast('> ' + line + '\n');
     processInput.add(line);
   }
 
-  void append(String msg) {
+  void append(final String msg) {
     stdout.addLast(msg);
     while (stdout.length > config.stdoutLineBufferSize) {
       stdout.removeFirst();
@@ -293,7 +293,6 @@ class SyncedState extends HookedState {
         height = await rpc.height();
         connected = await daemon.isConnected();
         getInfo = await rpc.getInfoSimple();
-        // syncInfo = await rpc.syncInfoString();
         getConnections = await rpc.getConnectionsSimple();
         // getTransactionPool = await rpc.getTransactionPoolString();
 
@@ -328,16 +327,17 @@ class SyncedState extends HookedState {
 
 
 class ReSyncingState extends HookedState {
-  Queue<String> stdout;
-  StreamSink<String> processInput;
-  Stream<String> processOutput;
-  bool synced = false;
+  final Queue<String> stdout;
+  final StreamSink<String> processInput;
+  final Stream<String> processOutput;
   final int pageIndex;
+
+  bool synced = false;
 
   ReSyncingState(f1, f2, f3, this.stdout, this.processInput, this.processOutput, this.pageIndex)
     : super (f1, f2, f3);
 
-  void append(String msg) {
+  void append(final String msg) {
     stdout.addLast(msg);
     while (stdout.length > config.stdoutLineBufferSize) {
       stdout.removeFirst();
@@ -394,12 +394,12 @@ class ReSyncingState extends HookedState {
 }
 
 class ExitingState extends HookedState {
-  Queue<String> stdout;
-  Stream<String> processOutput;
+  final Queue<String> stdout;
+  final Stream<String> processOutput;
 
   ExitingState(f1, f2, f3, this.stdout, this.processOutput) : super (f1, f2, f3);
 
-  void append(String msg) {
+  void append(final String msg) {
     stdout.addLast(msg);
     while (stdout.length > config.stdoutLineBufferSize) {
       stdout.removeFirst();

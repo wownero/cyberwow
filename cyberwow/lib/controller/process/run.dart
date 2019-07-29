@@ -30,7 +30,7 @@ import '../helper.dart';
 import '../../config.dart' as config;
 import '../../logging.dart';
 
-Stream<String> runBinary (String name, {Stream<String> input}) async* {
+Stream<String> runBinary (final String name, {final Stream<String> input}) async* {
   final newPath = await getBinaryPath(name);
 
   final appDocDir = await getApplicationDocumentsDirectory();

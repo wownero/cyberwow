@@ -25,12 +25,12 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 
-Future<String> getBinaryPath(String name) async {
+Future<String> getBinaryPath(final String name) async {
   final tmpDir = await getTemporaryDirectory();
   return tmpDir.path + '/' + name;
 }
 
-Future<bool> binaryExists(String name) async {
+Future<bool> binaryExists(final String name) async {
   final binPath = await getBinaryPath(name);
   return new File(binPath).exists();
 }
