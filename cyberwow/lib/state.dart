@@ -251,6 +251,14 @@ class SyncedState extends HookedState {
     processInput.add(line);
   }
 
+  void append(String msg) {
+    stdout.addLast(msg);
+    while (stdout.length > config.stdoutLineBufferSize) {
+      stdout.removeFirst();
+    }
+    syncState();
+  }
+
   void onPageChanged(int value) {
     this.pageIndex = value;
   }
@@ -263,7 +271,7 @@ class SyncedState extends HookedState {
         if (!synced) break;
 
         // print('synced: print stdout loop');
-        stdout.addLast(line);
+        append(line);
         log.info(line);
       }
     }
