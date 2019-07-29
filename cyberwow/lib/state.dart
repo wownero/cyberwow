@@ -248,6 +248,7 @@ class SyncedState extends HookedState {
 
   void appendInput(final String line) {
     stdout.addLast('> ' + line + '\n');
+    syncState();
     processInput.add(line);
   }
 
