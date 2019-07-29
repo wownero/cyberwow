@@ -233,6 +233,7 @@ class SyncedState extends HookedState {
 
   int height;
   bool synced = true;
+  bool userExit = false;
   bool connected = true;
   Map<String, dynamic> getInfo = {};
   List<dynamic> getConnections = [];
@@ -250,6 +251,10 @@ class SyncedState extends HookedState {
     stdout.addLast('> ' + line + '\n');
     syncState();
     processInput.add(line);
+
+    if (line == 'exit') {
+      userExit = true;
+    }
   }
 
   void append(final String msg) {
@@ -281,7 +286,7 @@ class SyncedState extends HookedState {
 
     Future<void> checkSync() async  {
       await for (final _null in refresh.pull(getNotification, 'syncedState')) {
-        if (isExiting()) {
+        if (isExiting() || userExit) {
           log.fine('Synced state detected exiting');
           break;
         }
@@ -308,7 +313,7 @@ class SyncedState extends HookedState {
 
     await checkSync();
 
-    if (isExiting()) {
+    if (isExiting() || userExit) {
       ExitingState _next = ExitingState
       (
         setState, getNotification, isExiting, stdout, processOutput
