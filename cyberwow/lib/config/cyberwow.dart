@@ -70,6 +70,47 @@ final _theme = ThemeData
 );
 
 
+const Set<String> _commands =
+{
+  'alt_chain_info',
+  'bc_dyn_stat0s',
+  'check_blockchain_pruning',
+  'flush_txpool',
+  'hard_fork_info',
+  'hide_hr',
+  'in_peers',
+  'is_key_image_spent',
+  'limit_down',
+  'limit_up',
+  'mining_status',
+  'out_peers',
+  'output_histogram',
+  'pop_blocks',
+  'print_bc',
+  'print_block',
+  'print_cn',
+  'print_coinbase_tx_sum',
+  'print_height',
+  'print_net_stats',
+  'print_pl',
+  'print_pl_stats',
+  'print_pool',
+  'print_pool_sh',
+  'print_pool_stats',
+  'print_status',
+  'print_tx',
+  'prune_blockchain',
+  'relay_tx',
+  'set_log',
+  'show_hr',
+  'start_mining',
+  'start_save_graph',
+  'stop_daemon',
+  'stop_mining',
+  'stop_save_graph',
+  'sync_info',
+};
+
 final config = CryptoConfig
 (
   'wownerod',
@@ -78,6 +119,7 @@ final config = CryptoConfig
   70,
   _theme,
   34568,
+  _commands,
   [
     '--prune-blockchain',
     '--max-concurrency=1',

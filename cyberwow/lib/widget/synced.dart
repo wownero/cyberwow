@@ -170,7 +170,27 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
       border: InputBorder.none,
     ),
     onFieldSubmitted: (v) {
-      final line = state.textController.text.trim();
+      String autoReplace(String x) {
+        final words = x.split(' ');
+
+        if (words.length == 0) {
+          return x;
+        }
+
+        final head = words.first;
+        final tail = words.sublist(1);
+        final guessHead = head.replaceAll('-', '_');
+
+        if (config.c.commands.contains(guessHead)) {
+          return [ guessHead, ...tail ].join(' ');
+        } else {
+          return x;
+        }
+      }
+
+      final _text = state.textController.text.trim();
+      final line = autoReplace(_text);
+
       if (line.isNotEmpty) {
         log.finer('terminal input: ${line}');
         state.appendInput(line);
