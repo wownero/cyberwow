@@ -31,19 +31,19 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+cd $BUILD_ROOT_SRC
 
-cd ../vendor/wownero
-git fetch --all
+name=zlib
+version=1.2.11
+hash=c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1
 
-git checkout $version
-git submodule init && git submodule update
+rm -rf ${name}-${version}
 
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+curl -# -L -O \
+     https://zlib.net/${name}-${version}.tar.gz
 
+echo "${hash} ${name}-${version}.tar.gz" | sha256sum -c
+
+tar xzf ${name}-${version}.tar.gz

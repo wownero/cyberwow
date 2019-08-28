@@ -31,19 +31,11 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+build_root=$BUILD_PATH
 
-cd ../vendor/wownero
-git fetch --all
+rm -rf $build_root
+mkdir -p $build_root
 
-git checkout $version
-git submodule init && git submodule update
-
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
-
+rm -rf cyberwow/native/output

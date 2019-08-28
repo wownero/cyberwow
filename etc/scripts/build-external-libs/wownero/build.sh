@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Copyright (c) 2019, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
@@ -31,19 +31,55 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+build_root=$BUILD_ROOT
+src_root=$BUILD_ROOT_SRC
 
-cd ../vendor/wownero
-git fetch --all
+build_root_wow=$BUILD_ROOT_WOW
 
-git checkout $version
-git submodule init && git submodule update
+name=wownero
 
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+cd $src_root/${name}
 
+archs=(arm64)
+for arch in ${archs[@]}; do
+    extra_cmake_flags=""
+    case ${arch} in
+        "arm")
+            target_host=arm-linux-androideabi
+            ;;
+        "arm64")
+            target_host=aarch64-linux-android
+            ;;
+        "x86_64")
+            target_host=x86_64-linux-android
+            ;;
+        *)
+            exit 16
+            ;;
+    esac
+
+    # PREFIX=$build_root/build/${name}/$arch
+    PREFIX=$build_root/build/$arch
+    echo "building for ${arch}"
+
+    mkdir -p $PREFIX/dlib/
+    rm -f $PREFIX/dlib/libtinfo.so.5
+    ln -s $PATH_NCURSES/lib/libncursesw.so.5 $PREFIX/dlib/libtinfo.so.5
+
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PREFIX/dlib
+    export TOOLCHAIN_DIR=`realpath $build_root_wow/tool/${arch}`
+    export PATH=$PATH:$build_root/host/bin
+
+    (
+        CMAKE_INCLUDE_PATH="${PREFIX}/include" \
+        CMAKE_LIBRARY_PATH="${PREFIX}/lib" \
+        ANDROID_STANDALONE_TOOLCHAIN_PATH=${TOOLCHAIN_DIR} \
+        USE_SINGLE_BUILDDIR=1 \
+        make release-static-android-armv8 -j${NPROC} \
+    )
+
+done
+
+exit 0

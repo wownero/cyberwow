@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # Copyright (c) 2019, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
 #
@@ -29,21 +27,39 @@
 # STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 # THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-set -e
+DEFAULT_ANDROID_NDK_ROOT=~/SDK/Android/ndk-archive/android-ndk-r20
+ANDROID_NDK_ROOT="${ANDROID_NDK_ROOT:-${DEFAULT_ANDROID_NDK_ROOT}}"
+export ANDROID_NDK_ROOT=`realpath $ANDROID_NDK_ROOT`
 
-version="aba46a"
-container="wownero-android-${version}"
+DEFAULT_ANDROID_NDK_VERSION=r20
+ANDROID_NDK_VERSION="${ANDROID_NDK_VERSION:-${DEFAULT_ANDROID_NDK_VERSION}}"
 
-echo "Building: ${container}"
-echo
+BUILD_PATH=../cyberwow-build
 
-cd ../vendor/wownero
-git fetch --all
+DEFAULT_BUILD_ROOT=${BUILD_PATH}/$ANDROID_NDK_VERSION
+BUILD_ROOT="${BUILD_ROOT:-${DEFAULT_BUILD_ROOT}}"
+export BUILD_ROOT=`realpath $BUILD_ROOT`
 
-git checkout $version
-git submodule init && git submodule update
+BUILD_ROOT_SRC=${BUILD_ROOT}/src
 
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+DEFAULT_NPROC=$(nproc)
+NPROC="${NPROC:-${DEFAULT_NPROC}}"
+
+export NPROC
+
+
+# wownero can only be built with ndk-r17c
+
+DEFAULT_ANDROID_NDK_VERSION_WOW=r17c
+ANDROID_NDK_VERSION_WOW="${ANDROID_NDK_VERSION_WOW:-${DEFAULT_ANDROID_NDK_VERSION_WOW}}"
+
+DEFAULT_ANDROID_NDK_ROOT_WOW=$ANDROID_NDK_ROOT/../$ANDROID_NDK_VERSION_WOW
+ANDROID_NDK_ROOT_WOW="${ANDROID_NDK_ROOT_WOW:-${DEFAULT_ANDROID_NDK_ROOT_WOW}}"
+export ANDROID_NDK_ROOT_WOW=`realpath $ANDROID_NDK_ROOT_WOW`
+
+DEFAULT_BUILD_ROOT_WOW=${BUILD_PATH}/$ANDROID_NDK_VERSION_WOW
+BUILD_ROOT_WOW="${BUILD_ROOT_WOW:-${DEFAULT_BUILD_ROOT_WOW}}"
+export BUILD_ROOT_WOW=`realpath $BUILD_ROOT_WOW`
+
+
 

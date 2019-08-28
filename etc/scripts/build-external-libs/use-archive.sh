@@ -31,19 +31,12 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+version=v2.3.0.0
 
-echo "Building: ${container}"
-echo
+curl -O -L https://github.com/fuwa0529/wownerujo/releases/download/${version}/external-libs.tgz
 
-cd ../vendor/wownero
-git fetch --all
+rm -rf external-libs
 
-git checkout $version
-git submodule init && git submodule update
-
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
-
+echo "unpacking external-libs"
+tar zxfv external-libs.tgz
+rm external-libs.tgz

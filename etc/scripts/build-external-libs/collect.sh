@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Copyright (c) 2019, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
@@ -31,19 +31,40 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+src_root=$BUILD_ROOT_SRC
+target_root=`pwd`
 
-cd ../vendor/wownero
-git fetch --all
+name=wownero
 
-git checkout $version
-git submodule init && git submodule update
+cd $src_root/${name}
 
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+archs=(arm64)
+for arch in ${archs[@]}; do
+    extra_cmake_flags=""
+    case ${arch} in
+        "arm")
+            target_host=arm-linux-androideabi
+            ;;
+        "arm64")
+            target_host=aarch64-linux-android
+            ;;
+        "x86_64")
+            target_host=x86_64-linux-android
+            ;;
+        *)
+            exit 16
+            ;;
+    esac
 
+    echo "collecting for ${arch}"
+    mkdir -p $target_root/cyberwow/native/output/$arch
+    cp build/release/bin/wownerod $target_root/cyberwow/native/output/$arch/
+
+done
+
+mkdir -p $target_root/cyberwow/native/output/x86_64
+touch $target_root/cyberwow/native/output/x86_64/wownerod
+
+exit 0

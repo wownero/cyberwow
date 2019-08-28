@@ -31,19 +31,19 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+cd $BUILD_ROOT_SRC
 
-cd ../vendor/wownero
-git fetch --all
+version=1.15
+hash=ccf536620a45458d26ba83887a983b96827001e92a13847b45e4925cc8913178
+name=libiconv
 
-git checkout $version
-git submodule init && git submodule update
+rm -rf ${name}-${version}
+curl -# -L -O \
+     http://ftp.gnu.org/pub/gnu/${name}/${name}-${version}.tar.gz
 
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+echo "${hash} ${name}-${version}.tar.gz" | sha256sum -c
+
+tar -xzf ${name}-${version}.tar.gz
 

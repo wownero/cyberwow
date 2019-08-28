@@ -31,19 +31,20 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+cd $BUILD_ROOT_SRC
 
-cd ../vendor/wownero
-git fetch --all
+name=boost
+version=1_68_0
+dot_version=1.68.0
+hash=7f6130bc3cf65f56a618888ce9d5ea704fa10b462be126ad053e80e553d6d8b7
 
-git checkout $version
-git submodule init && git submodule update
+rm -rf ${name}_${version}
 
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+curl -# -L -O \
+     https://dl.bintray.com/boostorg/release/${dot_version}/source/${name}_${version}.tar.bz2
 
+echo "${hash} ${name}_${version}.tar.bz2" | sha256sum -c
+
+tar xfv ${name}_${version}.tar.bz2

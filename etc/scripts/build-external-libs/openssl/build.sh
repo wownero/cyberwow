@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Copyright (c) 2019, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
@@ -31,19 +31,58 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+build_root=$BUILD_ROOT
+src_root=$BUILD_ROOT_SRC
 
-cd ../vendor/wownero
-git fetch --all
+name=openssl
+# version=1.0.2p
+version=1.1.1c
 
-git checkout $version
-git submodule init && git submodule update
+cd $src_root/${name}-${version}
 
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+archs=(arm64)
+for arch in ${archs[@]}; do
+    extra_cmake_flags=""
+    case ${arch} in
+        "arm")
+            target_host=arm-linux-androideabi
+            ;;
+        "arm64")
+            target_host=aarch64-linux-android
+            ;;
+        "x86_64")
+            target_host=x86_64-linux-android
+            ;;
+        *)
+            exit 16
+            ;;
+    esac
 
+    # ZLIB_PATH=$build_root/build/zlib/$arch
+    ZLIB_PATH=$build_root/build/$arch
+
+    # PREFIX=$build_root/build/${name}/$arch
+    PREFIX=$build_root/build/$arch
+
+    echo "building for ${arch}"
+
+    (
+        export CC=clang
+        export CXX=clang++
+        export ANDROID_API=23
+        export PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
+        export ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
+
+        ./Configure android-${arch} \
+                    --prefix=${PREFIX} \
+                    -D__ANDROID_API__=$ANDROID_API \
+                    --with-zlib-include=${ZLIB_PATH}/include \
+                    --with-zlib-lib=${ZLIB_PATH}/lib \
+            && make -j${NPROC} && make install && make clean \
+    )
+
+done
+
+exit 0

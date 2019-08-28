@@ -31,19 +31,20 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+cd $BUILD_ROOT_SRC
 
-cd ../vendor/wownero
-git fetch --all
+name=openssl
+# version=1.0.2p
+version=1.1.1c
+hash=50a98e07b1a89eb8f6a99477f262df71c6fa7bef77df4dc83025a2845c827d00
 
-git checkout $version
-git submodule init && git submodule update
+rm -rf ${name}-${version}
 
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+curl -# -L -O \
+     https://www.openssl.org/source/openssl-${version}.tar.gz
 
+# echo "${hash} ${name}-${version}.tar.gz" | sha256sum -c
+
+tar xzf ${name}-${version}.tar.gz

@@ -31,19 +31,17 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+cd $BUILD_ROOT_SRC
 
-cd ../vendor/wownero
-git fetch --all
+name=libsodium
+version=1.0.16
+githash=675149b9b8b66ff44152553fb3ebf9858128363d
 
-git checkout $version
-git submodule init && git submodule update
+rm -rf $name
 
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+git clone https://github.com/jedisct1/libsodium.git -b $version
 
+cd $name
+test `git rev-parse HEAD` = $githash || exit 1

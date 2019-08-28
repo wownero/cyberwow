@@ -31,19 +31,20 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+cd $BUILD_ROOT_SRC
 
-cd ../vendor/wownero
-git fetch --all
+name=wownero
+version=v0.6.1.2
+githash=aba46a7c5f0a892533abd3cc1a8b97cdf6b23fcc
 
-git checkout $version
+rm -rf $name
+
+git clone https://github.com/wownero/wownero.git -b $version
+# git clone ../../../wownero -b $version
+
+cd $name
+test `git rev-parse HEAD` = $githash || exit 1
+
 git submodule init && git submodule update
-
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
-

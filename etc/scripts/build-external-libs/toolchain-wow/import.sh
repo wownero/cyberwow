@@ -31,19 +31,19 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+build_root=$BUILD_ROOT_WOW
+PATH=$ANDROID_NDK_ROOT_WOW/build/tools/:$PATH
 
-cd ../vendor/wownero
-git fetch --all
+args="--api 23 --stl=libc++"
+archs=(arm64)
 
-git checkout $version
-git submodule init && git submodule update
+for arch in ${archs[@]}; do
 
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+    if [ ! -d "$build_root/tool/$arch" ]; then
+        echo "installing $arch"
+        make_standalone_toolchain.py $args --arch $arch --install-dir $build_root/tool/$arch
+    fi
 
+done

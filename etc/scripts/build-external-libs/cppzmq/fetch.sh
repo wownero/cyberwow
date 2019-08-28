@@ -31,19 +31,16 @@
 
 set -e
 
-version="aba46a"
-container="wownero-android-${version}"
+source etc/scripts/build-external-libs/env.sh
 
-echo "Building: ${container}"
-echo
+cd $BUILD_ROOT_SRC
 
-cd ../vendor/wownero
-git fetch --all
+version=v4.2.3
+name=cppzmq
+githash=6aa3ab686e916cb0e62df7fa7d12e0b13ae9fae6
 
-git checkout $version
-git submodule init && git submodule update
-
-docker build -f utils/build_scripts/android64.Dockerfile -t $container .
-docker create -it --name $container $container bash
-docker cp ${container}:/src/build/release/bin .
+rm -rf $name
+git clone https://github.com/zeromq/cppzmq.git -b $version
+cd $name
+test `git rev-parse HEAD` = $githash || exit 1
 

@@ -64,6 +64,12 @@ android {
             }
         }
     }
+
+    applicationVariants.all {
+        variant -> variant.outputs.all {
+            output -> outputFileName = "app-${output.baseName}.apk"
+        }
+    }
 }
 
 flutter {
