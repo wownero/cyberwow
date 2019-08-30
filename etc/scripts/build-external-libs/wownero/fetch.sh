@@ -41,8 +41,7 @@ githash=aba46a7c5f0a892533abd3cc1a8b97cdf6b23fcc
 
 rm -rf $name
 
-git clone https://github.com/wownero/wownero.git -b $version
-# git clone ../../../wownero -b $version
+git clone --depth 1 https://github.com/wownero/wownero.git -b $version
 
 cd $name
 test `git rev-parse HEAD` = $githash || exit 1
