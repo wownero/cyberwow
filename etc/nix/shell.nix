@@ -56,7 +56,7 @@ with nixpkgs;
     jdk
     # dart_dev
     gnumake
-    # gcc
+    gcc
     entr
     androidenv.androidPkgs_9_0.platform-tools
 
