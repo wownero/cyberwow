@@ -36,8 +36,8 @@ android {
         applicationId "org.wownero.cyberwow"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode flutterVersionCode.toInteger()
-        versionName "0.6.1.2-e"
+        versionCode 12
+        versionName "0.6.1.2-f"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
