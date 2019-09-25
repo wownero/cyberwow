@@ -49,7 +49,10 @@ Widget buildLoading(BuildContext context, LoadingState state) {
                 child: Text
                 (
                   state.status,
-                  style: Theme.of(context).textTheme.subhead,
+                  style: Theme.of(context).textTheme.title.apply
+                  (
+                    fontFamily: 'VT323',
+                  ),
                 )
               )
             )
