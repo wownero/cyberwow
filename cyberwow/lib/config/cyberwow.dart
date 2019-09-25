@@ -126,4 +126,5 @@ final config = CryptoConfig
     '--fast-block-sync=1',
     '--block-sync-size=5',
   ],
+  '[1337@cyberwow]: ',
 );

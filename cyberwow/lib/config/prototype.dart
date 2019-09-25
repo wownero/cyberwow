@@ -30,6 +30,7 @@ class CryptoConfig {
   final int port;
   final Set<String> commands;
   final List<String> extraArgs;
+  final String promptString;
   const CryptoConfig
   (
     this.outputBin,
@@ -40,5 +41,6 @@ class CryptoConfig {
     this.port,
     this.commands,
     this.extraArgs,
+    this.promptString,
   );
 }

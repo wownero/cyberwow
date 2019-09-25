@@ -248,7 +248,7 @@ class SyncedState extends HookedState {
   }
 
   void appendInput(final String line) {
-    stdout.addLast('> ' + line + '\n');
+    stdout.addLast(config.c.promptString + line + '\n');
     syncState();
     processInput.add(line);
 
