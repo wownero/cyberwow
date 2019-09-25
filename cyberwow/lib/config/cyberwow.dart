@@ -53,6 +53,11 @@ final _theme = ThemeData
       fontSize: 17,
       fontWeight: FontWeight.bold,
     ),
+    body1: TextStyle
+    (
+      fontSize: 16,
+      height: 1,
+    ),
     body2: TextStyle
     (
       fontSize: 11,
