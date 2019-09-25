@@ -35,23 +35,23 @@ final _theme = ThemeData
 
   scaffoldBackgroundColor: Colors.black,
 
-  fontFamily: 'RobotoMono',
-
   textTheme: TextTheme
   (
     display1: TextStyle
     (
       fontSize: 35,
       fontWeight: FontWeight.bold,
+      fontFamily: 'RobotoMono',
     ),
     subhead: TextStyle
     (
-      fontSize: 17,
-      fontWeight: FontWeight.bold,
+      fontSize: 22,
+      fontFamily: 'VT323',
     ),
     body2: TextStyle
     (
       fontSize: 11,
+      fontFamily: 'RobotoMono',
     ),
   ).apply
   (

@@ -66,6 +66,9 @@ flutter:
         - asset: fonts/RobotoMono-Regular.ttf
         - asset: fonts/RobotoMono-Bold.ttf
           weight: 700
+    - family: VT323
+      fonts:
+        - asset: fonts/VT323/VT323-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
