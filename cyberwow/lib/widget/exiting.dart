@@ -53,10 +53,7 @@ Widget buildExiting(BuildContext context, ExitingState state) {
                 child: Text
                 (
                   state.stdout.join(),
-                  style: Theme.of(context).textTheme.body1.apply
-                  (
-                    fontFamily: 'VT323',
-                  ),
+                  style: Theme.of(context).textTheme.body1,
                 )
               )
             )
