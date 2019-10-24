@@ -8,6 +8,10 @@ A dumb android pruned full node for Wownero.
 
 ### Compile wownerod for android-arm64
 
+#### Docker
+
+##### Manual
+
 ```
 pushd .
 git clone https://github.com/wownero/wownero
@@ -22,6 +26,14 @@ docker cp wownero-android:/src/build/release/bin .
 ```
 
 The binary needed is `./bin/wownerod`.
+
+##### Per hash
+
+See `etc/scripts/build-wownero.sh`, modify the value of `version` per build.
+
+#### Debian based system similar to F-droid
+
+See the `wownero` task in `Makefile`.
 
 ### Install flutter and make sure it's in path
 
@@ -43,7 +55,7 @@ touch cyberwow/native/output/x86_64/wownerod
 make build
 ```
 
-Resulting apk is in `cyberwow/build/app/outputs/apk/release/app-release.apk`.
+The resulting apk is `cyberwow/build/app/outputs/apk/release/app-release.apk`.
 
 ## Donations
 
