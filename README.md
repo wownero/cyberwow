@@ -8,9 +8,7 @@ A dumb android pruned full node for Wownero.
 
 ### Compile wownerod for android-arm64
 
-#### Docker
-
-##### Manual
+#### Simple method with Docker
 
 ```
 pushd .
@@ -27,11 +25,13 @@ docker cp wownero-android:/src/build/release/bin .
 
 The binary needed is `./bin/wownerod`.
 
-##### Per hash
+#### Alternative methods
+
+1. One docker instance per hash
 
 See `etc/scripts/build-wownero.sh`, modify the value of `version` per build.
 
-#### Debian based system similar to F-droid
+2. Debian based system similar to F-droid
 
 See the `wow` task in `Makefile`.
 
