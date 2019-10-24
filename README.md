@@ -33,7 +33,7 @@ See `etc/scripts/build-wownero.sh`, modify the value of `version` per build.
 
 #### Debian based system similar to F-droid
 
-See the `wownero` task in `Makefile`.
+See the `wow` task in `Makefile`.
 
 ### Install flutter and make sure it's in path
 
