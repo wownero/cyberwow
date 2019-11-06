@@ -91,14 +91,6 @@ openssl: zlib
 	$(script)/openssl/fetch.sh
 	$(script)/openssl/build.sh
 
-zeromq: toolchain
-	$(script)/zeromq/fetch.sh
-	$(script)/zeromq/build.sh
-
-cppzmq:
-	$(script)/cppzmq/fetch.sh
-	$(script)/cppzmq/build.sh
-
 sodium: toolchain
 	$(script)/sodium/fetch.sh
 	$(script)/sodium/build.sh
@@ -107,11 +99,7 @@ toolchain-wow:
 	$(script)/toolchain-wow/import.sh
 	$(script)/toolchain-wow/patch.sh
 
-cmake:
-	$(script)/cmake/fetch.sh
-	$(script)/cmake/install.sh
-
-wownero: openssl boost zeromq cppzmq sodium toolchain-wow
+wownero: openssl boost sodium toolchain-wow
 	$(script)/wownero/fetch.sh
 	$(script)/wownero/build.sh
 
