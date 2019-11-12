@@ -36,8 +36,8 @@ android {
         applicationId "org.wownero.cyberwow"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 12
-        versionName "0.6.1.2-f"
+        versionCode 13
+        versionName "0.7.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
