@@ -36,8 +36,8 @@ source etc/scripts/build-external-libs/env.sh
 cd $BUILD_ROOT_SRC
 
 name=wownero
-version=dev-v0.7.0
-githash=c73d4d0ce01676bdcbe75fb78eabeb306f06ad11
+version=v0.7.0
+githash=4c6c7ab87b2a56165f400f6e49f17b9577a2bcad
 
 rm -rf $name
 
