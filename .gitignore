@@ -5,3 +5,5 @@ result
 cyberwow/native/output/*
 screenshots/
 git/
+
+flutter_export_environment.sh
