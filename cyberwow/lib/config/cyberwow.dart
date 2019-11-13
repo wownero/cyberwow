@@ -137,7 +137,6 @@ final config = CryptoConfig
     '--max-concurrency=1',
     '--fast-block-sync=1',
     '--block-sync-size=5',
-    '--sync-pruned-blocks',
   ],
   '[1337@cyberwow]: ',
 );
