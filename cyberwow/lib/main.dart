@@ -50,6 +50,9 @@ void main() {
 class CyberWOW_App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
     return MaterialApp
     (
       title: 'CyberWOW',
@@ -178,11 +181,6 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     log.fine("CyberWOW_PageState initState");
 
     WidgetsBinding.instance.addObserver(this);
-
-    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-        statusBarColor: Colors.black,
-    ));
 
     final BlankState _blankState = BlankState(_setState, _getNotification, _isExiting);
     _state = _blankState;
