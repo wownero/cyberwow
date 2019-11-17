@@ -149,7 +149,7 @@ class LoadingState extends HookedState {
 }
 
 class SyncingState extends HookedState {
-  final Queue<String> stdout = Queue();
+  final Queue<String> stdout = Queue.from(['']);
 
   bool synced = false;
 
