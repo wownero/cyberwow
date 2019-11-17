@@ -181,11 +181,7 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
         final tail = words.sublist(1);
         final guessHead = head.replaceAll('-', '_');
 
-        if (config.c.commands.contains(guessHead)) {
-          return [ guessHead, ...tail ].join(' ');
-        } else {
-          return x;
-        }
+        return [ guessHead, ...tail ].join(' ');
       }
 
       final _text = state.textController.text.trim();

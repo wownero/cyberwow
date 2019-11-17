@@ -28,7 +28,6 @@ class CryptoConfig {
   final int splashDelay;
   final ThemeData theme;
   final int port;
-  final Set<String> commands;
   final List<String> extraArgs;
   final String promptString;
   const CryptoConfig
@@ -39,7 +38,6 @@ class CryptoConfig {
     this.splashDelay,
     this.theme,
     this.port,
-    this.commands,
     this.extraArgs,
     this.promptString,
   );
