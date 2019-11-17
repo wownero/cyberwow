@@ -70,15 +70,6 @@ final _theme = ThemeData
     bodyColor: Colors.green,
     displayColor: Colors.green,
   ),
-
-  // cursorColor: config.c.textColor,
-  // inputDecorationTheme: InputDecorationTheme
-  // (
-  //   focusedBorder: UnderlineInputBorder
-  //   (
-  //     borderSide: BorderSide(color: config.c.textColor)
-  //   )
-  // )
 );
 
 
