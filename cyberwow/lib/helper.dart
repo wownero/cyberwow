@@ -27,10 +27,10 @@ String pretty(dynamic x) {
 }
 
 
-int asInt(dynamic x) => x == null ? 0 : x;
+int asInt(dynamic x) => x ?? 0;
 
-bool asBool(dynamic x) => x == null ? false : x;
+bool asBool(dynamic x) => x ?? false;
 
-List<dynamic> asList(dynamic x) => x == null ? [] : x;
+List<dynamic> asList(dynamic x) => x ?? [];
 
-Map<String, dynamic> asMap(dynamic x) => x == null ? {} : x;
+Map<String, dynamic> asMap(dynamic x) => x ?? {};
