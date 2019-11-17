@@ -56,7 +56,7 @@ Widget buildSyncing(BuildContext context, SyncingState state) {
                   style: Theme.of(context).textTheme.body1,
                 )
               )
-            )
+            ),
           ],
         ),
       ),

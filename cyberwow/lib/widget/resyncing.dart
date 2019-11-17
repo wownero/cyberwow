@@ -43,6 +43,10 @@ Widget buildReSyncing(BuildContext context, ReSyncingState state) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>
           [
+            Spacer
+            (
+              flex: 1,
+            ),
             Expanded
             (
               flex: 1,
@@ -52,11 +56,15 @@ Widget buildReSyncing(BuildContext context, ReSyncingState state) {
                 reverse: true,
                 child: Text
                 (
-                  state.stdout.join(),
+                  state.stdout.last,
                   style: Theme.of(context).textTheme.body1,
                 )
               )
-            )
+            ),
+            Spacer
+            (
+              flex: 1,
+            ),
           ],
         ),
       ),
