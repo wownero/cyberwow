@@ -30,13 +30,14 @@ import '../helper.dart';
 import '../../config.dart' as config;
 import '../../logging.dart';
 
-typedef IsExitingFunc = bool Function();
+typedef ShouldExit = bool Function();
 
 Stream<String> runBinary
 (
   final String name,
-  final IsExitingFunc isExiting,
-  {final Stream<String> input}
+  { final Stream<String> input,
+    final ShouldExit shouldExit,
+  }
 ) async* {
   final newPath = await getBinaryPath(name);
 
@@ -85,9 +86,11 @@ Stream<String> runBinary
 
   if (config.isEmu) return;
 
-  if (!isExiting()) {
-    log.warning('process is ded');
-    exit(1);
+  if (shouldExit != null) {
+    if (!shouldExit()) {
+      log.warning('process is ded');
+      exit(1);
+    }
   }
 
   log.info('Daemon exited gracefully.');

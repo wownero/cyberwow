@@ -130,7 +130,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     SyncingState _syncingState = await _loadingState.next(loading, '');
 
     final syncing = process
-    .runBinary(binName, _isExiting, input: inputStreamController.stream)
+    .runBinary(binName, input: inputStreamController.stream, shouldExit: _isExiting)
     .asBroadcastStream();
 
     HookedState _syncedNextState = await _syncingState.next(inputStreamController.sink, syncing);
