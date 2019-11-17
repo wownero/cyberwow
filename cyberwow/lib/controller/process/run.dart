@@ -30,7 +30,14 @@ import '../helper.dart';
 import '../../config.dart' as config;
 import '../../logging.dart';
 
-Stream<String> runBinary (final String name, {final Stream<String> input}) async* {
+typedef IsExitingFunc = bool Function();
+
+Stream<String> runBinary
+(
+  final String name,
+  final IsExitingFunc isExiting,
+  {final Stream<String> input}
+) async* {
   final newPath = await getBinaryPath(name);
 
   final appDocDir = await getApplicationDocumentsDirectory();
@@ -78,7 +85,10 @@ Stream<String> runBinary (final String name, {final Stream<String> input}) async
 
   if (config.isEmu) return;
 
-  // the app should never reach here
+  if (!isExiting()) {
+    log.warning('process is ded');
+    exit(1);
+  }
+
   log.info('Daemon exited gracefully.');
-  // exit(0);
 }
