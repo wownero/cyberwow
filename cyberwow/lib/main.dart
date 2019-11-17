@@ -54,6 +54,7 @@ class CyberWOW_App extends StatelessWidget {
     (
       title: 'CyberWOW',
       theme: config.c.theme,
+      darkTheme: config.c.theme,
       home: CyberWOW_Page(title: 'CyberWOW'),
     );
   }
@@ -179,6 +180,9 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     WidgetsBinding.instance.addObserver(this);
 
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.black,
+    ));
 
     final BlankState _blankState = BlankState(_setState, _getNotification, _isExiting);
     _state = _blankState;
