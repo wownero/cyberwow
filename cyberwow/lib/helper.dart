@@ -27,7 +27,7 @@ String pretty(dynamic x) {
 }
 
 
-int asInt(dynamic x) => x ?? 0;
+int asInt(dynamic x) => x?.toInt() ?? 0;
 
 bool asBool(dynamic x) => x ?? false;
 
