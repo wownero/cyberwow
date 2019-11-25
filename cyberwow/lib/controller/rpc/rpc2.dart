@@ -103,7 +103,7 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
             // 'blob_size',
           ];
 
-          return Map.fromIterable
+          final _tx = Map.fromIterable
           (
             x.keys.where
             (
@@ -151,8 +151,24 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
                 return MapEntry(k, v);
               }
             }
-          )
-          ;
+          );
+
+          final List<String> keys =
+          [
+            'id',
+            'time',
+            'fee',
+            'in/out',
+            'size',
+          ]
+          .where((k) => _tx.keys.contains(k))
+          .toList();
+
+          final _sortedTx = {
+            for (var k in keys) k: _tx[k]
+          };
+
+          return _sortedTx;
         }
       ).toList();
     }
