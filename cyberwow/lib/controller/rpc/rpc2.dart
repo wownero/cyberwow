@@ -21,9 +21,11 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 import '../../config.dart' as config;
 import '../../helper.dart';
@@ -89,6 +91,14 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
             'tx_json',
             'last_failed_id_hash',
             'max_used_block_id_hash',
+            // fields not useful for noobs
+            'last_relayed_time',
+            'kept_by_block',
+            'double_spend_seen',
+            'relayed',
+            'do_not_relay',
+            'last_failed_height',
+            'max_used_block_height',
           ];
 
           return Map.fromIterable
@@ -103,6 +113,23 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
             (k, v) {
               if (k == 'id_hash') {
                 return MapEntry(k, v.substring(0, config.hashLength) + '...');
+              } else if (k == 'blob_size') {
+                final formatter = NumberFormat.compact();
+                return MapEntry(k, formatter.format(v) + 'B');
+              } else if (k == 'weight') {
+                final formatter = NumberFormat.compact();
+                return MapEntry(k, formatter.format(v));
+              } else if (k == 'fee') {
+                final formatter = NumberFormat.currency
+                (
+                  symbol: '',
+                  decimalDigits: 2,
+                );
+                return MapEntry(k, formatter.format(v / pow(10, 11)) + ' ⍵');
+              } else if (k == 'receive_time') {
+                final _dateTime = DateTime.fromMillisecondsSinceEpoch(v * 1000);
+                final _dateFormat = DateFormat.yMd().add_jm() ;
+                return MapEntry(k, _dateFormat.format(_dateTime));
               } else {
                 return MapEntry(k, v);
               }
