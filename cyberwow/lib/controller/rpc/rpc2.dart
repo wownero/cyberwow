@@ -88,7 +88,7 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
           const _remove =
           [
             'tx_blob',
-            'tx_json',
+            // 'tx_json',
             'last_failed_id_hash',
             'max_used_block_id_hash',
             // fields not useful for noobs
@@ -99,6 +99,8 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
             'do_not_relay',
             'last_failed_height',
             'max_used_block_height',
+            'weight',
+            // 'blob_size',
           ];
 
           return Map.fromIterable
@@ -112,25 +114,40 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
           (
             (k, v) {
               if (k == 'id_hash') {
-                return MapEntry(k, v.substring(0, config.hashLength) + '...');
-              } else if (k == 'blob_size') {
-                final formatter = NumberFormat.compact();
-                return MapEntry(k, formatter.format(v) + 'B');
-              } else if (k == 'weight') {
-                final formatter = NumberFormat.compact();
-                return MapEntry(k, formatter.format(v));
-              } else if (k == 'fee') {
+                return MapEntry('id', v.substring(0, config.hashLength) + '...');
+              }
+
+              else if (k == 'blob_size') {
+                return MapEntry('size', (v / 1024).toStringAsFixed(2) + ' kB');
+              }
+
+              else if (k == 'fee') {
                 final formatter = NumberFormat.currency
                 (
                   symbol: '',
                   decimalDigits: 2,
                 );
                 return MapEntry(k, formatter.format(v / pow(10, 11)) + ' ⍵');
-              } else if (k == 'receive_time') {
+              }
+
+              else if (k == 'receive_time') {
                 final _dateTime = DateTime.fromMillisecondsSinceEpoch(v * 1000);
                 final _dateFormat = DateFormat.yMd().add_jm() ;
-                return MapEntry(k, _dateFormat.format(_dateTime));
-              } else {
+                return MapEntry('time', _dateFormat.format(_dateTime));
+              }
+
+              else if (k == 'tx_json') {
+                final _tx = json.decode(v);
+                final _out =
+                {
+                  'vin': _tx['vin'].length,
+                  'vout': _tx['vout'].length,
+                };
+                final _outString = _out['vin'].toString() + '/' + _out['vout'].toString();
+                return MapEntry('in/out', _outString);
+              }
+
+              else {
                 return MapEntry(k, v);
               }
             }
