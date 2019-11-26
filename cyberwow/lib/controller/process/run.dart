@@ -81,7 +81,7 @@ Stream<String> runBinary
   }
   await for (final line in outputProcess.stdout.transform(utf8.decoder)) {
     log.finest('process output: ' + line);
-    yield line.replaceAll(RegExp(r'\033\[[0-9;]*m'), '');
+    yield line;
   }
 
   if (config.isEmu) return;
