@@ -82,9 +82,9 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
       return [];
     }
     else {
-      return result.map
+      return Stream.fromIterable(result).asyncMap
       (
-        (x) {
+        (x) async {
           const _remove =
           [
             'tx_blob',
@@ -103,14 +103,20 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
             // 'blob_size',
           ];
 
-          final _tx = Map.fromIterable
+          final _filteredTx = x..removeWhere
           (
-            x.keys.where
-            (
-              (k) => !_remove.contains(k)
-            ),
-            value: (k) => x[k],
-          ).map
+            (k,v) => _remove.contains(k)
+          );
+
+          final String _tx_json = _filteredTx['tx_json'];
+          final _tx_json_decoded = await compute(jsonDecode, _tx_json);
+
+          final _decodedTx = {
+            ..._filteredTx,
+            ...{'tx_decoded': _tx_json_decoded},
+          };
+
+          final _tx = _filteredTx.map
           (
             (k, v) {
               if (k == 'id_hash') {
@@ -136,12 +142,11 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
                 return MapEntry('time', _dateFormat.format(_dateTime));
               }
 
-              else if (k == 'tx_json') {
-                final _tx = json.decode(v);
+              else if (k == 'tx_json_decoded') {
                 final _out =
                 {
-                  'vin': _tx['vin'].length,
-                  'vout': _tx['vout'].length,
+                  'vin': v['vin'].length,
+                  'vout': v['vout'].length,
                 };
                 final _outString = _out['vin'].toString() + '/' + _out['vout'].toString();
                 return MapEntry('in/out', _outString);
