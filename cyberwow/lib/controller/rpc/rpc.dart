@@ -119,7 +119,34 @@ Future<List<dynamic>> getConnectionsSimple() async {
   return _connections.map
   (
     (x) {
-      return x.map
+      const _remove =
+      [
+        'address_type',
+        'connection_id',
+        'host',
+        'ip',
+        'local_ip',
+        'localhost',
+        'peer_id',
+        'port',
+        'recv_count',
+        'rpc_port',
+        'send_count',
+        'support_flags',
+
+        'avg_download',
+        'avg_upload',
+        'current_download',
+        'current_upload',
+        'rpc_credits_per_hash',
+      ];
+
+      final _filteredConn = x..removeWhere
+      (
+        (k,v) => _remove.contains(k)
+      );
+
+      return _filteredConn.map
       (
         (k, v) {
           if (k == 'connection_id') {
