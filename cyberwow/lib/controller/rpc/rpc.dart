@@ -154,7 +154,15 @@ Future<List<dynamic>> getConnectionsSimple() async {
         (k, v) {
           if (k == 'connection_id') {
             return MapEntry(k, v.substring(0, config.hashLength) + '...');
-          } else {
+          }
+
+          else if (k == 'live_time') {
+            final _duration = Duration(seconds: v);
+            format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+            return MapEntry(k, format(_duration));
+          }
+
+          else {
             return MapEntry(k, v);
           }
         }
