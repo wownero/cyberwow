@@ -116,7 +116,7 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
             ...{'tx_decoded': _tx_json_decoded},
           };
 
-          final _tx = _filteredTx.map
+          final _tx = _decodedTx.map
           (
             (k, v) {
               if (k == 'id_hash') {
@@ -142,7 +142,7 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
                 return MapEntry('time', _dateFormat.format(_dateTime));
               }
 
-              else if (k == 'tx_json_decoded') {
+              else if (k == 'tx_decoded') {
                 final _out =
                 {
                   'vin': v['vin'].length,
