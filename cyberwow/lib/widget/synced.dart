@@ -145,13 +145,15 @@ Widget syncInfo(BuildContext context, SyncedState state) => rpcView(context, 'sy
 
 Widget getTransactionPool(BuildContext context, SyncedState state) {
   final pool = state.getTransactionPool;
-  final subTitle = pool.isEmpty ? '' : ' ‹${pool.length}›';
+  const minimalLength = 6;
+  final subTitle = pool.length < minimalLength ? '' : ' ‹${pool.length}›';
   return rpcView(context, 'tx pool' + subTitle, pool);
 }
 
 Widget getConnections(BuildContext context, SyncedState state) {
   final peers = state.getConnections;
-  final subTitle = peers.isEmpty ? '' : ' ‹${peers.length}›';
+  const minimalLength = 6;
+  final subTitle = peers.length < minimalLength ? '' : ' ‹${peers.length}›';
   return rpcView(context, 'peers' + subTitle, peers);
 }
 
