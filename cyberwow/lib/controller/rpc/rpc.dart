@@ -119,7 +119,16 @@ Future<List<dynamic>> getConnectionsSimple() async {
   const minActiveTime = 8;
   final _activeConnections = _connections.where((x) => x['live_time'] > minActiveTime);
 
-  return _activeConnections.map
+  final _sortedConn = _activeConnections.cast<Map<String, dynamic>>().toList()..sort
+  (
+    (x, y) {
+      final int a = x['live_time'];
+      final int b = y['live_time'];
+      return a.compareTo(b);
+    }
+  );
+
+  return _sortedConn.map
   (
     (x) {
       const _remove =

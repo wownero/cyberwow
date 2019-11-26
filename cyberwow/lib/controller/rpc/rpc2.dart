@@ -82,7 +82,15 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
       return [];
     }
     else {
-      return Stream.fromIterable(result).asyncMap
+      final _sortedPool = result.cast<Map<String, dynamic>>()..sort
+      (
+        (x, y) {
+          final int a = x['receive_time'];
+          final int b = y['receive_time'];
+          return b.compareTo(a);
+        }
+      );
+      return Stream.fromIterable(_sortedPool).asyncMap
       (
         (x) async {
           const _remove =
