@@ -141,9 +141,20 @@ Widget rpcView(BuildContext context, String title, dynamic body) {
 }
 
 Widget getInfo(BuildContext context, SyncedState state) => rpcView(context, 'info', state.getInfo);
-Widget getConnections(BuildContext context, SyncedState state) => rpcView(context, 'connections', state.getConnections);
 Widget syncInfo(BuildContext context, SyncedState state) => rpcView(context, 'sync info', state.syncInfo);
-Widget getTransactionPool(BuildContext context, SyncedState state) => rpcView(context, 'tx pool', state.getTransactionPool);
+
+Widget getTransactionPool(BuildContext context, SyncedState state) {
+  final pool = state.getTransactionPool;
+  final subTitle = pool.isEmpty ? '' : ' ‹${pool.length}›';
+  return rpcView(context, 'tx pool' + subTitle, pool);
+}
+
+Widget getConnections(BuildContext context, SyncedState state) {
+  final peers = state.getConnections;
+  final subTitle = peers.isEmpty ? '' : ' ‹${peers.length}›';
+  return rpcView(context, 'peers' + subTitle, peers);
+}
+
 
 
 Widget terminalView(BuildContext context, String title, SyncedState state) {

@@ -139,6 +139,9 @@ Future<List<dynamic>> getConnectionsSimple() async {
         'current_download',
         'current_upload',
         'rpc_credits_per_hash',
+        'state',
+        'recv_idle_time',
+        'send_idle_time',
       ];
 
       final _filteredConn = x..removeWhere
