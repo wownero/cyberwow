@@ -165,7 +165,7 @@ Future<List<dynamic>> getConnectionsSimple() async {
             'current_upload',
           ];
           if (speedField.contains(k)) {
-            return MapEntry(k, '${v} kB');
+            return MapEntry(k, '${v} kB/s');
           }
 
           else if (k == 'live_time') {
