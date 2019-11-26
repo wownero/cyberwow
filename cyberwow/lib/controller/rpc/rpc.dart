@@ -116,7 +116,10 @@ Future<int> incomingConnectionsCount() =>
 Future<List<dynamic>> getConnectionsSimple() async {
   final _connections = await rpc('get_connections', field: 'connections').then(asList);
 
-  return _connections.map
+  const minActiveTime = 8;
+  final _activeConnections = _connections.where((x) => x['live_time'] > minActiveTime);
+
+  return _activeConnections.map
   (
     (x) {
       const _remove =
