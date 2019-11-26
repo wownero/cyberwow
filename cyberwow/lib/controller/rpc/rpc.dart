@@ -134,14 +134,15 @@ Future<List<dynamic>> getConnectionsSimple() async {
         'send_count',
         'support_flags',
 
-        'avg_download',
-        'avg_upload',
-        'current_download',
-        'current_upload',
+        // 'avg_download',
+        // 'avg_upload',
+        // 'current_download',
+        // 'current_upload',
         'rpc_credits_per_hash',
         'state',
         'recv_idle_time',
         'send_idle_time',
+        'incoming',
       ];
 
       final _filteredConn = x..removeWhere
@@ -149,11 +150,22 @@ Future<List<dynamic>> getConnectionsSimple() async {
         (k,v) => _remove.contains(k)
       );
 
-      return _filteredConn.map
+      final _conn = _filteredConn.map
       (
         (k, v) {
           if (k == 'connection_id') {
             return MapEntry(k, v.substring(0, config.hashLength) + '...');
+          }
+
+          const speedField =
+          [
+            'avg_download',
+            'avg_upload',
+            'current_download',
+            'current_upload',
+          ];
+          if (speedField.contains(k)) {
+            return MapEntry(k, '${v} kB');
           }
 
           else if (k == 'live_time') {
@@ -167,6 +179,26 @@ Future<List<dynamic>> getConnectionsSimple() async {
           }
         }
       );
+
+      final List<String> keys =
+      [
+        'address',
+        'height',
+        'live_time',
+        'current_download',
+        'current_upload',
+        'avg_download',
+        'avg_upload',
+        'pruning_seed',
+      ]
+      .where((k) => _conn.keys.contains(k))
+      .toList();
+
+      final _sortedConn = {
+        for (var k in keys) k: _conn[k]
+      };
+
+      return _sortedConn;
     }
   ).toList();
 }
