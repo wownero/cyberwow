@@ -25,7 +25,7 @@ import 'package:intl/intl.dart';
 
 import '../../config.dart' as config;
 
-Map<String, dynamic> rpcTxView(x) {
+Map<String, dynamic> rpcTxView(Map<String, dynamic> x) {
   const _remove =
   [
     'tx_blob',
@@ -105,7 +105,7 @@ Map<String, dynamic> rpcTxView(x) {
   .toList();
 
   final _sortedTx = {
-    for (var k in keys) k: _tx[k]
+    for (final k in keys) k: _tx[k]
   };
 
   return _sortedTx;

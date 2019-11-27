@@ -98,7 +98,7 @@ Map<String, dynamic> rpcPeerView(Map<String, dynamic> x) {
   .toList();
 
   final _sortedConn = {
-    for (var k in keys) k: _conn[k]
+    for (final k in keys) k: _conn[k]
   };
 
   final _cleanupConn = _sortedConn..removeWhere
@@ -109,3 +109,26 @@ Map<String, dynamic> rpcPeerView(Map<String, dynamic> x) {
   return _cleanupConn;
 }
 
+Map<String, dynamic> simpleHeight(int height, Map<String, dynamic> x) {
+  return x.map
+  (
+    (k, v) {
+      if (k == 'height') {
+        if (v < height) {
+          return MapEntry('height', '- ${height - v}');
+        }
+
+        else if (v == height) {
+          return MapEntry('height', '✓');
+        }
+
+        else {
+          return MapEntry('height', '+ ${v - height}');
+        }
+      }
+      else {
+        return MapEntry(k, v);
+      }
+    }
+  );
+}
