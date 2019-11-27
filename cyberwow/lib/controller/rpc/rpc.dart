@@ -26,9 +26,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 import '../../config.dart' as config;
+import 'rpcView.dart' as rpcView;
 import '../../helper.dart';
 import '../../logging.dart';
-import 'rpcView.dart';
 
 int rpcID = 0;
 
@@ -129,7 +129,7 @@ Future<List<dynamic>> getConnectionsSimple() async {
     }
   );
 
-  return _sortedConn.map(rpcPeerView).toList();
+  return _sortedConn.map(rpcView.rpcPeerView).toList();
 }
 
 

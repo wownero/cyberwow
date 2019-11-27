@@ -20,6 +20,7 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import '../../config.dart' as config;
+import '../../helper.dart';
 
 Map<String, dynamic> rpcPeerView(Map<String, dynamic> x) {
   const _remove =
@@ -57,7 +58,7 @@ Map<String, dynamic> rpcPeerView(Map<String, dynamic> x) {
   (
     (k, v) {
       if (k == 'connection_id') {
-        return MapEntry(k, v.substring(0, config.hashLength) + '...');
+        return MapEntry(k, trimHash(v));
       }
 
       const speedField =

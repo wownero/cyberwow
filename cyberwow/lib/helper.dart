@@ -21,11 +21,16 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:convert';
 
+import 'config.dart' as config;
+
 String pretty(dynamic x) {
   final JsonEncoder encoder = JsonEncoder.withIndent('    ');
-  return encoder.convert(x);
+  return encoder.convert(x)
+         .replaceAll(RegExp(r'["\[\]{},]'), '')
+         .replaceAll('\n    ', '\n');
 }
 
+String trimHash(String x) => x.substring(0, config.hashLength) + ' ...';
 
 int asInt(dynamic x) => x?.toInt() ?? 0;
 

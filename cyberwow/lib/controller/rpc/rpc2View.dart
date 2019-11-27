@@ -24,6 +24,7 @@ import 'dart:math';
 import 'package:intl/intl.dart';
 
 import '../../config.dart' as config;
+import '../../helper.dart';
 
 Map<String, dynamic> rpcTxView(Map<String, dynamic> x) {
   const _remove =
@@ -53,7 +54,7 @@ Map<String, dynamic> rpcTxView(Map<String, dynamic> x) {
   (
     (k, v) {
       if (k == 'id_hash') {
-        return MapEntry('id', v.substring(0, config.hashLength) + '...');
+        return MapEntry('id', trimHash(v));
       }
 
       else if (k == 'blob_size') {
