@@ -97,7 +97,7 @@ Future<Map<String, dynamic>> getInfoSimple() async {
   (
     (k, v) {
       if (k == 'top_block_hash') {
-        return MapEntry(k, v.substring(0, config.hashLength) + '...');
+        return MapEntry(k, trimHash(v));
       } else {
         return MapEntry(k, v);
       }
