@@ -101,8 +101,7 @@ Map<String, dynamic> rpcPeerView(Map<String, dynamic> x) {
     for (var k in keys) k: _conn[k]
   };
 
-
-  final _cleanupConn = x..removeWhere
+  final _cleanupConn = _sortedConn..removeWhere
   (
     (k,v) => k == 'pruning_seed' && x[k] == 0
   );
