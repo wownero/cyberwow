@@ -82,7 +82,7 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
       return [];
     }
     else {
-      final _sortedPool = result.cast<Map<String, dynamic>>()..sort
+      final _sortedPool = result..sort
       (
         (x, y) {
           final int a = x['receive_time'];
