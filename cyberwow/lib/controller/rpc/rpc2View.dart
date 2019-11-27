@@ -70,9 +70,11 @@ Map<String, dynamic> rpcTxView(x) {
       }
 
       else if (k == 'receive_time') {
-        final _dateTime = DateTime.fromMillisecondsSinceEpoch(v * 1000);
-        final _dateFormat = DateFormat.yMd().add_jm() ;
-        return MapEntry('time', _dateFormat.format(_dateTime));
+        final _receive_time = DateTime.fromMillisecondsSinceEpoch(v * 1000);
+        final _diff = DateTime.now().difference(_receive_time);
+
+        format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+        return MapEntry('age', format(_diff));
       }
 
       else if (k == 'tx_decoded') {
@@ -94,7 +96,7 @@ Map<String, dynamic> rpcTxView(x) {
   final List<String> keys =
   [
     'id',
-    'time',
+    'age',
     'fee',
     'in/out',
     'size',
