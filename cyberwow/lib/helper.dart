@@ -24,11 +24,10 @@ import 'dart:convert';
 import 'config.dart' as config;
 
 String pretty(dynamic x) {
-  final JsonEncoder encoder = JsonEncoder.withIndent('    ');
+  final JsonEncoder encoder = JsonEncoder.withIndent('');
   return encoder.convert(x)
          .replaceAll(RegExp(r'^{'), '\n')
          .replaceAll(RegExp(r'["\[\],{}]'), '')
-         .replaceAll('\n    ', '\n')
          ;
 }
 
