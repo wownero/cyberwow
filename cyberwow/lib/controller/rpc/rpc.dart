@@ -28,6 +28,7 @@ import 'package:flutter/foundation.dart';
 import '../../config.dart' as config;
 import '../../helper.dart';
 import '../../logging.dart';
+import 'rpcView.dart';
 
 int rpcID = 0;
 
@@ -114,7 +115,7 @@ Future<int> incomingConnectionsCount() =>
   rpc('get_info', field: 'incoming_connections_count').then(asInt);
 
 Future<List<dynamic>> getConnectionsSimple() async {
-  final _connections = await rpc('get_connections', field: 'connections').then(asList);
+  final _connections = await rpc('get_connections', field: 'connections').then(asJsonArray);
 
   const minActiveTime = 8;
   final _activeConnections = _connections.where((x) => x['live_time'] > minActiveTime);
@@ -128,91 +129,7 @@ Future<List<dynamic>> getConnectionsSimple() async {
     }
   );
 
-  return _sortedConn.map
-  (
-    (x) {
-      const _remove =
-      [
-        'address_type',
-        'connection_id',
-        'host',
-        'ip',
-        'local_ip',
-        'localhost',
-        'peer_id',
-        'port',
-        'recv_count',
-        'rpc_port',
-        'send_count',
-        'support_flags',
-
-        // 'avg_download',
-        // 'avg_upload',
-        // 'current_download',
-        // 'current_upload',
-        'rpc_credits_per_hash',
-        'state',
-        'recv_idle_time',
-        'send_idle_time',
-        'incoming',
-      ];
-
-      final _filteredConn = x..removeWhere
-      (
-        (k,v) => _remove.contains(k)
-      );
-
-      final _conn = _filteredConn.map
-      (
-        (k, v) {
-          if (k == 'connection_id') {
-            return MapEntry(k, v.substring(0, config.hashLength) + '...');
-          }
-
-          const speedField =
-          [
-            'avg_download',
-            'avg_upload',
-            'current_download',
-            'current_upload',
-          ];
-          if (speedField.contains(k)) {
-            return MapEntry(k, '${v} kB/s');
-          }
-
-          else if (k == 'live_time') {
-            final _duration = Duration(seconds: v);
-            format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
-            return MapEntry(k, format(_duration));
-          }
-
-          else {
-            return MapEntry(k, v);
-          }
-        }
-      );
-
-      final List<String> keys =
-      [
-        'address',
-        'height',
-        'live_time',
-        'current_download',
-        'current_upload',
-        'avg_download',
-        'avg_upload',
-        'pruning_seed',
-      ]
-      .where((k) => _conn.keys.contains(k))
-      .toList();
-
-      final _sortedConn = {
-        for (var k in keys) k: _conn[k]
-      };
-
-      return _sortedConn;
-    }
-  ).toList();
+  return _sortedConn.map(rpcPeerView).toList();
 }
 
 

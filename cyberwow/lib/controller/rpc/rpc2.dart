@@ -30,6 +30,7 @@ import 'package:intl/intl.dart';
 import '../../config.dart' as config;
 import '../../helper.dart';
 import '../../logging.dart';
+import 'rpc2View.dart';
 
 Future<http.Response> rpc2(final String method) async {
   final url = 'http://${config.host}:${config.c.port}/${method}';
@@ -77,113 +78,29 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
     return [];
   } else {
     final responseBody = json.decode(response.body);
-    final result = responseBody['transactions'];
-    if (result == null) {
-      return [];
-    }
-    else {
-      final _sortedPool = result..sort
-      (
-        (x, y) {
-          final int a = x['receive_time'];
-          final int b = y['receive_time'];
-          return b.compareTo(a);
-        }
-      );
-      return Stream.fromIterable(_sortedPool).asyncMap
-      (
-        (x) async {
-          const _remove =
-          [
-            'tx_blob',
-            // 'tx_json',
-            'last_failed_id_hash',
-            'max_used_block_id_hash',
-            // fields not useful for noobs
-            'last_relayed_time',
-            'kept_by_block',
-            'double_spend_seen',
-            'relayed',
-            'do_not_relay',
-            'last_failed_height',
-            'max_used_block_height',
-            'weight',
-            // 'blob_size',
-          ];
+    final result = asJsonArray(responseBody['transactions']);
+    final _sortedPool = result..sort
+    (
+      (x, y) {
+        final int a = x['receive_time'];
+        final int b = y['receive_time'];
+        return b.compareTo(a);
+      }
+    );
 
-          final _filteredTx = x..removeWhere
-          (
-            (k,v) => _remove.contains(k)
-          );
+    final _decodedPool = await Stream.fromIterable(_sortedPool).asyncMap
+    (
+      (x) async {
+        final String _tx_json = x['tx_json'];
+        final _tx_json_decoded = await compute(jsonDecode, _tx_json);
 
-          final String _tx_json = _filteredTx['tx_json'];
-          final _tx_json_decoded = await compute(jsonDecode, _tx_json);
+        return {
+          ...x,
+          ...{'tx_decoded': _tx_json_decoded},
+        };
+      }
+    );
 
-          final _decodedTx = {
-            ..._filteredTx,
-            ...{'tx_decoded': _tx_json_decoded},
-          };
-
-          final _tx = _decodedTx.map
-          (
-            (k, v) {
-              if (k == 'id_hash') {
-                return MapEntry('id', v.substring(0, config.hashLength) + '...');
-              }
-
-              else if (k == 'blob_size') {
-                return MapEntry('size', (v / 1024).toStringAsFixed(2) + ' kB');
-              }
-
-              else if (k == 'fee') {
-                final formatter = NumberFormat.currency
-                (
-                  symbol: '',
-                  decimalDigits: 2,
-                );
-                return MapEntry(k, formatter.format(v / pow(10, 11)) + ' ⍵');
-              }
-
-              else if (k == 'receive_time') {
-                final _dateTime = DateTime.fromMillisecondsSinceEpoch(v * 1000);
-                final _dateFormat = DateFormat.yMd().add_jm() ;
-                return MapEntry('time', _dateFormat.format(_dateTime));
-              }
-
-              else if (k == 'tx_decoded') {
-                final _out =
-                {
-                  'vin': v['vin'].length,
-                  'vout': v['vout'].length,
-                };
-                final _outString = _out['vin'].toString() + '/' + _out['vout'].toString();
-                return MapEntry('in/out', _outString);
-              }
-
-              else {
-                return MapEntry(k, v);
-              }
-            }
-          );
-
-          final List<String> keys =
-          [
-            'id',
-            'time',
-            'fee',
-            'in/out',
-            'size',
-          ]
-          .where((k) => _tx.keys.contains(k))
-          .toList();
-
-          final _sortedTx = {
-            for (var k in keys) k: _tx[k]
-          };
-
-          return _sortedTx;
-        }
-      ).toList();
-    }
+    return _decodedPool.map(rpcTxView).toList();
   }
 }

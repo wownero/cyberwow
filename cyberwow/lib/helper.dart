@@ -32,5 +32,6 @@ int asInt(dynamic x) => x?.toInt() ?? 0;
 bool asBool(dynamic x) => x ?? false;
 
 List<dynamic> asList(dynamic x) => x ?? [];
+List<Map<String, dynamic>> asJsonArray(dynamic x) => x.cast<Map<String, dynamic>>() ?? [];
 
 Map<String, dynamic> asMap(dynamic x) => x ?? {};
