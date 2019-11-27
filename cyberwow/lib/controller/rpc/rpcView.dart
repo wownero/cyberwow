@@ -114,16 +114,20 @@ Map<String, dynamic> simpleHeight(int height, Map<String, dynamic> x) {
   (
     (k, v) {
       if (k == 'height') {
-        if (v < height) {
-          return MapEntry('height', '- ${height - v}');
+        if (v == 0) {
+          return MapEntry(k, '☠');
+        }
+
+        else if (v < height) {
+          return MapEntry(k, '- ${height - v}');
         }
 
         else if (v == height) {
-          return MapEntry('height', '✓');
+          return MapEntry(k, '✓');
         }
 
         else {
-          return MapEntry('height', '+ ${v - height}');
+          return MapEntry(k, '+ ${v - height}');
         }
       }
       else {
