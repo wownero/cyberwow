@@ -193,7 +193,7 @@ Map<String, dynamic> getInfoView(Map<String, dynamic> x) {
         final _diff = DateTime.now().difference(_receive_time);
 
         format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
-        return MapEntry('age', format(_diff));
+        return MapEntry('uptime', format(_diff));
       }
 
 
