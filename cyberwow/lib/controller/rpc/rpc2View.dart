@@ -50,7 +50,7 @@ Map<String, dynamic> txView(Map<String, dynamic> x) {
     (k,v) => _remove.contains(k)
   );
 
-  final _tx = _filteredTx.map
+  final _formattedTx = _filteredTx.map
   (
     (k, v) {
       if (k == 'id_hash') {
@@ -102,11 +102,11 @@ Map<String, dynamic> txView(Map<String, dynamic> x) {
     'i/o',
     'size',
   ]
-  .where((k) => _tx.keys.contains(k))
+  .where((k) => _formattedTx.keys.contains(k))
   .toList();
 
   final _sortedTx = {
-    for (final k in keys) k: _tx[k]
+    for (final k in keys) k: _formattedTx[k]
   };
 
   return _sortedTx;

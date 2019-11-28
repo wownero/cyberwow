@@ -56,7 +56,7 @@ Map<String, dynamic> getConnectionView(Map<String, dynamic> x) {
     (k,v) => _remove.contains(k)
   );
 
-  final _conn = _filteredConn.map
+  final _formattedConn = _filteredConn.map
   (
     (k, v) {
       if (k == 'connection_id') {
@@ -97,19 +97,19 @@ Map<String, dynamic> getConnectionView(Map<String, dynamic> x) {
     'avg_upload',
     'pruning_seed',
   ]
-  .where((k) => _conn.keys.contains(k))
+  .where((k) => _formattedConn.keys.contains(k))
   .toList();
 
   final _sortedConn = {
-    for (final k in keys) k: _conn[k]
+    for (final k in keys) k: _formattedConn[k]
   };
 
-  final _cleanupConn = _sortedConn..removeWhere
+  final _cleanedUpConn = _sortedConn..removeWhere
   (
     (k,v) => k == 'pruning_seed' && x[k] == 0
   );
 
-  return _cleanupConn;
+  return _cleanedUpConn;
 }
 
 Map<String, dynamic> simpleHeight(int height, Map<String, dynamic> x) {
@@ -162,13 +162,18 @@ Map<String, dynamic> getInfoView(Map<String, dynamic> x) {
     (k,v) => _remove.contains(k)
   );
 
-  final _formattedInfo = _filteredInfo.map
+  final Map<String, double> _hashRate = {'hash_rate': _filteredInfo['difficulty'] / 300};
+  final Map<String, dynamic> _ammendedInfo = {
+    ..._filteredInfo,
+    ..._hashRate,
+  };
+
+  final _formattedInfo = _ammendedInfo.map
   (
     (k, v) {
       if (k == 'top_block_hash') {
         return MapEntry(k, trimHash(v));
       }
-
 
       const sizeField =
       [
@@ -177,11 +182,11 @@ Map<String, dynamic> getInfoView(Map<String, dynamic> x) {
         'block_weight_limit',
         'block_weight_median',
         'difficulty',
-        'height',
         'tx_count',
         'cumulative_difficulty',
         'free_space',
         'database_size',
+        'hash_rate',
       ];
       if (sizeField.contains(k)) {
         final formatter = NumberFormat.compact();
@@ -196,14 +201,13 @@ Map<String, dynamic> getInfoView(Map<String, dynamic> x) {
         return MapEntry('uptime', format(_diff));
       }
 
-
       else {
         return MapEntry(k, v);
       }
     }
   );
 
-  return _formattedInfo.map
+  final _cleanedUpInfo = _formattedInfo.map
   (
     (k, v) {
       if (k.contains('_count') && k != 'tx_count') {
@@ -215,4 +219,10 @@ Map<String, dynamic> getInfoView(Map<String, dynamic> x) {
       }
     }
   );
+
+  final _sortedInfo = {
+    for (final k in _cleanedUpInfo.keys.toList()..sort()) k: _cleanedUpInfo[k]
+  };
+
+  return _sortedInfo;
 }
