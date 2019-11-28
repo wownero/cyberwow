@@ -36,7 +36,7 @@ Widget summary(BuildContext context, SyncedState state) {
   final poolLength = state.getTransactionPool.length;
   final poolLengthNotice = poolLength > 0 ? '[${poolLength}] ' : '';
   final txNotice = state.getTransactionPool.isEmpty ?
-    '' : poolLengthNotice + state.getTransactionPool.first['id    '];
+    '' : poolLengthNotice + state.getTransactionPool.first['id    '].substring(0, 6) + ' ...';
 
   return Container
   (
@@ -102,7 +102,11 @@ Widget summary(BuildContext context, SyncedState state) {
             child: Text
             (
               txNotice,
-              style: Theme.of(context).textTheme.body2,
+              style: TextStyle
+              (
+                fontFamily: 'RobotoMono',
+                fontSize: 14,
+              ),
               key: ValueKey<int>(poolLength),
             ),
           ),
