@@ -34,7 +34,7 @@ Widget summary(BuildContext context, SyncedState state) {
   final onFire = state.getTransactionPool.length >= 10;
   final onFireNotice = onFire ? ' 🔥' : '';
   final poolLength = state.getTransactionPool.length;
-  final poolLengthNotice = poolLength > 0 ? '[${poolLength}] ' : '';
+  final poolLengthNotice = poolLength > 1 ? '[${poolLength}] ' : '';
   final txNotice = state.getTransactionPool.isEmpty ?
     '' : poolLengthNotice + state.getTransactionPool.first['id    '].substring(0, 6) + ' ...';
 
