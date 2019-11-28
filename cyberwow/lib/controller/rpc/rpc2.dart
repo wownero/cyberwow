@@ -30,7 +30,6 @@ import 'package:intl/intl.dart';
 import '../../config.dart' as config;
 import '../../helper.dart';
 import '../../logging.dart';
-import 'rpc2View.dart' as rpc2View;
 
 Future<http.Response> rpc2(final String method) async {
   final url = 'http://${config.host}:${config.c.port}/${method}';
@@ -101,6 +100,6 @@ Future<List<dynamic>> getTransactionPoolSimple() async {
       }
     );
 
-    return _decodedPool.map(rpc2View.txView).map(cleanKey).toList();
+    return _decodedPool.toList();
   }
 }

@@ -38,6 +38,7 @@ import 'config.dart' as config;
 import 'logging.dart';
 import 'helper.dart';
 import 'controller/rpc/rpcView.dart' as rpcView;
+import 'controller/rpc/rpc2View.dart' as rpc2View;
 
 abstract class AppState {
   T use<T>
@@ -304,24 +305,22 @@ class SyncedState extends HookedState {
         // log.finer('SyncedState: checkSync loop');
         height = await rpc.height();
         connected = await daemon.isConnected();
-        getInfo = await rpc.getInfoSimple();
+        final _getInfo = await rpc.getInfoSimple();
+        getInfo = cleanKey(rpcView.getInfoView(_getInfo));
         getInfoCache = pretty(getInfo);
 
-        final _getConnections = await rpc.getConnectionsSimple();
+        final List<Map<String, dynamic>> _getConnections = await rpc.getConnectionsSimple();
         getConnections = _getConnections
+        .map(rpcView.getConnectionView)
         .map((x) => rpcView.simpleHeight(height, x))
         .map(cleanKey)
         .toList();
         getConnectionsCache = pretty(getConnections);
 
-        // getTransactionPool = await rpc.getTransactionPoolString();
-
-        getTransactionPool = await rpc.getTransactionPoolSimple();
+        final List<Map<String, dynamic>> _getTransactionPool = await rpc.getTransactionPoolSimple();
+        getTransactionPool = _getTransactionPool.map(rpc2View.txView).map(cleanKey).toList();
         getTransactionPoolCache = pretty(getTransactionPool);
 
-        // appendInput('help');
-
-        // log.fine('getTransactionPool: $getTransactionPool');
         syncState();
       }
     }

@@ -26,7 +26,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 import '../../config.dart' as config;
-import 'rpcView.dart' as rpcView;
 import '../../helper.dart';
 import '../../logging.dart';
 
@@ -93,7 +92,7 @@ Future<http.Response> getInfo() => rpc('get_info');
 Future<Map<String, dynamic>> getInfoSimple() async {
   final _getInfo = await rpc('get_info').then(asMap);
 
-  return cleanKey(rpcView.getInfoView(_getInfo));
+  return _getInfo;
 }
 
 Future<String> getInfoString() => rpcString('get_info');
@@ -105,7 +104,7 @@ Future<int> outgoingConnectionsCount() =>
 Future<int> incomingConnectionsCount() =>
   rpc('get_info', field: 'incoming_connections_count').then(asInt);
 
-Future<List<dynamic>> getConnectionsSimple() async {
+Future<List<Map<String, dynamic>>> getConnectionsSimple() async {
   final _connections = await rpc('get_connections', field: 'connections').then(asJsonArray);
 
   const minActiveTime = 8;
@@ -120,7 +119,7 @@ Future<List<dynamic>> getConnectionsSimple() async {
     }
   );
 
-  return _sortedConn.map(rpcView.getConnectionView).toList();
+  return _sortedConn.toList();
 }
 
 
