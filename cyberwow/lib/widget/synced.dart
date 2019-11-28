@@ -88,7 +88,7 @@ Widget summary(BuildContext context, SyncedState state) {
   );
 }
 
-Widget rpcView(BuildContext context, String title, dynamic body) {
+Widget rpcView(BuildContext context, String title, String body) {
   return Container
   (
     padding: const EdgeInsets.all(10.0),
@@ -127,7 +127,7 @@ Widget rpcView(BuildContext context, String title, dynamic body) {
                   ),
                   Text
                   (
-                    pretty(body),
+                    body,
                     style: Theme.of(context).textTheme.body2,
                   )
                 ],
@@ -140,21 +140,21 @@ Widget rpcView(BuildContext context, String title, dynamic body) {
   );
 }
 
-Widget getInfo(BuildContext context, SyncedState state) => rpcView(context, 'info', state.getInfo);
-Widget syncInfo(BuildContext context, SyncedState state) => rpcView(context, 'sync info', state.syncInfo);
+Widget getInfo(BuildContext context, SyncedState state) => rpcView(context, 'info', state.getInfoCache);
+Widget syncInfo(BuildContext context, SyncedState state) => rpcView(context, 'sync info', pretty(state.syncInfo));
 
 Widget getTransactionPool(BuildContext context, SyncedState state) {
   final pool = state.getTransactionPool;
   const minimalLength = 6;
   final subTitle = pool.length < minimalLength ? '' : ' ‹${pool.length}›';
-  return rpcView(context, 'tx pool' + subTitle, pool);
+  return rpcView(context, 'tx pool' + subTitle, state.getTransactionPoolCache);
 }
 
 Widget getConnections(BuildContext context, SyncedState state) {
   final peers = state.getConnections;
   const minimalLength = 6;
   final subTitle = peers.length < minimalLength ? '' : ' ‹${peers.length}›';
-  return rpcView(context, 'peers' + subTitle, peers);
+  return rpcView(context, 'peers' + subTitle, state.getConnectionsCache);
 }
 
 

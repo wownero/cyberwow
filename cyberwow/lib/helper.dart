@@ -41,7 +41,6 @@ Map<String, dynamic> cleanKey(Map<String, dynamic> x) {
       k
       .replaceAll('cumulative', 'Σ')
       .replaceAll('current_', '')
-      .replaceAll('_count', '')
       .replaceAll('_', ' ')
       ,
       v

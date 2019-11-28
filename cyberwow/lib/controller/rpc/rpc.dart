@@ -120,7 +120,7 @@ Future<List<dynamic>> getConnectionsSimple() async {
     }
   );
 
-  return _sortedConn.map(rpcView.getConnectionView).map(cleanKey).toList();
+  return _sortedConn.map(rpcView.getConnectionView).toList();
 }
 
 

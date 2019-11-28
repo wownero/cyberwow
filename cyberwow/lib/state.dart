@@ -36,7 +36,8 @@ import 'controller/daemon.dart' as daemon;
 import 'controller/refresh.dart' as refresh;
 import 'config.dart' as config;
 import 'logging.dart';
-import 'controller/rpc/rpcView.dart';
+import 'helper.dart';
+import 'controller/rpc/rpcView.dart' as rpcView;
 
 abstract class AppState {
   T use<T>
@@ -243,6 +244,10 @@ class SyncedState extends HookedState {
   String syncInfo = 'syncInfo';
   PageController pageController;
 
+  String getInfoCache = '';
+  String getConnectionsCache = '';
+  String getTransactionPoolCache = '';
+
   SyncedState(f1, f2, f3, this.stdout, this.processInput, this.processOutput, this.pageIndex)
   : super (f1, f2, f3) {
     pageController = PageController( initialPage: pageIndex );
@@ -300,12 +305,19 @@ class SyncedState extends HookedState {
         height = await rpc.height();
         connected = await daemon.isConnected();
         getInfo = await rpc.getInfoSimple();
+        getInfoCache = pretty(getInfo);
+
         final _getConnections = await rpc.getConnectionsSimple();
-        getConnections = _getConnections.map((x) => simpleHeight(height, x)).toList();
+        getConnections = _getConnections
+        .map((x) => rpcView.simpleHeight(height, x))
+        .map(cleanKey)
+        .toList();
+        getConnectionsCache = pretty(getConnections);
 
         // getTransactionPool = await rpc.getTransactionPoolString();
 
         getTransactionPool = await rpc.getTransactionPoolSimple();
+        getTransactionPoolCache = pretty(getTransactionPool);
 
         // appendInput('help');
 

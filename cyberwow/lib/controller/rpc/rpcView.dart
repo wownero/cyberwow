@@ -122,7 +122,7 @@ Map<String, dynamic> simpleHeight(int height, Map<String, dynamic> x) {
         }
 
         else if (v < height) {
-          return MapEntry(k, '- ${height - v}');
+          return MapEntry(k, '-${height - v}');
         }
 
         else if (v == height) {
@@ -130,7 +130,7 @@ Map<String, dynamic> simpleHeight(int height, Map<String, dynamic> x) {
         }
 
         else {
-          return MapEntry(k, '+ ${v - height}');
+          return MapEntry(k, '+${v - height}');
         }
       }
       else {
@@ -162,7 +162,7 @@ Map<String, dynamic> getInfoView(Map<String, dynamic> x) {
     (k,v) => _remove.contains(k)
   );
 
-  return _filteredInfo.map
+  final _formattedInfo = _filteredInfo.map
   (
     (k, v) {
       if (k == 'top_block_hash') {
@@ -196,6 +196,19 @@ Map<String, dynamic> getInfoView(Map<String, dynamic> x) {
         return MapEntry('age', format(_diff));
       }
 
+
+      else {
+        return MapEntry(k, v);
+      }
+    }
+  );
+
+  return _formattedInfo.map
+  (
+    (k, v) {
+      if (k.contains('_count') && k != 'tx_count') {
+        return MapEntry(k.replaceAll('_count', ''), v);
+      }
 
       else {
         return MapEntry(k, v);
