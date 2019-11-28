@@ -102,11 +102,7 @@ Widget summary(BuildContext context, SyncedState state) {
             child: Text
             (
               txNotice,
-              style: TextStyle
-              (
-                fontFamily: 'RobotoMono',
-                fontSize: 14,
-              ),
+              style: Theme.of(context).textTheme.body2,
               key: ValueKey<int>(poolLength),
             ),
           ),
