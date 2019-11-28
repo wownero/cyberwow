@@ -43,6 +43,11 @@ final _theme = ThemeData
       fontSize: 35,
       fontWeight: FontWeight.bold,
     ),
+    display2: TextStyle
+    (
+      fontFamily: 'RobotoMono',
+      fontSize: 22,
+    ),
     title: TextStyle
     (
       fontFamily: 'VT323',

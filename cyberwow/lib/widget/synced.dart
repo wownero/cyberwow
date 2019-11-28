@@ -30,6 +30,14 @@ import '../helper.dart';
 import '../logging.dart';
 
 Widget summary(BuildContext context, SyncedState state) {
+  final height = state.height.toString();
+  final onFire = state.getTransactionPool.length >= 10;
+  final onFireNotice = onFire ? ' 🔥' : '';
+  final poolLength = state.getTransactionPool.length;
+  final poolLengthNotice = poolLength > 0 ? '[${poolLength}] ' : '';
+  final txNotice = state.getTransactionPool.isEmpty ?
+    '' : poolLengthNotice + state.getTransactionPool.first['id    '];
+
   return Container
   (
     padding: EdgeInsets.only(bottom: 10.0),
@@ -56,16 +64,47 @@ Widget summary(BuildContext context, SyncedState state) {
           Expanded
           (
             flex: 15,
-            child: AnimatedSwitcher
+            child: Row
             (
-              duration: Duration(milliseconds: 500),
-              child: Text
-              (
-                '${state.height}',
-                style: Theme.of(context).textTheme.display1,
-                key: ValueKey<int>(state.height),
-              )
+              children: <Widget>
+              [
+                Spacer(),
+                AnimatedSwitcher
+                (
+                  duration: Duration(milliseconds: 500),
+                  child: Text
+                  (
+                    height,
+                    style: Theme.of(context).textTheme.display1,
+                    key: ValueKey<int>(state.height),
+                  ),
+                ),
+                AnimatedSwitcher
+                (
+                  duration: Duration(milliseconds: 500),
+                  child: Text
+                  (
+                    onFireNotice,
+                    style: TextStyle
+                    (
+                      fontSize: 25,
+                    ),
+                    key: ValueKey<int>(onFire ? 0 : 1),
+                  ),
+                ),
+                Spacer(),
+              ]
             )
+          ),
+          AnimatedSwitcher
+          (
+            duration: Duration(milliseconds: 500),
+            child: Text
+            (
+              txNotice,
+              style: Theme.of(context).textTheme.body2,
+              key: ValueKey<int>(poolLength),
+            ),
           ),
           Spacer
           (
