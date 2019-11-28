@@ -93,16 +93,7 @@ Future<http.Response> getInfo() => rpc('get_info');
 Future<Map<String, dynamic>> getInfoSimple() async {
   final _getInfo = await rpc('get_info').then(asMap);
 
-  return _getInfo.map
-  (
-    (k, v) {
-      if (k == 'top_block_hash') {
-        return MapEntry(k, trimHash(v));
-      } else {
-        return MapEntry(k, v);
-      }
-    }
-  );
+  return cleanKey(rpcView.getInfoView(_getInfo));
 }
 
 Future<String> getInfoString() => rpcString('get_info');
@@ -129,7 +120,7 @@ Future<List<dynamic>> getConnectionsSimple() async {
     }
   );
 
-  return _sortedConn.map(rpcView.rpcPeerView).toList();
+  return _sortedConn.map(rpcView.getConnectionView).map(cleanKey).toList();
 }
 
 

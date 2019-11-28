@@ -19,10 +19,12 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+import 'package:intl/intl.dart';
+
 import '../../config.dart' as config;
 import '../../helper.dart';
 
-Map<String, dynamic> rpcPeerView(Map<String, dynamic> x) {
+Map<String, dynamic> getConnectionView(Map<String, dynamic> x) {
   const _remove =
   [
     'address_type',
@@ -131,6 +133,70 @@ Map<String, dynamic> simpleHeight(int height, Map<String, dynamic> x) {
           return MapEntry(k, '+ ${v - height}');
         }
       }
+      else {
+        return MapEntry(k, v);
+      }
+    }
+  );
+}
+
+Map<String, dynamic> getInfoView(Map<String, dynamic> x) {
+  const _remove =
+  [
+    'difficulty_top64',
+    'stagenet',
+    'testnet',
+    'top_hash',
+    'update_available',
+    'was_bootstrap_ever_used',
+    'bootstrap_daemon_address',
+    'height_without_bootstrap',
+    'wide_cumulative_difficulty',
+    'wide_difficulty',
+    'cumulative_difficulty_top64',
+    'credits',
+  ];
+
+  final _filteredInfo = x..removeWhere
+  (
+    (k,v) => _remove.contains(k)
+  );
+
+  return _filteredInfo.map
+  (
+    (k, v) {
+      if (k == 'top_block_hash') {
+        return MapEntry(k, trimHash(v));
+      }
+
+
+      const sizeField =
+      [
+        'block_size_limit',
+        'block_size_median',
+        'block_weight_limit',
+        'block_weight_median',
+        'difficulty',
+        'height',
+        'tx_count',
+        'cumulative_difficulty',
+        'free_space',
+        'database_size',
+      ];
+      if (sizeField.contains(k)) {
+        final formatter = NumberFormat.compact();
+        return MapEntry(k, formatter.format(v));
+      }
+
+      else if (k == 'start_time') {
+        final _receive_time = DateTime.fromMillisecondsSinceEpoch(v * 1000);
+        final _diff = DateTime.now().difference(_receive_time);
+
+        format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+        return MapEntry('age', format(_diff));
+      }
+
+
       else {
         return MapEntry(k, v);
       }

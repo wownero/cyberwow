@@ -57,13 +57,13 @@ final _theme = ThemeData
     body1: TextStyle
     (
       fontFamily: 'VT323',
-      fontSize: 16,
+      fontSize: 17,
       height: 1,
     ),
     body2: TextStyle
     (
       fontFamily: 'RobotoMono',
-      fontSize: 11,
+      fontSize: 12.5,
     ),
   ).apply
   (

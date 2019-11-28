@@ -20,6 +20,7 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'config.dart' as config;
 
@@ -27,11 +28,35 @@ String pretty(dynamic x) {
   final JsonEncoder encoder = JsonEncoder.withIndent('');
   return encoder.convert(x)
          .replaceAll(RegExp(r'^{'), '\n')
-         .replaceAll(RegExp(r'["\[\],{}]'), '')
+         .replaceAll(RegExp(r'(["\[\],{}]|: )'), '')
          ;
 }
 
 String trimHash(String x) => x.substring(0, config.hashLength) + ' ...';
+Map<String, dynamic> cleanKey(Map<String, dynamic> x) {
+  final _cleaned = x.map
+  (
+    (k, v) => MapEntry
+    (
+      k
+      .replaceAll('cumulative', 'Σ')
+      .replaceAll('current_', '')
+      .replaceAll('_count', '')
+      .replaceAll('_', ' ')
+      ,
+      v
+    )
+  );
+
+
+  final int _maxLength = _cleaned.keys.map((x) => x.length).reduce(max);
+  final _padded = _cleaned.map
+  (
+    (k, v) => MapEntry(k.padRight(_maxLength + 2, ' '), v)
+  );
+
+  return _padded;
+}
 
 int asInt(dynamic x) => x?.toInt() ?? 0;
 

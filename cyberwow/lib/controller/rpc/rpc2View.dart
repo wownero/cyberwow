@@ -26,7 +26,7 @@ import 'package:intl/intl.dart';
 import '../../config.dart' as config;
 import '../../helper.dart';
 
-Map<String, dynamic> rpcTxView(Map<String, dynamic> x) {
+Map<String, dynamic> txView(Map<String, dynamic> x) {
   const _remove =
   [
     'tx_blob',
@@ -85,7 +85,7 @@ Map<String, dynamic> rpcTxView(Map<String, dynamic> x) {
           'vout': v['vout'].length,
         };
         final _outString = _out['vin'].toString() + '/' + _out['vout'].toString();
-        return MapEntry('in/out', _outString);
+        return MapEntry('i/o', _outString);
       }
 
       else {
@@ -99,7 +99,7 @@ Map<String, dynamic> rpcTxView(Map<String, dynamic> x) {
     'id',
     'age',
     'fee',
-    'in/out',
+    'i/o',
     'size',
   ]
   .where((k) => _tx.keys.contains(k))
