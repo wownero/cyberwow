@@ -60,6 +60,9 @@ build:
 	cd cyberwow && \
 	flutter build apk --target-platform android-arm64
 
+install: build
+	cd cyberwow && \
+  flutter install
 
 # build wownero android binary
 
