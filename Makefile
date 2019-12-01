@@ -60,6 +60,9 @@ build:
 	cd cyberwow && \
 	flutter build apk --target-platform android-arm64
 
+install: build
+	cd cyberwow && \
+  flutter install
 
 # build wownero android binary
 
@@ -108,4 +111,10 @@ collect-wownero: wownero
 
 collect-wownero-fake:
 	$(script)/collect-fake.sh
+
+
+# etc
+
+remove-exif:
+	exiftool -all= `find fastlane/ -name '*.jp*g' -o -name '*.png'`
 

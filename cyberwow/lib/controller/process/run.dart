@@ -53,7 +53,6 @@ Stream<String> runBinary
   ];
   const List<String> releaseArgs =
   [
-    "--restricted-rpc"
   ];
 
   const extraArgs = kReleaseMode ? releaseArgs : debugArgs;
