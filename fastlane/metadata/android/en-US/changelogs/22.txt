@@ -1,0 +1,3 @@
+* Fix an RPC error caused by null result
+* Add fastlane metadata
+* Enable UI in release mode
