@@ -112,3 +112,9 @@ collect-wownero: wownero
 collect-wownero-fake:
 	$(script)/collect-fake.sh
 
+
+# etc
+
+remove-exif:
+	exiftool -all= `find fastlane/ -name '*.jp*g' -o -name '*.png'`
+
