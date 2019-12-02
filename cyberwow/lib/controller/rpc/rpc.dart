@@ -69,7 +69,9 @@ Future<dynamic> rpc(final String method, {final String field}) async {
     return null;
   } else {
     final _body = await compute(jsonDecode, response.body);
-    final _result = _body['result'] ?? const {};
+    final _result = _body['result'];
+    if (_result == null) return null;
+
     final _field = field == null ? _result : _result[field];
 
     return _field;
