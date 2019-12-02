@@ -36,9 +36,9 @@ source etc/scripts/build-external-libs/env.sh
 cd $BUILD_ROOT_SRC
 
 name=boost
-version=1_68_0
-dot_version=1.68.0
-hash=7f6130bc3cf65f56a618888ce9d5ea704fa10b462be126ad053e80e553d6d8b7
+version=1_71_0
+dot_version=1.71.0
+hash=d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee
 
 rm -rf ${name}_${version}
 
