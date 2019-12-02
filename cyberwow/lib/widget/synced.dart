@@ -36,7 +36,7 @@ Widget summary(BuildContext context, SyncedState state) {
   final poolLength = state.getTransactionPool.length;
   final poolLengthNotice = poolLength > 1 ? '[${poolLength}] ' : '';
   final txNotice = state.getTransactionPool.isEmpty ?
-    '' : poolLengthNotice + state.getTransactionPool.first['id    '].substring(0, 6) + ' ...';
+    '' : poolLengthNotice + state.getTransactionPool.first['id_hash'].substring(0, 6) + ' ...';
 
   return Container
   (
