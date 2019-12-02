@@ -37,8 +37,9 @@ build_root=$BUILD_ROOT
 src_root=$BUILD_ROOT_SRC
 
 name=libsodium
+version=1.0.18
 
-cd $src_root/${name}
+cd $src_root/${name}-${version}
 
 ./autogen.sh
 

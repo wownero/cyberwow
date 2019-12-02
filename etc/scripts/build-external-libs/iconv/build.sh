@@ -36,7 +36,7 @@ source etc/scripts/build-external-libs/env.sh
 build_root=$BUILD_ROOT
 src_root=$BUILD_ROOT_SRC
 
-version=1.15
+version=1.16
 name=libiconv
 
 cd $src_root/${name}-${version}
