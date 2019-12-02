@@ -47,9 +47,6 @@ archs=(arm64)
 for arch in ${archs[@]}; do
     extra_cmake_flags=""
     case ${arch} in
-        "arm")
-            target_host=arm-linux-androideabi
-            ;;
         "arm64")
             target_host=aarch64-linux-android
             ;;
