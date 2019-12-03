@@ -35,8 +35,8 @@ source etc/scripts/build-external-libs/env.sh
 
 cd $BUILD_ROOT_SRC
 
-version=1.15
-hash=ccf536620a45458d26ba83887a983b96827001e92a13847b45e4925cc8913178
+version=1.16
+hash=e6a1b1b589654277ee790cce3734f07876ac4ccfaecbee8afa0b649cf529cc04
 name=libiconv
 
 rm -rf ${name}-${version}

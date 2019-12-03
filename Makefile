@@ -35,7 +35,7 @@ watch:
 
 run:
 	cd cyberwow && \
-	flutter run --pid-file /tmp/flutter.pid
+	flutter run --release --pid-file /tmp/flutter.pid
 
 # clang -target aarch64-linux-android21 cyberwow/native/hello.c -o cyberwow/native/output/hello
 c:

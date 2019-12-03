@@ -305,21 +305,23 @@ class SyncedState extends HookedState {
         // log.finer('SyncedState: checkSync loop');
         height = await rpc.height();
         connected = await daemon.isConnected();
-        final _getInfo = await rpc.getInfoSimple();
-        getInfo = cleanKey(rpcView.getInfoView(_getInfo));
-        getInfoCache = pretty(getInfo);
+        getInfo = await rpc.getInfoSimple();
+        final _getInfoView = cleanKey(rpcView.getInfoView(getInfo));
+        getInfoCache = pretty(_getInfoView);
 
-        final List<Map<String, dynamic>> _getConnections = await rpc.getConnectionsSimple();
-        getConnections = _getConnections
+        getConnections = await rpc.getConnectionsSimple();
+        final List<Map<String, dynamic>> _getConnectionsView =
+        getConnections
         .map(rpcView.getConnectionView)
         .map((x) => rpcView.simpleHeight(height, x))
         .map(cleanKey)
         .toList();
-        getConnectionsCache = pretty(getConnections);
+        getConnectionsCache = pretty(_getConnectionsView);
 
-        final List<Map<String, dynamic>> _getTransactionPool = await rpc.getTransactionPoolSimple();
-        getTransactionPool = _getTransactionPool.map(rpc2View.txView).map(cleanKey).toList();
-        getTransactionPoolCache = pretty(getTransactionPool);
+        getTransactionPool = await rpc.getTransactionPoolSimple();
+        final List<Map<String, dynamic>> _getTransactionPoolView =
+        getTransactionPool.map(rpc2View.txView).map(cleanKey).toList();
+        getTransactionPoolCache = pretty(_getTransactionPoolView);
 
         syncState();
       }

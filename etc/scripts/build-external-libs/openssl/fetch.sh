@@ -36,15 +36,14 @@ source etc/scripts/build-external-libs/env.sh
 cd $BUILD_ROOT_SRC
 
 name=openssl
-# version=1.0.2p
-version=1.1.1c
-hash=50a98e07b1a89eb8f6a99477f262df71c6fa7bef77df4dc83025a2845c827d00
+version=1.1.1d
+hash=1e3a91bc1f9dfce01af26026f856e064eab4c8ee0a8f457b5ae30b40b8b711f2
 
 rm -rf ${name}-${version}
 
 curl -# -L -O \
      https://www.openssl.org/source/openssl-${version}.tar.gz
 
-# echo "${hash} ${name}-${version}.tar.gz" | sha256sum -c
+echo "${hash} ${name}-${version}.tar.gz" | sha256sum -c
 
 tar xzf ${name}-${version}.tar.gz

@@ -37,7 +37,7 @@ build_root=$BUILD_ROOT
 src_root=$BUILD_ROOT_SRC
 
 name=boost
-version=1_68_0
+version=1_71_0
 
 cd $src_root/${name}_${version}
 
@@ -47,9 +47,6 @@ archs=(arm64)
 for arch in ${archs[@]}; do
     extra_cmake_flags=""
     case ${arch} in
-        "arm")
-            target_host=arm-linux-androideabi
-            ;;
         "arm64")
             target_host=aarch64-linux-android
             ;;
@@ -73,10 +70,18 @@ for arch in ${archs[@]}; do
             CC=clang \
             CXX=clang++; \
             ./b2 \
-                --prefix=${PREFIX} \
-                --build-type=minimal \
+                cxxstd=14 \
+                toolset=clang \
+                threading=multi \
+                threadapi=pthread \
                 link=static \
                 runtime-link=static \
+                target-os=android \
+                --ignore-site-config \
+                --prefix=${PREFIX} \
+                --build-dir=android \
+                -sICONV_PATH=${ICONV_PATH} \
+                --build-type=minimal \
                 --with-chrono \
                 --with-date_time \
                 --with-filesystem \
@@ -86,13 +91,6 @@ for arch in ${archs[@]}; do
                 --with-system \
                 --with-thread \
                 --with-locale \
-                --build-dir=android \
-                --stagedir=android \
-                toolset=clang \
-                threading=multi \
-                threadapi=pthread \
-                target-os=android \
-                -sICONV_PATH=${ICONV_PATH} \
                 install \
                 -j${NPROC} \
     )

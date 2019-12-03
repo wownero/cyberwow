@@ -36,12 +36,14 @@ source etc/scripts/build-external-libs/env.sh
 cd $BUILD_ROOT_SRC
 
 name=libsodium
-version=1.0.16
-githash=675149b9b8b66ff44152553fb3ebf9858128363d
+version=1.0.18
+hash=d59323c6b712a1519a5daf710b68f5e7fde57040845ffec53850911f10a5d4f4
 
-rm -rf $name
+rm -rf ${name}-${version}
 
-git clone https://github.com/jedisct1/libsodium.git -b $version
+curl -# -L -o ${name}-${version}.tar.gz \
+https://github.com/jedisct1/libsodium/archive/${version}.tar.gz
 
-cd $name
-test `git rev-parse HEAD` = $githash || exit 1
+echo "${hash} ${name}-${version}.tar.gz" | sha256sum -c
+
+tar xzf ${name}-${version}.tar.gz

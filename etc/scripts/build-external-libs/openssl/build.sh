@@ -37,8 +37,7 @@ build_root=$BUILD_ROOT
 src_root=$BUILD_ROOT_SRC
 
 name=openssl
-# version=1.0.2p
-version=1.1.1c
+version=1.1.1d
 
 cd $src_root/${name}-${version}
 
@@ -46,9 +45,6 @@ archs=(arm64)
 for arch in ${archs[@]}; do
     extra_cmake_flags=""
     case ${arch} in
-        "arm")
-            target_host=arm-linux-androideabi
-            ;;
         "arm64")
             target_host=aarch64-linux-android
             ;;
