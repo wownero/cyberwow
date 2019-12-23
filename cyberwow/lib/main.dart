@@ -123,7 +123,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     LoadingState _loadingState = await _blankState.next(loadingText);
 
     final binName = config.c.outputBin;
-    final resourcePath = 'native/output/' + config.arch + '/' + binName;
+    final resourcePath = 'native/output/' + describeEnum(config.arch) + '/' + binName;
     final bundle = DefaultAssetBundle.of(context);
     final loading = process.deployBinary(bundle, resourcePath, binName);
 
