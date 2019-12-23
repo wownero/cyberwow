@@ -93,4 +93,5 @@ final config = CryptoConfig
     '--block-sync-size=5',
   ],
   '[1337@cyberwow]: ',
+  6,
 );
