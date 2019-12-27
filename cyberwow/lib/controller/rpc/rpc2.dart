@@ -65,7 +65,7 @@ Future<String> rpc2String(final String method, {final String field}) async {
 
 Future<http.Response> getTransactionPool() async => rpc2('get_transaction_pool');
 
-Future<List<dynamic>> getTransactionPoolSimple() async {
+Future<List<Map<String, dynamic>>> getTransactionPoolSimple() async {
   final response = await getTransactionPool();
 
   if (response == null) return [];
