@@ -49,7 +49,7 @@ void main() {
 
 class CyberWOW_App extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
@@ -83,7 +83,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   final StreamController<String> inputStreamController = StreamController();
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(final AppLifecycleState state) {
     log.fine('app cycle: ${state}');
     setState(() { _notification = state; });
   }
@@ -94,7 +94,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     super.dispose();
   }
 
-  void _setState(AppState newState) {
+  void _setState(final AppState newState) {
     setState
     (
       () => _state = newState
@@ -111,11 +111,6 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
   AppState _getState() {
     return _state;
-  }
-
-
-  void _updateLoading(LoadingState state, final String msg) {
-    log.fine('updateLoading: ' + msg);
   }
 
   Future<void> buildStateMachine(final BlankState _blankState) async {
@@ -188,7 +183,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     buildStateMachine(_blankState);
   }
 
-  Future<bool> _exitApp(BuildContext context) async {
+  Future<bool> _exitApp(final BuildContext context) async {
     log.info("CyberWOW_PageState _exitApp");
     WidgetsBinding.instance.removeObserver(this);
 
@@ -203,7 +198,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return WillPopScope
     (
       onWillPop: () => _exitApp(context),
