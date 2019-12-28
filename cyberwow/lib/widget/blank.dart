@@ -24,7 +24,7 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../config.dart' as config;
 
-Widget buildBlank(BuildContext context, BlankState state) {
+Widget build(BuildContext context, BlankState state) {
   return Scaffold(
     body: Container
     (

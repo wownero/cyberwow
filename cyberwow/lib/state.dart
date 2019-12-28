@@ -40,39 +40,6 @@ import 'helper.dart';
 import 'controller/rpc/rpcView.dart' as rpcView;
 import 'controller/rpc/rpc2View.dart' as rpc2View;
 
-abstract class AppState {
-  T use<T>
-  (
-    T Function(BlankState) useBlankState,
-    T Function(LoadingState) useLoadingState,
-    T Function(SyncingState) useSyncingState,
-    T Function(SyncedState) useSyncedState,
-    T Function(ReSyncingState) useReSyncingState,
-    T Function(ExitingState) useExitingState,
-  )
-  {
-    if (this is BlankState) {
-      return useBlankState(this);
-    }
-    if (this is LoadingState) {
-      return useLoadingState(this);
-    }
-    if (this is SyncingState) {
-      return useSyncingState(this);
-    }
-    if (this is SyncedState) {
-      return useSyncedState(this);
-    }
-    if (this is ReSyncingState) {
-      return useReSyncingState(this);
-    }
-    if (this is ExitingState) {
-      return useExitingState(this);
-    }
-    throw Exception('Invalid state');
-  }
-}
-
 typedef SetStateFunc = void Function(AppState);
 typedef GetNotificationFunc = AppLifecycleState Function();
 typedef IsExitingFunc = bool Function();
@@ -84,21 +51,21 @@ class AppHook {
   AppHook(this.setState, this.getNotification, this.isExiting);
 }
 
-class HookedState extends AppState {
+class AppState {
   final AppHook appHook;
-  HookedState(this.appHook);
+  AppState(this.appHook);
 
   syncState() {
     appHook.setState(this);
   }
 
-  HookedState moveState(HookedState _next) {
+  AppState moveState(AppState _next) {
     appHook.setState(_next);
     return _next;
   }
 }
 
-class BlankState extends HookedState {
+class BlankState extends AppState {
   BlankState(appHook) : super (appHook);
 
   Future<LoadingState> next(String status) async {
@@ -107,7 +74,7 @@ class BlankState extends HookedState {
   }
 }
 
-class LoadingState extends HookedState {
+class LoadingState extends AppState {
   final String banner;
   String status = '';
 
@@ -156,7 +123,7 @@ class LoadingState extends HookedState {
   }
 }
 
-class SyncingState extends HookedState {
+class SyncingState extends AppState {
   final Queue<String> stdout = Queue.from(['']);
 
   bool synced = false;
@@ -171,7 +138,7 @@ class SyncingState extends HookedState {
     syncState();
   }
 
-  Future<HookedState> next
+  Future<AppState> next
   (
     StreamSink<String> processInput, Stream<String> processOutput
   ) async {
@@ -233,7 +200,7 @@ class SyncingState extends HookedState {
   }
 }
 
-class SyncedState extends HookedState {
+class SyncedState extends AppState {
   final Queue<String> stdout;
   final StreamSink<String> processInput;
   final Stream<String> processOutput;
@@ -281,7 +248,7 @@ class SyncedState extends HookedState {
     this.pageIndex = value;
   }
 
-  Future<HookedState> next() async {
+  Future<AppState> next() async {
     log.fine("Synced next");
 
     Future<void> logStdout() async {
@@ -353,7 +320,7 @@ class SyncedState extends HookedState {
 }
 
 
-class ReSyncingState extends HookedState {
+class ReSyncingState extends AppState {
   final Queue<String> stdout;
   final StreamSink<String> processInput;
   final Stream<String> processOutput;
@@ -372,7 +339,7 @@ class ReSyncingState extends HookedState {
     syncState();
   }
 
-  Future<HookedState> next() async {
+  Future<AppState> next() async {
     log.fine("ReSyncing next");
 
     Future<void> printStdout() async {
@@ -420,7 +387,7 @@ class ReSyncingState extends HookedState {
   }
 }
 
-class ExitingState extends HookedState {
+class ExitingState extends AppState {
   final Queue<String> stdout;
   final Stream<String> processOutput;
 

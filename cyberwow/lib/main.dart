@@ -32,12 +32,7 @@ import 'config.dart' as config;
 import 'logging.dart';
 import 'controller/process/deploy.dart' as process;
 import 'controller/process/run.dart' as process;
-import 'widget/loading.dart' as widget;
-import 'widget/blank.dart' as widget;
-import 'widget/syncing.dart' as widget;
-import 'widget/synced.dart' as widget;
-import 'widget/resyncing.dart' as widget;
-import 'widget/exiting.dart' as widget;
+import 'widget.dart' as widget;
 
 void main() {
   Logger.root.level = kReleaseMode ? Level.INFO : Level.FINE;
@@ -128,7 +123,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     .runBinary(binName, input: inputStreamController.stream, shouldExit: _isExiting)
     .asBroadcastStream();
 
-    HookedState _syncedNextState = await _syncingState.next(inputStreamController.sink, syncing);
+    AppState _syncedNextState = await _syncingState.next(inputStreamController.sink, syncing);
 
     var exited = false;
 
@@ -143,19 +138,25 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     var validState = true;
     while (validState && !exited) {
-      await _getState().use
-      (
-        (s) => validState = false,
-        (s) => validState = false,
-        (s) => validState = false,
-        (s) => s.next(),
-        (s) => s.next(),
-        (s) async {
-          await s.wait();
+      AppState _state = _getState();
+      switch (_state.runtimeType) {
+        case ExitingState: {
+          await (_state as ExitingState).wait();
           log.finer('exit state wait done');
           exited = true;
         }
-      );
+        break;
+
+        case SyncedState:
+          (_state as SyncedState).next();
+          break;
+
+        case ReSyncingState:
+          (_state as ReSyncingState).next();
+          break;
+
+        default: validState = false;
+      }
     }
 
     log.finer('state machine finished');
@@ -203,15 +204,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     return WillPopScope
     (
       onWillPop: () => _exitApp(context),
-      child: _state.use
-      (
-        (s) => widget.buildBlank(context, s),
-        (s) => widget.buildLoading(context, s),
-        (s) => widget.buildSyncing(context, s),
-        (s) => widget.buildSynced(context, s),
-        (s) => widget.buildReSyncing(context, s),
-        (s) => widget.buildExiting(context, s),
-      ),
+      child: widget.build(context, _state),
     );
   }
 }

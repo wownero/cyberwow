@@ -24,7 +24,7 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../config.dart' as config;
 
-Widget buildLoading(BuildContext context, LoadingState state) {
+Widget build(BuildContext context, LoadingState state) {
   return Scaffold(
     // appBar: AppBar(
     //   // title: Text(widget.title),
