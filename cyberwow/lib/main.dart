@@ -123,21 +123,11 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     .runBinary(binName, input: inputStreamController.stream, shouldExit: _isExiting)
     .asBroadcastStream();
 
-    state.AppState _syncedNextState =
     await _syncingState.next(inputStreamController.sink, syncing);
 
     var exited = false;
-
-    if (_syncedNextState is state.SyncedState) {
-      state.SyncedState _syncedState = _syncedNextState;
-      await _syncedState.next();
-    } else {
-      state.ExitingState _exitingState = _syncedNextState;
-      await _exitingState.wait();
-      exited = true;
-    }
-
     var validState = true;
+
     while (validState && !exited) {
       state.AppState _state = _getState();
       switch (_state.runtimeType) {
@@ -149,11 +139,11 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
         break;
 
         case state.SyncedState:
-          (_state as state.SyncedState).next();
+          await (_state as state.SyncedState).next();
           break;
 
         case state.ReSyncingState:
-          (_state as state.ReSyncingState).next();
+          await (_state as state.ReSyncingState).next();
           break;
 
         default: validState = false;
