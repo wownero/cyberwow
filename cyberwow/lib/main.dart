@@ -27,11 +27,11 @@ import 'package:logging/logging.dart';
 import 'dart:io';
 import 'dart:async';
 
-import 'state.dart';
 import 'config.dart' as config;
-import 'logging.dart';
 import 'controller/process/deploy.dart' as process;
 import 'controller/process/run.dart' as process;
+import 'logging.dart';
+import 'state.dart' as state;
 import 'widget.dart' as widget;
 
 void main() {
@@ -70,7 +70,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 {
   // AppState _state = LoadingState("init...");
 
-  AppState _state;
+  state.AppState _state;
   AppLifecycleState _notification = AppLifecycleState.resumed;
 
   bool _exiting = false;
@@ -89,7 +89,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     super.dispose();
   }
 
-  void _setState(final AppState newState) {
+  void _setState(final state.AppState newState) {
     setState
     (
       () => _state = newState
@@ -104,55 +104,56 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     return _exiting;
   }
 
-  AppState _getState() {
+  state.AppState _getState() {
     return _state;
   }
 
-  Future<void> buildStateMachine(final BlankState _blankState) async {
+  Future<void> buildStateMachine(final state.BlankState _blankState) async {
     final loadingText = config.c.splash;
-    LoadingState _loadingState = await _blankState.next(loadingText);
+    state.LoadingState _loadingState = await _blankState.next(loadingText);
 
     final binName = config.c.outputBin;
     final resourcePath = 'native/output/' + describeEnum(config.arch) + '/' + binName;
     final bundle = DefaultAssetBundle.of(context);
     final loading = process.deployBinary(bundle, resourcePath, binName);
 
-    SyncingState _syncingState = await _loadingState.next(loading, '');
+    state.SyncingState _syncingState = await _loadingState.next(loading, '');
 
     final syncing = process
     .runBinary(binName, input: inputStreamController.stream, shouldExit: _isExiting)
     .asBroadcastStream();
 
-    AppState _syncedNextState = await _syncingState.next(inputStreamController.sink, syncing);
+    state.AppState _syncedNextState =
+    await _syncingState.next(inputStreamController.sink, syncing);
 
     var exited = false;
 
-    if (_syncedNextState is SyncedState) {
-      SyncedState _syncedState = _syncedNextState;
+    if (_syncedNextState is state.SyncedState) {
+      state.SyncedState _syncedState = _syncedNextState;
       await _syncedState.next();
     } else {
-      ExitingState _exitingState = _syncedNextState;
+      state.ExitingState _exitingState = _syncedNextState;
       await _exitingState.wait();
       exited = true;
     }
 
     var validState = true;
     while (validState && !exited) {
-      AppState _state = _getState();
+      state.AppState _state = _getState();
       switch (_state.runtimeType) {
-        case ExitingState: {
-          await (_state as ExitingState).wait();
+        case state.ExitingState: {
+          await (_state as state.ExitingState).wait();
           log.finer('exit state wait done');
           exited = true;
         }
         break;
 
-        case SyncedState:
-          (_state as SyncedState).next();
+        case state.SyncedState:
+          (_state as state.SyncedState).next();
           break;
 
-        case ReSyncingState:
-          (_state as ReSyncingState).next();
+        case state.ReSyncingState:
+          (_state as state.ReSyncingState).next();
           break;
 
         default: validState = false;
@@ -178,8 +179,8 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     WidgetsBinding.instance.addObserver(this);
 
-    final AppHook _appHook = AppHook(_setState, _getNotification, _isExiting);
-    final BlankState _blankState = BlankState(_appHook);
+    final state.AppHook _appHook = state.AppHook(_setState, _getNotification, _isExiting);
+    final state.BlankState _blankState = state.BlankState(_appHook);
     _state = _blankState;
 
     buildStateMachine(_blankState);
