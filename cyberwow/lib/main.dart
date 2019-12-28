@@ -129,7 +129,6 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     var validState = true;
 
     while (validState && !exited) {
-      state.AppState _state = _getState();
       switch (_state.runtimeType) {
         case state.ExitingState: {
           await (_state as state.ExitingState).wait();
