@@ -77,27 +77,32 @@ typedef SetStateFunc = void Function(AppState);
 typedef GetNotificationFunc = AppLifecycleState Function();
 typedef IsExitingFunc = bool Function();
 
-class HookedState extends AppState {
+class AppHook {
   final SetStateFunc setState;
   final GetNotificationFunc getNotification;
   final IsExitingFunc isExiting;
-  HookedState(this.setState, this.getNotification, this.isExiting);
+  AppHook(this.setState, this.getNotification, this.isExiting);
+}
+
+class HookedState extends AppState {
+  final AppHook appHook;
+  HookedState(this.appHook);
 
   syncState() {
-    setState(this);
+    appHook.setState(this);
   }
 
   HookedState moveState(HookedState _next) {
-    setState(_next);
+    appHook.setState(_next);
     return _next;
   }
 }
 
 class BlankState extends HookedState {
-  BlankState(f1, f2, f3) : super (f1, f2, f3);
+  BlankState(appHook) : super (appHook);
 
   Future<LoadingState> next(String status) async {
-    LoadingState _next = LoadingState(setState, getNotification, isExiting, status);
+    LoadingState _next = LoadingState(appHook, status);
     return moveState(_next);
   }
 }
@@ -106,7 +111,7 @@ class LoadingState extends HookedState {
   final String banner;
   String status = '';
 
-  LoadingState(f1, f2, f3, this.banner) : super (f1, f2, f3);
+  LoadingState(appHook, this.banner) : super (appHook);
 
   void append(final String msg) {
     this.status += msg;
@@ -146,7 +151,7 @@ class LoadingState extends HookedState {
       await Future.wait([load(), showBanner()]);
     }
 
-    SyncingState _next = SyncingState(setState, getNotification, isExiting);
+    SyncingState _next = SyncingState(appHook);
     return moveState(_next);
   }
 }
@@ -156,7 +161,7 @@ class SyncingState extends HookedState {
 
   bool synced = false;
 
-  SyncingState(f1, f2, f3) : super (f1, f2, f3);
+  SyncingState(appHook) : super (appHook);
 
   void append(final String msg) {
     stdout.addLast(msg);
@@ -183,10 +188,10 @@ class SyncingState extends HookedState {
     }
 
     Future<void> checkSync() async {
-      await for (final _null in refresh.pull(getNotification, 'syncingState')) {
+      await for (final _null in refresh.pull(appHook.getNotification, 'syncingState')) {
         log.finer('SyncingState: checkSync loop');
 
-        if (isExiting()) {
+        if (appHook.isExiting()) {
           log.fine('Syncing state detected exiting');
           break;
         }
@@ -206,10 +211,10 @@ class SyncingState extends HookedState {
     printStdout();
     await checkSync();
 
-    if (isExiting()) {
+    if (appHook.isExiting()) {
       ExitingState _next = ExitingState
       (
-        setState, getNotification, isExiting, stdout, processOutput
+        appHook, stdout, processOutput
       );
       return moveState(_next);
     }
@@ -221,7 +226,7 @@ class SyncingState extends HookedState {
     final _height = await rpc.height();
     SyncedState _next = SyncedState
     (
-      setState, getNotification, isExiting, stdout, processInput, processOutput, 1,
+      appHook, stdout, processInput, processOutput, 1,
     );
     _next.height = _height;
     return moveState(_next);
@@ -249,8 +254,8 @@ class SyncedState extends HookedState {
   String getConnectionsCache = '';
   String getTransactionPoolCache = '';
 
-  SyncedState(f1, f2, f3, this.stdout, this.processInput, this.processOutput, this.pageIndex)
-  : super (f1, f2, f3) {
+  SyncedState(appHook, this.stdout, this.processInput, this.processOutput, this.pageIndex)
+  : super (appHook) {
     pageController = PageController( initialPage: pageIndex );
   }
 
@@ -292,8 +297,8 @@ class SyncedState extends HookedState {
     logStdout();
 
     Future<void> checkSync() async  {
-      await for (final _null in refresh.pull(getNotification, 'syncedState')) {
-        if (isExiting() || userExit) {
+      await for (final _null in refresh.pull(appHook.getNotification, 'syncedState')) {
+        if (appHook.isExiting() || userExit) {
           log.fine('Synced state detected exiting');
           break;
         }
@@ -329,10 +334,10 @@ class SyncedState extends HookedState {
 
     await checkSync();
 
-    if (isExiting() || userExit) {
+    if (appHook.isExiting() || userExit) {
       ExitingState _next = ExitingState
       (
-        setState, getNotification, isExiting, stdout, processOutput
+        appHook, stdout, processOutput
       );
       return moveState(_next);
     }
@@ -341,7 +346,7 @@ class SyncedState extends HookedState {
 
     ReSyncingState _next = ReSyncingState
     (
-      setState, getNotification, isExiting, stdout, processInput, processOutput, pageIndex
+      appHook, stdout, processInput, processOutput, pageIndex
     );
     return moveState(_next);
   }
@@ -356,8 +361,8 @@ class ReSyncingState extends HookedState {
 
   bool synced = false;
 
-  ReSyncingState(f1, f2, f3, this.stdout, this.processInput, this.processOutput, this.pageIndex)
-    : super (f1, f2, f3);
+  ReSyncingState(appHook, this.stdout, this.processInput, this.processOutput, this.pageIndex)
+    : super (appHook);
 
   void append(final String msg) {
     stdout.addLast(msg);
@@ -380,8 +385,8 @@ class ReSyncingState extends HookedState {
     }
 
     Future<void> checkSync() async {
-      await for (final _null in refresh.pull(getNotification, 'ReSyncingState')) {
-        if (isExiting()) {
+      await for (final _null in refresh.pull(appHook.getNotification, 'ReSyncingState')) {
+        if (appHook.isExiting()) {
           log.fine('ReSyncing state detected exiting');
           break;
         }
@@ -397,10 +402,10 @@ class ReSyncingState extends HookedState {
     printStdout();
     await checkSync();
 
-    if (isExiting()) {
+    if (appHook.isExiting()) {
       ExitingState _next = ExitingState
       (
-        setState, getNotification, isExiting, stdout, processOutput
+        appHook, stdout, processOutput
       );
       return moveState(_next);
     }
@@ -408,7 +413,7 @@ class ReSyncingState extends HookedState {
     log.fine('resync: await exit');
     SyncedState _next = SyncedState
     (
-      setState, getNotification, isExiting, stdout, processInput, processOutput, pageIndex
+      appHook, stdout, processInput, processOutput, pageIndex
     );
     _next.height = await rpc.height();
     return moveState(_next);
@@ -419,7 +424,7 @@ class ExitingState extends HookedState {
   final Queue<String> stdout;
   final Stream<String> processOutput;
 
-  ExitingState(f1, f2, f3, this.stdout, this.processOutput) : super (f1, f2, f3);
+  ExitingState(appHook, this.stdout, this.processOutput) : super (appHook);
 
   void append(final String msg) {
     stdout.addLast(msg);

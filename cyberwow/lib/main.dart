@@ -177,7 +177,8 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     WidgetsBinding.instance.addObserver(this);
 
-    final BlankState _blankState = BlankState(_setState, _getNotification, _isExiting);
+    final AppHook _appHook = AppHook(_setState, _getNotification, _isExiting);
+    final BlankState _blankState = BlankState(_appHook);
     _state = _blankState;
 
     buildStateMachine(_blankState);
