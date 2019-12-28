@@ -19,13 +19,29 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-export 'state/prototype.dart';
-export 'state/blank.dart';
-export 'state/loading.dart';
-export 'state/syncing.dart';
-export 'state/synced.dart';
-export 'state/resyncing.dart';
-export 'state/exiting.dart';
+import 'package:flutter/material.dart';
 
+typedef SetStateFunc = void Function(AppState);
+typedef GetNotificationFunc = AppLifecycleState Function();
+typedef IsExitingFunc = bool Function();
 
+class AppHook {
+  final SetStateFunc setState;
+  final GetNotificationFunc getNotification;
+  final IsExitingFunc isExiting;
+  AppHook(this.setState, this.getNotification, this.isExiting);
+}
 
+class AppState {
+  final AppHook appHook;
+  AppState(this.appHook);
+
+  syncState() {
+    appHook.setState(this);
+  }
+
+  AppState moveState(AppState _next) {
+    appHook.setState(_next);
+    return _next;
+  }
+}

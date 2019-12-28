@@ -19,13 +19,16 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-export 'state/prototype.dart';
-export 'state/blank.dart';
-export 'state/loading.dart';
-export 'state/syncing.dart';
-export 'state/synced.dart';
-export 'state/resyncing.dart';
-export 'state/exiting.dart';
+import 'dart:async';
 
+import 'prototype.dart';
+import 'loading.dart';
 
+class BlankState extends AppState {
+  BlankState(appHook) : super (appHook);
 
+  Future<LoadingState> next(String status) async {
+    LoadingState _next = LoadingState(appHook, status);
+    return moveState(_next);
+  }
+}
