@@ -117,7 +117,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     final bundle = DefaultAssetBundle.of(context);
     final loading = process.deployBinary(bundle, resourcePath, binName);
 
-    state.SyncingState _syncingState = await _loadingState.next(loading, '');
+    state.SyncingState _syncingState = await _loadingState.next(loading);
 
     final syncing = process
     .runBinary(binName, input: inputStreamController.stream, shouldExit: _isExiting)
@@ -125,8 +125,8 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     await _syncingState.next(inputStreamController.sink, syncing);
 
-    var exited = false;
-    var validState = true;
+    bool exited = false;
+    bool validState = true;
 
     while (validState && !exited) {
       switch (_state.runtimeType) {

@@ -38,15 +38,15 @@ class LoadingState extends AppState {
   }
 
 
-  Future<SyncingState> next(Stream<String> loadingProgress, String status) async {
+  Future<SyncingState> next(final Stream<String> loadingProgress) async {
     Future<void> showBanner() async {
-      var chars = [];
+      List<String> chars = [];
       banner.runes.forEach((int rune) {
           final c = String.fromCharCode(rune);
           chars.add(c);
       });
 
-      for (String char in chars) {
+      for (final String char in chars) {
         append(char);
         await Future.delayed(Duration(milliseconds: config.c.splashDelay), () => "1");
       }
