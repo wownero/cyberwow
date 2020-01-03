@@ -19,21 +19,29 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-import 'config/prototype.dart';
-import 'config/cyberwow.dart' as cryptoConfig;
+import 'package:flutter/material.dart';
 
-final c = cryptoConfig.config;
+typedef SetStateFunc = void Function(AppState);
+typedef GetNotificationFunc = AppLifecycleState Function();
+typedef IsExitingFunc = bool Function();
 
-enum Arch { arm64, x86_64 }
+class AppHook {
+  final SetStateFunc setState;
+  final GetNotificationFunc getNotification;
+  final IsExitingFunc isExiting;
+  AppHook(this.setState, this.getNotification, this.isExiting);
+}
 
-const arch = Arch.arm64;
-// const arch = 'x86_64';
-const minimumHeight = 118361;
+class AppState {
+  final AppHook appHook;
+  AppState(this.appHook);
 
-const isEmu = identical(arch, Arch.x86_64);
-const emuHost = '192.168.10.100';
+  syncState() {
+    appHook.setState(this);
+  }
 
-const host = isEmu ? emuHost : '127.0.0.1';
-
-const stdoutLineBufferSize = 100;
-
+  AppState moveState(AppState _next) {
+    appHook.setState(_next);
+    return _next;
+  }
+}

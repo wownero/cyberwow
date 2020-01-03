@@ -24,7 +24,7 @@ import 'package:flutter/material.dart';
 import '../state.dart';
 import '../config.dart' as config;
 
-Widget buildSyncing(BuildContext context, SyncingState state) {
+Widget build(BuildContext context, SyncingState state) {
   return Scaffold
   (
     // appBar: AppBar

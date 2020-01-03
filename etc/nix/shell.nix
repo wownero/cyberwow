@@ -82,7 +82,7 @@ with nixpkgs;
 ; profile = ''
     export ANDROID_HOME=~/SDK/Android/Sdk
 
-    PATH=~/scm/flutter/vendor/flutter/bin:$PATH
+    PATH=~/local/sdk/flutter/bin:$PATH
     PATH=~/SDK/Android/android-studio/bin:$PATH
 
     export ANDROID_NDK_VERSION=r20
@@ -95,7 +95,6 @@ with nixpkgs;
 
     export _JAVA_AWT_WM_NONREPARENTING=1
     export DART_VM_OPTIONS=--root-certs-file=/etc/ssl/certs/ca-certificates.crt
-
 
     export ANDROID_NDK_VERSION_WOW=r17c
     export ANDROID_NDK_ROOT_WOW=~/SDK/Android/ndk-archive/android-ndk-$ANDROID_NDK_VERSION_WOW

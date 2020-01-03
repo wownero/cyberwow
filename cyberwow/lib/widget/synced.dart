@@ -320,7 +320,7 @@ Widget pageView (BuildContext context, SyncedState state) {
   );
 }
 
-Widget buildSynced(BuildContext context, SyncedState state) {
+Widget build(BuildContext context, SyncedState state) {
   return Scaffold
   (
     body: pageView(context, state)

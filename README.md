@@ -32,7 +32,7 @@ The binary needed is `./bin/wownerod`.
 
 1. One docker instance per hash
 
-See `etc/scripts/build-wownero.sh`, modify the value of `version` per build.
+See `etc/scripts/docker-build-wownero.sh`, modify the value of `version` per build.
 
 2. Debian based system similar to F-droid
 
@@ -44,7 +44,7 @@ See the `wow` task in `Makefile`.
 
 ```
 popd
-git clone https://github.com/fuwa0529/cyberwow/
+git clone https://github.com/wownero/cyberwow/
 cd cyberwow
 
 mkdir -p cyberwow/native/output/arm64

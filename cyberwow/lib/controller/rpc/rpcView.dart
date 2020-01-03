@@ -162,7 +162,8 @@ Map<String, dynamic> getInfoView(Map<String, dynamic> x) {
     (k,v) => _remove.contains(k)
   );
 
-  final Map<String, double> _hashRate = {'hash_rate': _filteredInfo['difficulty'] / 300};
+  final int _difficulty = _filteredInfo['difficulty'] ?? 0;
+  final Map<String, double> _hashRate = {'hash_rate': _difficulty / 300};
   final Map<String, dynamic> _ammendedInfo = {
     ..._filteredInfo,
     ..._hashRate,

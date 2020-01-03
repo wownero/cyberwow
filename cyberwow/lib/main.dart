@@ -27,17 +27,12 @@ import 'package:logging/logging.dart';
 import 'dart:io';
 import 'dart:async';
 
-import 'state.dart';
 import 'config.dart' as config;
-import 'logging.dart';
 import 'controller/process/deploy.dart' as process;
 import 'controller/process/run.dart' as process;
-import 'widget/loading.dart' as widget;
-import 'widget/blank.dart' as widget;
-import 'widget/syncing.dart' as widget;
-import 'widget/synced.dart' as widget;
-import 'widget/resyncing.dart' as widget;
-import 'widget/exiting.dart' as widget;
+import 'logging.dart';
+import 'state.dart' as state;
+import 'widget.dart' as widget;
 
 void main() {
   Logger.root.level = kReleaseMode ? Level.INFO : Level.FINE;
@@ -49,7 +44,7 @@ void main() {
 
 class CyberWOW_App extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
@@ -75,7 +70,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 {
   // AppState _state = LoadingState("init...");
 
-  AppState _state;
+  state.AppState _state;
   AppLifecycleState _notification = AppLifecycleState.resumed;
 
   bool _exiting = false;
@@ -83,7 +78,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   final StreamController<String> inputStreamController = StreamController();
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(final AppLifecycleState state) {
     log.fine('app cycle: ${state}');
     setState(() { _notification = state; });
   }
@@ -94,7 +89,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     super.dispose();
   }
 
-  void _setState(AppState newState) {
+  void _setState(final state.AppState newState) {
     setState
     (
       () => _state = newState
@@ -109,58 +104,49 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     return _exiting;
   }
 
-  AppState _getState() {
+  state.AppState _getState() {
     return _state;
   }
 
-
-  void _updateLoading(LoadingState state, final String msg) {
-    log.fine('updateLoading: ' + msg);
-  }
-
-  Future<void> buildStateMachine(final BlankState _blankState) async {
+  Future<void> buildStateMachine(final state.BlankState _blankState) async {
     final loadingText = config.c.splash;
-    LoadingState _loadingState = await _blankState.next(loadingText);
+    state.LoadingState _loadingState = await _blankState.next(loadingText);
 
     final binName = config.c.outputBin;
-    final resourcePath = 'native/output/' + config.arch + '/' + binName;
+    final resourcePath = 'native/output/' + describeEnum(config.arch) + '/' + binName;
     final bundle = DefaultAssetBundle.of(context);
     final loading = process.deployBinary(bundle, resourcePath, binName);
 
-    SyncingState _syncingState = await _loadingState.next(loading, '');
+    state.SyncingState _syncingState = await _loadingState.next(loading);
 
     final syncing = process
     .runBinary(binName, input: inputStreamController.stream, shouldExit: _isExiting)
     .asBroadcastStream();
 
-    HookedState _syncedNextState = await _syncingState.next(inputStreamController.sink, syncing);
+    await _syncingState.next(inputStreamController.sink, syncing);
 
-    var exited = false;
+    bool exited = false;
+    bool validState = true;
 
-    if (_syncedNextState is SyncedState) {
-      SyncedState _syncedState = _syncedNextState;
-      await _syncedState.next();
-    } else {
-      ExitingState _exitingState = _syncedNextState;
-      await _exitingState.wait();
-      exited = true;
-    }
-
-    var validState = true;
     while (validState && !exited) {
-      await _getState().use
-      (
-        (s) => validState = false,
-        (s) => validState = false,
-        (s) => validState = false,
-        (s) => s.next(),
-        (s) => s.next(),
-        (s) async {
-          await s.wait();
+      switch (_state.runtimeType) {
+        case state.ExitingState: {
+          await (_state as state.ExitingState).wait();
           log.finer('exit state wait done');
           exited = true;
         }
-      );
+        break;
+
+        case state.SyncedState:
+          await (_state as state.SyncedState).next();
+          break;
+
+        case state.ReSyncingState:
+          await (_state as state.ReSyncingState).next();
+          break;
+
+        default: validState = false;
+      }
     }
 
     log.finer('state machine finished');
@@ -182,13 +168,14 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     WidgetsBinding.instance.addObserver(this);
 
-    final BlankState _blankState = BlankState(_setState, _getNotification, _isExiting);
+    final state.AppHook _appHook = state.AppHook(_setState, _getNotification, _isExiting);
+    final state.BlankState _blankState = state.BlankState(_appHook);
     _state = _blankState;
 
     buildStateMachine(_blankState);
   }
 
-  Future<bool> _exitApp(BuildContext context) async {
+  Future<bool> _exitApp(final BuildContext context) async {
     log.info("CyberWOW_PageState _exitApp");
     WidgetsBinding.instance.removeObserver(this);
 
@@ -203,19 +190,11 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return WillPopScope
     (
       onWillPop: () => _exitApp(context),
-      child: _state.use
-      (
-        (s) => widget.buildBlank(context, s),
-        (s) => widget.buildLoading(context, s),
-        (s) => widget.buildSyncing(context, s),
-        (s) => widget.buildSynced(context, s),
-        (s) => widget.buildReSyncing(context, s),
-        (s) => widget.buildExiting(context, s),
-      ),
+      child: widget.build(context, _state),
     );
   }
 }

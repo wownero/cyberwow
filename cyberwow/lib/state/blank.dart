@@ -19,21 +19,16 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-import 'config/prototype.dart';
-import 'config/cyberwow.dart' as cryptoConfig;
+import 'dart:async';
 
-final c = cryptoConfig.config;
+import 'prototype.dart';
+import 'loading.dart';
 
-enum Arch { arm64, x86_64 }
+class BlankState extends AppState {
+  BlankState(appHook) : super (appHook);
 
-const arch = Arch.arm64;
-// const arch = 'x86_64';
-const minimumHeight = 118361;
-
-const isEmu = identical(arch, Arch.x86_64);
-const emuHost = '192.168.10.100';
-
-const host = isEmu ? emuHost : '127.0.0.1';
-
-const stdoutLineBufferSize = 100;
-
+  Future<LoadingState> next(String status) async {
+    LoadingState _next = LoadingState(appHook, status);
+    return moveState(_next);
+  }
+}

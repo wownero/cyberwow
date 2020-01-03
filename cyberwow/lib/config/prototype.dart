@@ -30,6 +30,7 @@ class CryptoConfig {
   final int port;
   final List<String> extraArgs;
   final String promptString;
+  final int hashViewBlockLength;
   const CryptoConfig
   (
     this.outputBin,
@@ -40,5 +41,6 @@ class CryptoConfig {
     this.port,
     this.extraArgs,
     this.promptString,
+    this.hashViewBlockLength,
   );
 }

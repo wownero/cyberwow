@@ -32,11 +32,10 @@ String pretty(dynamic x) {
          ;
 }
 
-String trimHash(String x) =>
-x.substring(0, config.hashViewBlock)
-+ '-'
-+ x.substring(config.hashViewBlock, config.hashViewBlock * 2)
-+ ' ...';
+String trimHash(String x) {
+  final l = config.c.hashViewBlockLength;
+  return x.substring(0, l) + '-' + x.substring(l, l * 2) + ' ...';
+}
 
 Map<String, dynamic> cleanKey(Map<String, dynamic> x) {
   final _cleaned = x.map
