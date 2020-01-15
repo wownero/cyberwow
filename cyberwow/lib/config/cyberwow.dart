@@ -23,15 +23,16 @@ import 'package:flutter/material.dart';
 
 import 'prototype.dart';
 
+const crtGreen = Color.fromRGBO(0, 255, 102, 1);
+
 final _theme = ThemeData
 (
   brightness: Brightness.dark,
 
-  primaryColor: Colors.green,
+  primaryColor: crtGreen,
   hintColor: Colors.yellow,
-  primarySwatch: Colors.green,
-  accentColor: Colors.green,
-  cursorColor: Colors.green,
+  accentColor: crtGreen,
+  cursorColor: crtGreen,
 
   scaffoldBackgroundColor: Colors.black,
 
@@ -72,8 +73,8 @@ final _theme = ThemeData
     ),
   ).apply
   (
-    bodyColor: Colors.green,
-    displayColor: Colors.green,
+    bodyColor: crtGreen,
+    displayColor: crtGreen,
   ),
 );
 
