@@ -95,6 +95,7 @@ final config = CryptoConfig
     '--no-igd',
     '--check-updates=disabled',
     '--disable-dns-checkpoints',
+    '--max-log-file-size=0',
   ],
   '[1337@cyberwow]: ',
   6,
