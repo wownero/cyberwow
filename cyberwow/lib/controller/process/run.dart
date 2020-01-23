@@ -37,6 +37,7 @@ Stream<String> runBinary
   final String name,
   { final Stream<String> input,
     final ShouldExit shouldExit,
+    final List<String> userArgs = const [],
   }
 ) async* {
   final newPath = await getBinaryPath(name);
@@ -61,7 +62,7 @@ Stream<String> runBinary
   [
     "--data-dir",
     binDir.path,
-  ] + extraArgs + config.c.extraArgs;
+  ] + extraArgs + config.c.extraArgs + userArgs;
 
   log.info('args: ' + args.toString());
 

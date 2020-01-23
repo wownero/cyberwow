@@ -69,6 +69,7 @@ class CyberWOW_Page extends StatefulWidget {
 class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserver
 {
   // AppState _state = LoadingState("init...");
+  static const _channel = const MethodChannel('send-intent');
 
   state.AppState _state;
   AppLifecycleState _notification = AppLifecycleState.resumed;
@@ -76,6 +77,12 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   bool _exiting = false;
 
   final StreamController<String> inputStreamController = StreamController();
+
+  Future<String> getInitialIntent() async {
+    final text = await _channel.invokeMethod('getInitialIntent');
+    log.fine('getInitialIntent: ${text}');
+    return text;
+  }
 
   @override
   void didChangeAppLifecycleState(final AppLifecycleState state) {
@@ -112,6 +119,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     final loadingText = config.c.splash;
     state.LoadingState _loadingState = await _blankState.next(loadingText);
 
+
     final binName = config.c.outputBin;
     final resourcePath = 'native/output/' + describeEnum(config.arch) + '/' + binName;
     final bundle = DefaultAssetBundle.of(context);
@@ -119,8 +127,25 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
 
     state.SyncingState _syncingState = await _loadingState.next(loading);
 
+    final _initialIntent = await getInitialIntent();
+    final _userArgs = _initialIntent
+    .trim()
+    .split(RegExp(r"\s+"))
+    .where((x) => !x.isEmpty)
+    .toList();
+
+    if (!_userArgs.isEmpty) {
+      log.info('user args: ${_userArgs}');
+    }
+
     final syncing = process
-    .runBinary(binName, input: inputStreamController.stream, shouldExit: _isExiting)
+    .runBinary
+    (
+      binName,
+      input: inputStreamController.stream,
+      shouldExit: _isExiting,
+      userArgs: _userArgs,
+    )
     .asBroadcastStream();
 
     await _syncingState.next(inputStreamController.sink, syncing);
