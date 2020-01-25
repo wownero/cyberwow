@@ -81,7 +81,7 @@ final _theme = ThemeData
 
 final config = CryptoConfig
 (
-  'wownerod',
+  'libwownerod.so',
   'wownerod',
   'Follow the white rabbit.',
   70,

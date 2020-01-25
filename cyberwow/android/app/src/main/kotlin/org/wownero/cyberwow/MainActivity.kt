@@ -30,6 +30,8 @@ class MainActivity: FlutterActivity() {
             call, result ->
                 if (call.method == "getInitialIntent") {
                     result.success(initialIntentText)
+                } else if (call.method == "getBinaryDir") {
+                    result.success(getApplicationInfo().nativeLibraryDir)
                 } else {
                     result.notImplemented()
                 }

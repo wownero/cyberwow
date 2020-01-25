@@ -28,7 +28,6 @@ import 'dart:io';
 import 'dart:async';
 
 import 'config.dart' as config;
-import 'controller/process/deploy.dart' as process;
 import 'controller/process/run.dart' as process;
 import 'logging.dart';
 import 'state.dart' as state;
@@ -118,14 +117,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   Future<void> buildStateMachine(final state.BlankState _blankState) async {
     final loadingText = config.c.splash;
     state.LoadingState _loadingState = await _blankState.next(loadingText);
-
-
-    final binName = config.c.outputBin;
-    final resourcePath = 'native/output/' + describeEnum(config.arch) + '/' + binName;
-    final bundle = DefaultAssetBundle.of(context);
-    final loading = process.deployBinary(bundle, resourcePath, binName);
-
-    state.SyncingState _syncingState = await _loadingState.next(loading);
+    state.SyncingState _syncingState = await _loadingState.next();
 
     final _initialIntent = await getInitialIntent();
     final _userArgs = _initialIntent
@@ -141,7 +133,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     final syncing = process
     .runBinary
     (
-      binName,
+      config.c.outputBin,
       input: inputStreamController.stream,
       shouldExit: _isExiting,
       userArgs: _userArgs,

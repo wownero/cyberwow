@@ -19,6 +19,8 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 */
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../controller/helper.dart';
 import '../config.dart' as config;
 import '../logging.dart';
@@ -37,8 +39,7 @@ class LoadingState extends AppState {
     syncState();
   }
 
-
-  Future<SyncingState> next(final Stream<String> loadingProgress) async {
+  Future<SyncingState> next() async {
     Future<void> showBanner() async {
       List<String> chars = [];
       banner.runes.forEach((int rune) {
@@ -54,20 +55,12 @@ class LoadingState extends AppState {
       await Future.delayed(const Duration(seconds: 2), () => "1");
     }
 
-    Future<void> load() async {
-      log.fine("Loading next");
-      await for (final line in loadingProgress) {
-        // append(line);
-        log.info(line);
-      }
-    }
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    final _bannerShown = await _prefs.getBool(config.bannerShownKey);
 
-    final outputBinExists = await binaryExists(config.c.outputBin);
-    if (outputBinExists) {
-      await load();
-    }
-    else {
-      await Future.wait([load(), showBanner()]);
+    if (_bannerShown == null) {
+      await showBanner();
+      _prefs.setBool(config.bannerShownKey, true);
     }
 
     SyncingState _next = SyncingState(appHook);
