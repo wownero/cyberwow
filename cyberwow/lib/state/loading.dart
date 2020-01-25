@@ -42,11 +42,7 @@ class LoadingState extends AppState {
 
   Future<SyncingState> next() async {
     Future<void> showBanner() async {
-      List<String> chars = [];
-      banner.runes.forEach((int rune) {
-          final c = String.fromCharCode(rune);
-          chars.add(c);
-      });
+      final Iterable<String> chars = banner.runes.map((x) => String.fromCharCode(x));
 
       for (final String char in chars) {
         append(char);
