@@ -57,3 +57,10 @@ make build
 ```
 
 The resulting apk is `cyberwow/build/app/outputs/apk/release/app-release.apk`.
+
+
+## How to use custom start up arguments
+
+Sending the arguments to an unopened CyberWOW app will cause `wownerod` to use them on start up, for example:
+
+`--add-exclusive-node 192.168.1.3`
