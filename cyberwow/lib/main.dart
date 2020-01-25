@@ -199,7 +199,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     _exiting = true;
     inputStreamController.sink.add('exit');
 
-    await Future.delayed(const Duration(seconds: 5), () => null);
+    await Future.delayed(const Duration(seconds: 5));
 
     // the process controller should call exit(0) for us
     log.warning('Daemon took too long to shut down!');

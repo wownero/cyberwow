@@ -24,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../controller/helper.dart';
 import '../config.dart' as config;
 import '../logging.dart';
+import '../helper.dart';
 
 import 'prototype.dart';
 import 'syncing.dart';
@@ -49,10 +50,11 @@ class LoadingState extends AppState {
 
       for (final String char in chars) {
         append(char);
-        await Future.delayed(Duration(milliseconds: config.c.splashDelay), () => "1");
+        await Future.delayed(Duration(milliseconds: config.c.splashDelay));
       }
 
-      await Future.delayed(const Duration(seconds: 2), () => "1");
+      await tick();
+      await tick();
     }
 
     SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -60,7 +62,7 @@ class LoadingState extends AppState {
 
     if (_bannerShown == null) {
       await showBanner();
-      _prefs.setBool(config.bannerShownKey, true);
+      await _prefs.setBool(config.bannerShownKey, true);
     }
 
     SyncingState _next = SyncingState(appHook);
