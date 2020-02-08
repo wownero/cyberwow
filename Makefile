@@ -27,7 +27,12 @@
 # THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-.PHONY: toolchain
+.PHONY: toolchain clean
+
+clean:
+	-rm -f ./cyberwow/android/app/src/main/jniLibs/arm64-v8a/*.so
+	cd cyberwow && \
+  flutter clean
 
 watch:
 	find cyberwow/lib/ -name '*.dart' | \
