@@ -96,6 +96,7 @@ final config = CryptoConfig
     '--check-updates=disabled',
     '--disable-dns-checkpoints',
     '--max-log-file-size=0',
+    '--p2p-use-ipv6',
   ],
   '[1337@cyberwow]: ',
   6,
