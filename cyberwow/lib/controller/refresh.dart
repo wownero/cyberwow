@@ -27,6 +27,7 @@ import 'rpc/rpc.dart' as rpc;
 
 import '../config.dart';
 import '../logging.dart';
+import '../helper.dart';
 
 typedef GetNotificationFunc = AppLifecycleState Function();
 
@@ -37,9 +38,10 @@ Stream<Null> pull(GetNotificationFunc getNotification, final String puller) asyn
 
     if (_appState == AppLifecycleState.resumed) {
       yield null;
-      await Future.delayed(const Duration(milliseconds: 1000), () => null);
+      await tick();
     } else {
-      await Future.delayed(const Duration(seconds: 2), () => null);
+      await tick();
+      await tick();
     }
   }
 }

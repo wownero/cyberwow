@@ -49,6 +49,7 @@ for arch in ${archs[@]}; do
             ;;
         "arm64")
             target_host=aarch64-linux-android
+            target_abi=arm64-v8a
             ;;
         "x86_64")
             target_host=x86_64-linux-android
@@ -59,12 +60,10 @@ for arch in ${archs[@]}; do
     esac
 
     echo "collecting for ${arch}"
-    mkdir -p $target_root/cyberwow/native/output/$arch
-    cp build/release/bin/wownerod $target_root/cyberwow/native/output/$arch/
+    mkdir -p $target_root/cyberwow/android/app/src/main/jniLibs/$target_abi
+    cp build/release/bin/wownerod \
+    $target_root/cyberwow/android/app/src/main/jniLibs/$target_abi/libwownerod.so
 
 done
-
-mkdir -p $target_root/cyberwow/native/output/x86_64
-touch $target_root/cyberwow/native/output/x86_64/wownerod
 
 exit 0

@@ -47,15 +47,20 @@ popd
 git clone https://github.com/wownero/cyberwow/
 cd cyberwow
 
-mkdir -p cyberwow/native/output/arm64
-mkdir -p cyberwow/native/output/x86_64
+mkdir -p cyberwow/android/app/src/main/jniLibs/arm64-v8a
 
 # Copy wownerod that we just built
-cp $PATH_TO_WOWNEROD cyberwow/native/output/arm64/
-# Generate a dummy x86_64 bin
-touch cyberwow/native/output/x86_64/wownerod
+cp $PATH_TO_WOWNEROD \
+cyberwow/android/app/src/main/jniLibs/arm64-v8a/libwownerod.so
 
 make build
 ```
 
 The resulting apk is `cyberwow/build/app/outputs/apk/release/app-release.apk`.
+
+
+## How to use custom start up arguments
+
+Sending the arguments to an unopened CyberWOW app will cause `wownerod` to use them on start up, for example:
+
+`--add-exclusive-node 192.168.1.3`

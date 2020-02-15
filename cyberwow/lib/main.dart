@@ -28,7 +28,6 @@ import 'dart:io';
 import 'dart:async';
 
 import 'config.dart' as config;
-import 'controller/process/deploy.dart' as process;
 import 'controller/process/run.dart' as process;
 import 'logging.dart';
 import 'state.dart' as state;
@@ -69,6 +68,7 @@ class CyberWOW_Page extends StatefulWidget {
 class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserver
 {
   // AppState _state = LoadingState("init...");
+  static const _channel = const MethodChannel('send-intent');
 
   state.AppState _state;
   AppLifecycleState _notification = AppLifecycleState.resumed;
@@ -76,6 +76,12 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   bool _exiting = false;
 
   final StreamController<String> inputStreamController = StreamController();
+
+  Future<String> getInitialIntent() async {
+    final text = await _channel.invokeMethod('getInitialIntent');
+    log.fine('getInitialIntent: ${text}');
+    return text;
+  }
 
   @override
   void didChangeAppLifecycleState(final AppLifecycleState state) {
@@ -111,16 +117,27 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
   Future<void> buildStateMachine(final state.BlankState _blankState) async {
     final loadingText = config.c.splash;
     state.LoadingState _loadingState = await _blankState.next(loadingText);
+    state.SyncingState _syncingState = await _loadingState.next();
 
-    final binName = config.c.outputBin;
-    final resourcePath = 'native/output/' + describeEnum(config.arch) + '/' + binName;
-    final bundle = DefaultAssetBundle.of(context);
-    final loading = process.deployBinary(bundle, resourcePath, binName);
+    final _initialIntent = await getInitialIntent();
+    final _userArgs = _initialIntent
+    .trim()
+    .split(RegExp(r"\s+"))
+    .where((x) => !x.isEmpty)
+    .toList();
 
-    state.SyncingState _syncingState = await _loadingState.next(loading);
+    if (!_userArgs.isEmpty) {
+      log.info('user args: ${_userArgs}');
+    }
 
     final syncing = process
-    .runBinary(binName, input: inputStreamController.stream, shouldExit: _isExiting)
+    .runBinary
+    (
+      config.c.outputBin,
+      input: inputStreamController.stream,
+      shouldExit: _isExiting,
+      userArgs: _userArgs,
+    )
     .asBroadcastStream();
 
     await _syncingState.next(inputStreamController.sink, syncing);
@@ -182,7 +199,7 @@ class _CyberWOW_PageState extends State<CyberWOW_Page> with WidgetsBindingObserv
     _exiting = true;
     inputStreamController.sink.add('exit');
 
-    await Future.delayed(const Duration(seconds: 5), () => null);
+    await Future.delayed(const Duration(seconds: 5));
 
     // the process controller should call exit(0) for us
     log.warning('Daemon took too long to shut down!');

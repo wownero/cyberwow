@@ -29,7 +29,6 @@ Map<String, dynamic> getConnectionView(Map<String, dynamic> x) {
   [
     'address_type',
     'connection_id',
-    'host',
     'ip',
     'local_ip',
     'localhost',
@@ -88,7 +87,7 @@ Map<String, dynamic> getConnectionView(Map<String, dynamic> x) {
 
   final List<String> keys =
   [
-    'address',
+    'host',
     'height',
     'live_time',
     'current_download',

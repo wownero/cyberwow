@@ -23,15 +23,16 @@ import 'package:flutter/material.dart';
 
 import 'prototype.dart';
 
+const crtGreen = Color.fromRGBO(0, 255, 102, 1);
+
 final _theme = ThemeData
 (
   brightness: Brightness.dark,
 
-  primaryColor: Colors.green,
+  primaryColor: crtGreen,
   hintColor: Colors.yellow,
-  primarySwatch: Colors.green,
-  accentColor: Colors.green,
-  cursorColor: Colors.green,
+  accentColor: crtGreen,
+  cursorColor: crtGreen,
 
   scaffoldBackgroundColor: Colors.black,
 
@@ -72,15 +73,15 @@ final _theme = ThemeData
     ),
   ).apply
   (
-    bodyColor: Colors.green,
-    displayColor: Colors.green,
+    bodyColor: crtGreen,
+    displayColor: crtGreen,
   ),
 );
 
 
 final config = CryptoConfig
 (
-  'wownerod',
+  'libwownerod.so',
   'wownerod',
   'Follow the white rabbit.',
   70,
@@ -91,6 +92,11 @@ final config = CryptoConfig
     '--max-concurrency=1',
     '--fast-block-sync=1',
     '--block-sync-size=5',
+    '--no-igd',
+    '--check-updates=disabled',
+    '--disable-dns-checkpoints',
+    '--max-log-file-size=0',
+    '--p2p-use-ipv6',
   ],
   '[1337@cyberwow]: ',
   6,

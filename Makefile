@@ -27,7 +27,12 @@
 # THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-.PHONY: toolchain
+.PHONY: toolchain clean
+
+clean:
+	-rm -f ./cyberwow/android/app/src/main/jniLibs/arm64-v8a/*.so
+	cd cyberwow && \
+  flutter clean
 
 watch:
 	find cyberwow/lib/ -name '*.dart' | \
@@ -36,6 +41,10 @@ watch:
 run:
 	cd cyberwow && \
 	flutter run --debug --pid-file /tmp/flutter.pid
+
+run-release:
+	cd cyberwow && \
+	flutter run --release --pid-file /tmp/flutter.pid
 
 # clang -target aarch64-linux-android21 cyberwow/native/hello.c -o cyberwow/native/output/hello
 c:
@@ -59,6 +68,10 @@ collect:
 build:
 	cd cyberwow && \
 	flutter build apk --target-platform android-arm64
+
+build-debug:
+	cd cyberwow && \
+	flutter build apk --debug --target-platform android-arm64
 
 install: build
 	cd cyberwow && \

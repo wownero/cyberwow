@@ -29,6 +29,7 @@ import 'dart:convert';
 import '../helper.dart';
 import '../../config.dart' as config;
 import '../../logging.dart';
+import '../../logic/sensor/helper.dart' as helper;
 
 typedef ShouldExit = bool Function();
 
@@ -37,9 +38,10 @@ Stream<String> runBinary
   final String name,
   { final Stream<String> input,
     final ShouldExit shouldExit,
+    final List<String> userArgs = const [],
   }
 ) async* {
-  final newPath = await getBinaryPath(name);
+  final binPath = await helper.getBinaryPath(name);
 
   final appDocDir = await getApplicationDocumentsDirectory();
   final appDocPath = appDocDir.path;
@@ -61,11 +63,11 @@ Stream<String> runBinary
   [
     "--data-dir",
     binDir.path,
-  ] + extraArgs + config.c.extraArgs;
+  ] + extraArgs + config.c.extraArgs + userArgs;
 
   log.info('args: ' + args.toString());
 
-  final outputProcess = await Process.start(newPath, args);
+  final outputProcess = await Process.start(binPath, args);
 
   Future<void> printInput() async {
     await for (final line in input) {

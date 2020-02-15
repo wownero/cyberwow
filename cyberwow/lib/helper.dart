@@ -69,3 +69,5 @@ List<dynamic> asList(dynamic x) => x ?? [];
 List<Map<String, dynamic>> asJsonArray(dynamic x) => x?.cast<Map<String, dynamic>>() ?? [];
 
 Map<String, dynamic> asMap(dynamic x) => x ?? {};
+
+Future<void> tick() async => await Future.delayed(const Duration(seconds: 1));

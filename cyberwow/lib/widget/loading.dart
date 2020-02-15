@@ -32,7 +32,7 @@ Widget build(BuildContext context, LoadingState state) {
     // ),
     body: Container
     (
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(40.0),
       child: Align
       (
         alignment: Alignment.topLeft,
@@ -41,18 +41,19 @@ Widget build(BuildContext context, LoadingState state) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>
           [
-            Expanded
+            Spacer
             (
               flex: 1,
-              child: SingleChildScrollView
-              (
-                child: Text
-                (
-                  state.status,
-                  style: Theme.of(context).textTheme.title,
-                )
-              )
-            )
+            ),
+            Text
+            (
+              state.status,
+              style: Theme.of(context).textTheme.title,
+            ),
+            Spacer
+            (
+              flex: 1,
+            ),
           ],
         ),
       ),
