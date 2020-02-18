@@ -26,7 +26,6 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
-import '../helper.dart';
 import '../../config.dart' as config;
 import '../../logging.dart';
 import '../../logic/sensor/helper.dart' as helper;
