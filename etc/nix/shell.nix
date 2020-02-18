@@ -38,7 +38,7 @@ let
 with nixpkgs;
 
 (buildFHSUserEnv {
-  name = "sora-tuner-env"
+  name = "cyberwow-build-env"
 ; targetPkgs = pkgs: (with pkgs;
   [
     bash
@@ -82,7 +82,7 @@ with nixpkgs;
 ; profile = ''
     export ANDROID_HOME=~/SDK/Android/Sdk
 
-    PATH=~/local/sdk/flutter/bin:$PATH
+    PATH=~/local/sdk/flutter/stable/bin:$PATH
     PATH=~/SDK/Android/android-studio/bin:$PATH
 
     export ANDROID_NDK_VERSION=r20
@@ -93,12 +93,12 @@ with nixpkgs;
     export PATH_NCURSES=${nixpkgs.ncurses5}
     export PATH
 
-    export _JAVA_AWT_WM_NONREPARENTING=1
     export DART_VM_OPTIONS=--root-certs-file=/etc/ssl/certs/ca-certificates.crt
 
     export ANDROID_NDK_VERSION_WOW=r17c
     export ANDROID_NDK_ROOT_WOW=~/SDK/Android/ndk-archive/android-ndk-$ANDROID_NDK_VERSION_WOW
 
+    export ZSH_INIT=${nixpkgs.oh-my-zsh}/share/oh-my-zsh/oh-my-zsh.sh
     exec zsh
   ''
 
