@@ -30,8 +30,8 @@ import '../logic/sensor/daemon.dart' as daemon;
 import '../logic/controller/refresh.dart' as refresh;
 import '../logic/sensor/rpc/rpc.dart' as rpc;
 import '../logic/sensor/rpc/rpc2.dart' as rpc;
-import '../logic/sensor/rpc/rpc2View.dart' as rpc2View;
-import '../logic/sensor/rpc/rpcView.dart' as rpcView;
+import '../logic/view/rpc/rpc2.dart' as rpc2View;
+import '../logic/view/rpc/rpc.dart' as rpcView;
 import '../helper.dart';
 import '../logging.dart';
 
