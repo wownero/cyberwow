@@ -26,12 +26,12 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 import '../config.dart' as config;
-import '../logic/controller/daemon.dart' as daemon;
+import '../logic/sensor/daemon.dart' as daemon;
 import '../logic/controller/refresh.dart' as refresh;
-import '../logic/controller/rpc/rpc.dart' as rpc;
-import '../logic/controller/rpc/rpc2.dart' as rpc;
-import '../logic/controller/rpc/rpc2View.dart' as rpc2View;
-import '../logic/controller/rpc/rpcView.dart' as rpcView;
+import '../logic/sensor/rpc/rpc.dart' as rpc;
+import '../logic/sensor/rpc/rpc2.dart' as rpc;
+import '../logic/sensor/rpc/rpc2View.dart' as rpc2View;
+import '../logic/sensor/rpc/rpcView.dart' as rpcView;
 import '../helper.dart';
 import '../logging.dart';
 

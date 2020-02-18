@@ -22,9 +22,9 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 import 'dart:async';
 import 'dart:collection';
 
-import '../logic/controller/rpc/rpc.dart' as rpc;
-import '../logic/controller/daemon.dart' as daemon;
 import '../logic/controller/refresh.dart' as refresh;
+import '../logic/sensor/rpc/rpc.dart' as rpc;
+import '../logic/sensor/daemon.dart' as daemon;
 import '../config.dart' as config;
 import '../logging.dart';
 
