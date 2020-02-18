@@ -25,45 +25,12 @@ import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 
-import '../../../config.dart' as config;
 import '../../../helper.dart';
 import '../../../logging.dart';
+import '../../interface/rpc/rpc2.dart' as rpc2;
 
-Future<http.Response> rpc2(final String method) async {
-  final url = 'http://${config.host}:${config.c.port}/${method}';
-
-  try {
-    final response = await http.post
-    ( url,
-    );
-    return response;
-  }
-  catch (e) {
-    log.warning(e);
-    return null;
-  }
-}
-
-dynamic jsonDecode(final String responseBody) => json.decode(responseBody);
-
-Future<String> rpc2String(final String method, {final String field}) async {
-  final response = await rpc2(method);
-
-  if (response == null) return '';
-
-  if (response.statusCode != 200) {
-    return '';
-  } else {
-    final _body = await compute(jsonDecode, response.body);
-    final _field = field == null ? _body: _body[field];
-
-    return pretty(_field);
-  }
-}
-
-Future<http.Response> getTransactionPool() async => rpc2('get_transaction_pool');
+Future<http.Response> getTransactionPool() async => rpc2.rpc2('get_transaction_pool');
 
 Future<List<Map<String, dynamic>>> getTransactionPoolSimple() async {
   final response = await getTransactionPool();

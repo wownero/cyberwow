@@ -23,65 +23,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:flutter/foundation.dart';
 
-import '../../../config.dart' as config;
 import '../../../helper.dart';
 import '../../../logging.dart';
-
-int rpcID = 0;
-
-Future<http.Response> rpcHTTP(final String method) async {
-  final url = 'http://${config.host}:${config.c.port}/json_rpc';
-
-  rpcID += 1;
-
-  final body = json.encode
-  (
-    {
-      'jsonrpc': '2.0',
-      'id': rpcID.toString(),
-      'method': method,
-    }
-  );
-
-  try {
-    final response = await http.post
-    ( url,
-      body: body
-    );
-    return response;
-  }
-  catch (e) {
-    log.warning(e);
-    return null;
-  }
-}
-
-dynamic jsonDecode(final String responseBody) => json.decode(responseBody);
-
-Future<dynamic> rpc(final String method, {final String field}) async {
-  final response = await rpcHTTP(method);
-
-  if (response == null) return null;
-
-  if (response.statusCode != 200) {
-    return null;
-  } else {
-    final _body = await compute(jsonDecode, response.body);
-    final _result = _body['result'];
-    if (_result == null) return null;
-
-    final _field = field == null ? _result : _result[field];
-
-    return _field;
-  }
-}
-
-Future<String> rpcString(final String method, {final String field}) async {
-  final _field = await rpc(method, field: field);
-  return pretty(_field);
-}
+import '../../interface/rpc/rpc.dart';
 
 Future<http.Response> syncInfo() => rpc('sync_info');
 Future<String> syncInfoString() => rpcString('sync_info');
