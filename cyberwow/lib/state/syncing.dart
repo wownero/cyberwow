@@ -23,7 +23,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import '../logic/controller/rpc/rpc.dart' as rpc;
-import '../logic/controller/daemon.dart' as daemon;
+import '../logic/sensor/daemon.dart' as daemon;
 import '../logic/controller/refresh.dart' as refresh;
 import '../config.dart' as config;
 import '../logging.dart';
