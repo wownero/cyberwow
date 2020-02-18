@@ -38,6 +38,10 @@ watch:
 	find cyberwow/lib/ -name '*.dart' | \
 	entr kill -USR1 `cat /tmp/flutter.pid`
 
+watch-build:
+	find cyberwow/lib/ -name '*.dart' | \
+	entr $(MAKE) build-debug
+
 run:
 	cd cyberwow && \
 	flutter run --debug --pid-file /tmp/flutter.pid
