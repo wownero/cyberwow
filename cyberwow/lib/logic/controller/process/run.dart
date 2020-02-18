@@ -26,9 +26,9 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
-import '../../config.dart' as config;
-import '../../logging.dart';
-import '../../logic/sensor/helper.dart' as helper;
+import '../../../config.dart' as config;
+import '../../../logging.dart';
+import '../../sensor/helper.dart' as helper;
 
 typedef ShouldExit = bool Function();
 

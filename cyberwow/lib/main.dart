@@ -28,7 +28,7 @@ import 'dart:io';
 import 'dart:async';
 
 import 'config.dart' as config;
-import 'controller/process/run.dart' as process;
+import 'logic/controller/process/run.dart' as process;
 import 'logging.dart';
 import 'state.dart' as state;
 import 'widget.dart' as widget;

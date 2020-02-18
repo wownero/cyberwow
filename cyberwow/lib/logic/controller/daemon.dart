@@ -23,8 +23,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'rpc/rpc.dart' as rpc;
-import '../config.dart' as config;
-import '../logging.dart';
+import '../../config.dart' as config;
+import '../../logging.dart';
 
 Future<bool> isConnected() async {
   final _outPeers = await rpc.outgoingConnectionsCount();

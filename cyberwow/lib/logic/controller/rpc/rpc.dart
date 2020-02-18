@@ -25,9 +25,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
-import '../../config.dart' as config;
-import '../../helper.dart';
-import '../../logging.dart';
+import '../../../config.dart' as config;
+import '../../../helper.dart';
+import '../../../logging.dart';
 
 int rpcID = 0;
 

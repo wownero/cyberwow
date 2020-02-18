@@ -27,9 +27,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
-import '../../config.dart' as config;
-import '../../helper.dart';
-import '../../logging.dart';
+import '../../../config.dart' as config;
+import '../../../helper.dart';
+import '../../../logging.dart';
 
 Future<http.Response> rpc2(final String method) async {
   final url = 'http://${config.host}:${config.c.port}/${method}';
