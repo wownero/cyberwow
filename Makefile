@@ -87,7 +87,7 @@ script := etc/scripts/build-external-libs
 
 wow: clean-external-libs collect-wownero build
 
-wow-fake: clean-external-libs collect-wownero-fake build
+wow-no-native: build
 
 clean-external-libs:
 	$(script)/clean.sh
@@ -125,10 +125,6 @@ wownero: openssl boost sodium toolchain-wow
 
 collect-wownero: wownero
 	$(script)/collect.sh
-
-collect-wownero-fake:
-	$(script)/collect-fake.sh
-
 
 # etc
 
