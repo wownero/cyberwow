@@ -94,6 +94,7 @@ with nixpkgs;
     export PATH_NCURSES=${nixpkgs.ncurses5}
     export PATH
 
+    export _JAVA_AWT_WM_NONREPARENTING=1
     export DART_VM_OPTIONS=--root-certs-file=/etc/ssl/certs/ca-certificates.crt
 
     export ANDROID_NDK_VERSION_WOW=r17c

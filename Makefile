@@ -71,11 +71,11 @@ collect:
 
 build:
 	cd cyberwow && \
-	flutter build apk --target-platform android-arm64
+	flutter build apk --target-platform android-arm64 -v
 
 build-debug:
 	cd cyberwow && \
-	flutter build apk --debug --target-platform android-arm64
+	flutter build apk --debug --target-platform android-arm64 -v
 
 install: build
 	cd cyberwow && \
