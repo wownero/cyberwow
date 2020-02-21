@@ -22,6 +22,7 @@ let
     qrcode
     requests
     ruamel_yaml
+    libvirt
   ]
 
 ; python-with-fdroid-packages = pkgs.python3.withPackages fdroid-python-packages
