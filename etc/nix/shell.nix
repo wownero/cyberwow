@@ -86,7 +86,7 @@ with nixpkgs;
     PATH=~/SDK/Android/android-studio/bin:$PATH
     PATH=~/SDK/Android/Sdk/tools/bin:$PATH
 
-    export ANDROID_NDK_VERSION=r20
+    export ANDROID_NDK_VERSION=r20b
     export ANDROID_NDK_ROOT=~/SDK/Android/ndk-archive/android-ndk-$ANDROID_NDK_VERSION
     export NDK=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64
     PATH=$NDK/bin:$PATH
