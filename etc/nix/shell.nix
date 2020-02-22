@@ -53,7 +53,7 @@ with nixpkgs;
     # openjdk
     # jetbrains.jdk
     # zulu
-    jdk
+    jdk12
     # dart_dev
     gnumake
     gcc
