@@ -205,6 +205,8 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
     textInputAction: TextInputAction.next,
     autofocus: true,
     autocorrect: false,
+    enableSuggestions: false,
+    keyboardType: TextInputType.visiblePassword,
     decoration:
     InputDecoration
     (
