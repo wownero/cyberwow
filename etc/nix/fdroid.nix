@@ -18,6 +18,7 @@ let
     pyasn1
     pyasn1-modules
     python-vagrant
+    libvirt
     pyyaml
     qrcode
     requests
