@@ -64,3 +64,7 @@ The resulting apk is `cyberwow/build/app/outputs/apk/release/app-release.apk`.
 Sending the arguments to an unopened CyberWOW app will cause `wownerod` to use them on start up, for example:
 
 `--add-exclusive-node 192.168.1.3`
+
+## F-droid build status
+
+<https://f-droid.org/wiki/page/org.wownero.cyberwow/lastbuild>
