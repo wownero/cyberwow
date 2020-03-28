@@ -18,10 +18,12 @@ let
     pyasn1
     pyasn1-modules
     python-vagrant
+    libvirt
     pyyaml
     qrcode
     requests
     ruamel_yaml
+    libvirt
   ]
 
 ; python-with-fdroid-packages = pkgs.python3.withPackages fdroid-python-packages

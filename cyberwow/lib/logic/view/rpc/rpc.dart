@@ -21,8 +21,8 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:intl/intl.dart';
 
-import '../../config.dart' as config;
-import '../../helper.dart';
+import '../../../config.dart' as config;
+import '../../../helper.dart';
 
 Map<String, dynamic> getConnectionView(Map<String, dynamic> x) {
   const _remove =

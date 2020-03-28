@@ -23,11 +23,10 @@ import 'package:logging/logging.dart';
 
 import 'dart:ui';
 import 'dart:async';
-import 'rpc/rpc.dart' as rpc;
 
-import '../config.dart';
-import '../logging.dart';
-import '../helper.dart';
+import '../../config.dart';
+import '../../logging.dart';
+import '../../helper.dart';
 
 typedef GetNotificationFunc = AppLifecycleState Function();
 

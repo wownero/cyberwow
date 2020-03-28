@@ -23,16 +23,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'rpc/rpc.dart' as rpc;
-import '../config.dart' as config;
-import '../logging.dart';
+import '../../config.dart' as config;
+import '../../logging.dart';
 
 Future<bool> isConnected() async {
-  final _outPeers = await rpc.outgoingConnectionsCount();
-  final _inPeers = await rpc.incomingConnectionsCount();
-
-  log.finest('outPeers: ${_outPeers}');
-  log.finest('inPeers: ${_inPeers}');
-  return _outPeers + _inPeers > 0;
+  final _connections = await rpc.getConnectionsSimple();
+  log.finer('cyberwow: _connections: ${_connections}');
+  return !_connections.isEmpty;
 }
 
 Future<bool> isSynced() async {

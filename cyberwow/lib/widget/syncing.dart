@@ -52,7 +52,7 @@ Widget build(BuildContext context, SyncingState state) {
                 reverse: true,
                 child: Text
                 (
-                  state.stdout.join(),
+                  state.stdout.join('\n'),
                   style: Theme.of(context).textTheme.body1,
                 )
               )

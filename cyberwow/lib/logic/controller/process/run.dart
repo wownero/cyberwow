@@ -26,10 +26,9 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
-import '../helper.dart';
-import '../../config.dart' as config;
-import '../../logging.dart';
-import '../../logic/sensor/helper.dart' as helper;
+import '../../../config.dart' as config;
+import '../../../logging.dart';
+import '../../sensor/helper.dart' as helper;
 
 typedef ShouldExit = bool Function();
 
@@ -80,7 +79,11 @@ Stream<String> runBinary
   if (input != null) {
     printInput();
   }
-  await for (final line in outputProcess.stdout.transform(utf8.decoder)) {
+
+  final _stdout = outputProcess.stdout
+  .transform(utf8.decoder).transform(const LineSplitter());
+
+  await for (final line in _stdout) {
     log.finest('process output: ' + line);
     yield line;
   }

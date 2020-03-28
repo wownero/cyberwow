@@ -27,9 +27,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
-import '../../config.dart' as config;
-import '../../helper.dart';
-import '../../logging.dart';
+import '../../../config.dart' as config;
+import '../../../helper.dart';
+import '../../../logging.dart';
 
 Future<http.Response> rpc2(final String method) async {
   final url = 'http://${config.host}:${config.c.port}/${method}';
@@ -60,46 +60,5 @@ Future<String> rpc2String(final String method, {final String field}) async {
     final _field = field == null ? _body: _body[field];
 
     return pretty(_field);
-  }
-}
-
-Future<http.Response> getTransactionPool() async => rpc2('get_transaction_pool');
-
-Future<List<Map<String, dynamic>>> getTransactionPoolSimple() async {
-  final response = await getTransactionPool();
-
-  if (response == null) return [];
-
-  log.finest('getTransactionPoolSimple response: ${response.body}');
-  log.finest('Response status: ${response.statusCode}');
-
-  if (response.statusCode != 200) {
-    return [];
-  } else {
-    final responseBody = json.decode(response.body);
-    final result = asJsonArray(responseBody['transactions']);
-    final _sortedPool = result..sort
-    (
-      (x, y) {
-        final int a = x['receive_time'];
-        final int b = y['receive_time'];
-        return b.compareTo(a);
-      }
-    );
-
-    final _decodedPool = await Stream.fromIterable(_sortedPool).asyncMap
-    (
-      (x) async {
-        final String _tx_json = x['tx_json'];
-        final _tx_json_decoded = await compute(jsonDecode, _tx_json);
-
-        return {
-          ...x,
-          ...{'tx_decoded': _tx_json_decoded},
-        };
-      }
-    );
-
-    return _decodedPool.toList();
   }
 }

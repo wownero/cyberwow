@@ -26,12 +26,12 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 import '../config.dart' as config;
-import '../controller/daemon.dart' as daemon;
-import '../controller/refresh.dart' as refresh;
-import '../controller/rpc/rpc.dart' as rpc;
-import '../controller/rpc/rpc2.dart' as rpc;
-import '../controller/rpc/rpc2View.dart' as rpc2View;
-import '../controller/rpc/rpcView.dart' as rpcView;
+import '../logic/sensor/daemon.dart' as daemon;
+import '../logic/controller/refresh.dart' as refresh;
+import '../logic/sensor/rpc/rpc.dart' as rpc;
+import '../logic/sensor/rpc/rpc2.dart' as rpc;
+import '../logic/view/rpc/rpc2.dart' as rpc2View;
+import '../logic/view/rpc/rpc.dart' as rpcView;
 import '../helper.dart';
 import '../logging.dart';
 
@@ -66,7 +66,7 @@ class SyncedState extends AppState {
   }
 
   void appendInput(final String line) {
-    stdout.addLast(config.c.promptString + line + '\n');
+    stdout.addLast(config.c.promptString + line);
     syncState();
     processInput.add(line);
 

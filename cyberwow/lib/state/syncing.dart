@@ -22,9 +22,9 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 import 'dart:async';
 import 'dart:collection';
 
-import '../controller/rpc/rpc.dart' as rpc;
-import '../controller/daemon.dart' as daemon;
-import '../controller/refresh.dart' as refresh;
+import '../logic/sensor/rpc/rpc.dart' as rpc;
+import '../logic/sensor/daemon.dart' as daemon;
+import '../logic/controller/refresh.dart' as refresh;
 import '../config.dart' as config;
 import '../logging.dart';
 
@@ -34,7 +34,7 @@ import 'exiting.dart';
 
 
 class SyncingState extends AppState {
-  final Queue<String> stdout = Queue.from(['']);
+  final Queue<String> stdout = Queue();
 
   bool synced = false;
 

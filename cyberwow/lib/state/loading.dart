@@ -21,7 +21,6 @@ along with CyberWOW.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../controller/helper.dart';
 import '../config.dart' as config;
 import '../logging.dart';
 import '../helper.dart';

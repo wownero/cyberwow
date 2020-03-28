@@ -37,6 +37,6 @@ Widget build(final BuildContext context, final AppState state) {
     case SyncedState: return synced.build(context, state);
     case ReSyncingState: return resyncing.build(context, state);
     case ExitingState: return exiting.build(context, state);
-    default: Placeholder();
+    default: return Placeholder();
   }
 }

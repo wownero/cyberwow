@@ -38,6 +38,10 @@ watch:
 	find cyberwow/lib/ -name '*.dart' | \
 	entr kill -USR1 `cat /tmp/flutter.pid`
 
+watch-build:
+	find cyberwow/lib/ -name '*.dart' | \
+	entr $(MAKE) build-debug
+
 run:
 	cd cyberwow && \
 	flutter run --debug --pid-file /tmp/flutter.pid
@@ -67,7 +71,7 @@ collect:
 
 build:
 	cd cyberwow && \
-	flutter build apk --target-platform android-arm64
+	flutter build apk --target-platform android-arm64 -v
 
 build-debug:
 	cd cyberwow && \
@@ -83,7 +87,7 @@ script := etc/scripts/build-external-libs
 
 wow: clean-external-libs collect-wownero build
 
-wow-fake: clean-external-libs collect-wownero-fake build
+wow-no-native: build
 
 clean-external-libs:
 	$(script)/clean.sh
@@ -121,10 +125,6 @@ wownero: openssl boost sodium toolchain-wow
 
 collect-wownero: wownero
 	$(script)/collect.sh
-
-collect-wownero-fake:
-	$(script)/collect-fake.sh
-
 
 # etc
 

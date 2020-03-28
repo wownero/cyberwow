@@ -23,8 +23,8 @@ import 'dart:math';
 
 import 'package:intl/intl.dart';
 
-import '../../config.dart' as config;
-import '../../helper.dart';
+import '../../../config.dart' as config;
+import '../../../helper.dart';
 
 Map<String, dynamic> txView(Map<String, dynamic> x) {
   const _remove =
