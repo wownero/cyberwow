@@ -34,7 +34,7 @@ import 'exiting.dart';
 
 
 class SyncingState extends AppState {
-  final Queue<String> stdout = Queue.from(['']);
+  final Queue<String> stdout = Queue();
 
   bool synced = false;
 

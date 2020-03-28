@@ -278,7 +278,7 @@ Widget terminalView(BuildContext context, String title, SyncedState state) {
 
                   Text
                   (
-                    state.stdout.join(),
+                    state.stdout.join('\n'),
                     style: Theme.of(context).textTheme.body2,
                   )
                 ],

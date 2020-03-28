@@ -66,7 +66,7 @@ class SyncedState extends AppState {
   }
 
   void appendInput(final String line) {
-    stdout.addLast(config.c.promptString + line + '\n');
+    stdout.addLast(config.c.promptString + line);
     syncState();
     processInput.add(line);
 

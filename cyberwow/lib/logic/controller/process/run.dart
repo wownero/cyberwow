@@ -79,7 +79,11 @@ Stream<String> runBinary
   if (input != null) {
     printInput();
   }
-  await for (final line in outputProcess.stdout.transform(utf8.decoder)) {
+
+  final _stdout = outputProcess.stdout
+  .transform(utf8.decoder).transform(const LineSplitter());
+
+  await for (final line in _stdout) {
     log.finest('process output: ' + line);
     yield line;
   }
