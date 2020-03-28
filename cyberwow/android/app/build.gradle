@@ -41,8 +41,8 @@ android {
         applicationId "org.wownero.cyberwow"
         minSdkVersion 26
         targetSdkVersion 29
-        versionCode 23
-        versionName "0.7.0.0-j"
+        versionCode 24
+        versionName "0.7.0.0-k"
     }
 
     if(project.hasProperty("RELEASE_STORE_FILE")) {
