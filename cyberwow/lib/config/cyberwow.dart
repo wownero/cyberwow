@@ -95,6 +95,7 @@ final config = CryptoConfig
     '--no-igd',
     '--check-updates=disabled',
     '--disable-dns-checkpoints',
+    '--log-file=/dev/null',
     '--max-log-file-size=0',
     '--p2p-use-ipv6',
   ],
