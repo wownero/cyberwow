@@ -44,9 +44,9 @@ class MainActivity: FlutterActivity() {
     }
 
     internal fun handleSendText(intent:Intent) {
-        val text:String = intent.getStringExtra(Intent.EXTRA_TEXT)
+        val text:String? = intent.getStringExtra(Intent.EXTRA_TEXT)
         if (initialIntentSet == false) {
-            initialIntentText = text
+            initialIntentText = text ?: "";
         }
     }
 
