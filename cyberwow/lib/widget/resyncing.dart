@@ -25,49 +25,53 @@ import '../state.dart';
 import '../config.dart' as config;
 
 Widget build(BuildContext context, ReSyncingState state) {
+  final progressWidget =
+  [
+    Spacer
+    (
+      flex: 3,
+    ),
+    LinearProgressIndicator(),
+    Spacer
+    (
+      flex: 2,
+    ),
+    Expanded
+    (
+      flex: 5,
+      child: Text
+      (
+        state.stdout.last,
+        style: Theme.of(context).textTheme.body1,
+      )
+    ),
+  ];
+
   return Scaffold
   (
-    // appBar: AppBar
-    // (
-    //   // title: Text(widget.title),
-    //   title: Text('CyberWOW'),
-    // ),
     body: Container
     (
-      // padding: const EdgeInsets.all(10.0),
-      child: Align
+      padding: const EdgeInsets.all(10.0),
+      child: Column
       (
-        alignment: Alignment.topLeft,
-        child: Column
-        (
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>
-          [
-            Spacer
-            (
-              flex: 1,
-            ),
-            Expanded
-            (
-              flex: 1,
-              child: SingleChildScrollView
-              (
-                scrollDirection: Axis.vertical,
-                reverse: true,
-                child: Text
-                (
-                  state.stdout.last,
-                  style: Theme.of(context).textTheme.body1,
-                )
-              )
-            ),
-            Spacer
-            (
-              flex: 1,
-            ),
-          ],
-        ),
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>
+        [
+          Spacer
+          (
+            flex: 10,
+          ),
+        ] +
+        progressWidget +
+        [
+          Spacer
+          (
+            flex: 10,
+          ),
+        ]
       ),
-    ),
+    )
   );
 }
+
