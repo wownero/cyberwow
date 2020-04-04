@@ -58,29 +58,30 @@ Map<String, dynamic> getConnectionView(Map<String, dynamic> x) {
   final _formattedConn = _filteredConn.map
   (
     (k, v) {
-      if (k == 'connection_id') {
-        return MapEntry(k, trimHash(v));
-      }
-
-      const speedField =
-      [
-        'avg_download',
-        'avg_upload',
-        'current_download',
-        'current_upload',
-      ];
-      if (speedField.contains(k)) {
-        return MapEntry(k, '${v} kB/s');
-      }
-
-      else if (k == 'live_time') {
-        final _duration = Duration(seconds: v);
-        format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
-        return MapEntry(k, format(_duration));
-      }
-
-      else {
-        return MapEntry(k, v);
+      switch (k) {
+        case 'connection_id': {
+          return MapEntry(k, trimHash(v));
+        }
+        case 'live_time': {
+          final _duration = Duration(seconds: v);
+          format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+          return MapEntry(k, format(_duration));
+        }
+        default: {
+          const speedField =
+          [
+            'avg_download',
+            'avg_upload',
+            'current_download',
+            'current_upload',
+          ];
+          if (speedField.contains(k)) {
+            return MapEntry(k, '${v} kB/s');
+          }
+          else {
+            return MapEntry(k, v);
+          }
+        }
       }
     }
   );
@@ -171,38 +172,39 @@ Map<String, dynamic> getInfoView(Map<String, dynamic> x) {
   final _formattedInfo = _ammendedInfo.map
   (
     (k, v) {
-      if (k == 'top_block_hash') {
-        return MapEntry(k, trimHash(v));
-      }
+      switch (k) {
+        case 'top_block_hash': {
+          return MapEntry(k, trimHash(v));
+        }
+        case 'start_time': {
+          final _receive_time = DateTime.fromMillisecondsSinceEpoch(v * 1000);
+          final _diff = DateTime.now().difference(_receive_time);
 
-      const sizeField =
-      [
-        'block_size_limit',
-        'block_size_median',
-        'block_weight_limit',
-        'block_weight_median',
-        'difficulty',
-        'tx_count',
-        'cumulative_difficulty',
-        'free_space',
-        'database_size',
-        'hash_rate',
-      ];
-      if (sizeField.contains(k)) {
-        final formatter = NumberFormat.compact();
-        return MapEntry(k, formatter.format(v));
-      }
-
-      else if (k == 'start_time') {
-        final _receive_time = DateTime.fromMillisecondsSinceEpoch(v * 1000);
-        final _diff = DateTime.now().difference(_receive_time);
-
-        format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
-        return MapEntry('uptime', format(_diff));
-      }
-
-      else {
-        return MapEntry(k, v);
+          format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+          return MapEntry('uptime', format(_diff));
+        }
+        default: {
+          const sizeField =
+          [
+            'block_size_limit',
+            'block_size_median',
+            'block_weight_limit',
+            'block_weight_median',
+            'difficulty',
+            'tx_count',
+            'cumulative_difficulty',
+            'free_space',
+            'database_size',
+            'hash_rate',
+          ];
+          if (sizeField.contains(k)) {
+            final formatter = NumberFormat.compact();
+            return MapEntry(k, formatter.format(v));
+          }
+          else {
+            return MapEntry(k, v);
+          }
+        }
       }
     }
   );
