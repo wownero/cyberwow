@@ -38,3 +38,5 @@ const host = isEmu ? emuHost : '127.0.0.1';
 const stdoutLineBufferSize = 200;
 const bannerShownKey = 'banner-shown';
 
+const int maxPoolTxSize = 5000;
+
