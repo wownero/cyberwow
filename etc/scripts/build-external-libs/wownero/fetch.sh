@@ -36,7 +36,8 @@ source etc/scripts/build-external-libs/env.sh
 cd $BUILD_ROOT_SRC
 
 name=wownero
-version=v0.7.0
+# version=v0.7.0
+version=dev-v0.8
 githash=4c6c7ab87b2a56165f400f6e49f17b9577a2bcad
 
 rm -rf $name
@@ -44,7 +45,7 @@ rm -rf $name
 git clone --depth 1 https://github.com/wownero/wownero.git -b $version
 
 cd $name
-test `git rev-parse HEAD` = $githash || exit 1
+# test `git rev-parse HEAD` = $githash || exit 1
 
 git submodule update --init external/unbound
 git submodule update --init external/miniupnp
