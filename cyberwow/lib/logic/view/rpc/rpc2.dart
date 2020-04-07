@@ -53,45 +53,33 @@ Map<String, dynamic> txView(Map<String, dynamic> x) {
   final _formattedTx = _filteredTx.map
   (
     (k, v) {
-      if (k == 'id_hash') {
-        return MapEntry('id', trimHash(v));
-      }
+      switch (k) {
+        case 'id_hash':
+          return MapEntry('id', trimHash(v));
+        case 'blob_size':
+          return MapEntry('size', (v / 1024).toStringAsFixed(2) + ' kB');
+        case 'fee': {
+          final formatter = NumberFormat.currency
+          (
+            symbol: '',
+            decimalDigits: 2,
+          );
+          return MapEntry(k, formatter.format(v / pow(10, 11)) + ' ⍵');
+        }
+        case 'receive_time': {
+          final _receive_time = DateTime.fromMillisecondsSinceEpoch(v * 1000);
+          final _diff = DateTime.now().difference(_receive_time);
 
-      else if (k == 'blob_size') {
-        return MapEntry('size', (v / 1024).toStringAsFixed(2) + ' kB');
-      }
-
-      else if (k == 'fee') {
-        final formatter = NumberFormat.currency
-        (
-          symbol: '',
-          decimalDigits: 2,
-        );
-        return MapEntry(k, formatter.format(v / pow(10, 11)) + ' ⍵');
-      }
-
-      else if (k == 'receive_time') {
-        final _receive_time = DateTime.fromMillisecondsSinceEpoch(v * 1000);
-        final _diff = DateTime.now().difference(_receive_time);
-
-        format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
-        return MapEntry('age', format(_diff));
-      }
-
-      else if (k == 'tx_decoded') {
-        final _out =
-        {
-          'vin': v['vin'].length,
-          'vout': v['vout'].length,
-        };
-        final _outString = _out['vin'].toString() + '/' + _out['vout'].toString();
-        return MapEntry('i/o', _outString);
-      }
-
-      else {
-        return MapEntry(k, v);
+          format(Duration d) => d.toString().split('.').first.padLeft(8, "0");
+          return MapEntry('age', format(_diff));
+        }
+        default:
+          return MapEntry(k, v);
       }
     }
+
+
+
   );
 
   final List<String> keys =

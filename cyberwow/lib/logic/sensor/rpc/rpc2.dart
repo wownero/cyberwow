@@ -27,10 +27,13 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 import '../../../helper.dart';
+import '../../../config.dart' as config;
 import '../../../logging.dart';
 import '../../interface/rpc/rpc2.dart' as rpc2;
 
 Future<http.Response> getTransactionPool() async => rpc2.rpc2('get_transaction_pool');
+
+Map<String, String> txInOutCache = {};
 
 Future<List<Map<String, dynamic>>> getTransactionPoolSimple() async {
   final response = await getTransactionPool();
@@ -57,12 +60,31 @@ Future<List<Map<String, dynamic>>> getTransactionPoolSimple() async {
     final _decodedPool = await Stream.fromIterable(_sortedPool).asyncMap
     (
       (x) async {
-        final String _tx_json = x['tx_json'];
-        final _tx_json_decoded = await compute(jsonDecode, _tx_json);
+        if (txInOutCache.length > config.maxPoolTxSize) {
+          txInOutCache = {};
+        }
+
+        final _txid = x['id_hash'];
+
+        if (txInOutCache[_txid] == null) {
+          final String _tx_json = x['tx_json'];
+          final _tx_json_decoded = await compute(jsonDecode, _tx_json);
+
+          final _inOut =
+          {
+            'vin': _tx_json_decoded['vin'].length,
+            'vout': _tx_json_decoded['vout'].length,
+          };
+
+          final _inOutString = _inOut['vin'].toString() + '/' + _inOut['vout'].toString();
+
+          txInOutCache[_txid] = _inOutString;
+          log.fine('cached tx_json in pool for: ${_txid}');
+        }
 
         return {
           ...x,
-          ...{'tx_decoded': _tx_json_decoded},
+          ...{'i/o': txInOutCache[_txid]},
         };
       }
     );

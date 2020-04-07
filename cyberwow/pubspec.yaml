@@ -1,7 +1,7 @@
 name: cyberwow
 description: A new Flutter project.
 
-version: 0.7.0+24
+version: 0.7.0+25
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
