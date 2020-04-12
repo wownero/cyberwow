@@ -46,4 +46,7 @@ git clone --depth 1 https://github.com/wownero/wownero.git -b $version
 cd $name
 test `git rev-parse HEAD` = $githash || exit 1
 
-git submodule init && git submodule update
+git submodule update --init external/unbound
+git submodule update --init external/miniupnp
+git submodule update --init external/rapidjson
+git submodule update --init external/RandomWOW
