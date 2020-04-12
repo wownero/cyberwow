@@ -42,12 +42,11 @@ githash=4c6c7ab87b2a56165f400f6e49f17b9577a2bcad
 
 rm -rf $name
 
-git clone --depth 1 https://github.com/wownero/wownero.git -b $version
+git clone --depth 1 https://github.com/fuwa0529/wownero.git -b $version
 
 cd $name
 # test `git rev-parse HEAD` = $githash || exit 1
 
-git submodule update --init external/unbound
 git submodule update --init external/miniupnp
 git submodule update --init external/rapidjson
 git submodule update --init external/RandomWOW
