@@ -73,9 +73,13 @@ build:
 	cd cyberwow && \
 	flutter build apk --target-platform android-arm64 -v
 
+build-bundle:
+	cd cyberwow && \
+	flutter build appbundle --target-platform android-arm64 -v
+
 build-debug:
 	cd cyberwow && \
-	flutter build apk --debug --target-platform android-arm64
+	flutter build appbundle --debug --target-platform android-arm64
 
 install: build
 	cd cyberwow && \
