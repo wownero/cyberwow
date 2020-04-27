@@ -107,11 +107,7 @@ boost: iconv
 	$(script)/boost/fetch.sh
 	$(script)/boost/build.sh
 
-zlib: toolchain
-	$(script)/zlib/fetch.sh
-	$(script)/zlib/build.sh
-
-openssl: zlib
+openssl: toolchain
 	$(script)/openssl/fetch.sh
 	$(script)/openssl/build.sh
 

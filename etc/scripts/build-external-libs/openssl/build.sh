@@ -73,9 +73,8 @@ for arch in ${archs[@]}; do
 
         ./Configure android-${arch} \
                     --prefix=${PREFIX} \
+                    no-comp \
                     -D__ANDROID_API__=$ANDROID_API \
-                    --with-zlib-include=${ZLIB_PATH}/include \
-                    --with-zlib-lib=${ZLIB_PATH}/lib \
             && make -j${NPROC} && make install && make clean \
     )
 
