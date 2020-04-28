@@ -36,8 +36,8 @@ source etc/scripts/build-external-libs/env.sh
 cd $BUILD_ROOT_SRC
 
 name=openssl
-version=1.1.1f
-hash=186c6bfe6ecfba7a5b48c47f8a1673d0f3b0e5ba2e25602dd23b629975da3f35
+version=1.1.1g
+hash=ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46
 
 rm -rf ${name}-${version}
 
