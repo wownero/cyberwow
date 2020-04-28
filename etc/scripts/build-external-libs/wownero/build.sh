@@ -93,7 +93,7 @@ for arch in ${archs[@]}; do
           -D CMAKE_ANDROID_STANDALONE_TOOLCHAIN="${TOOLCHAIN_DIR}" \
           -D CMAKE_ANDROID_ARCH_ABI="arm64-v8a" \
           -D MANUAL_SUBMODULES=ON \
-          ../.. && make -j${NPROC}
+          ../.. && make -j${NPROC} daemon
     )
     popd
 
