@@ -7,57 +7,12 @@ A dumb android pruned full node for Wownero.
       height="80">](https://f-droid.org/en/packages/org.wownero.cyberwow/)
 <a href='https://play.google.com/store/apps/details?id=org.wownero.cyberwow'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height='80'/></a>
 
+
 ## How to build
 
-### Compile wownerod for android-arm64
+An example build script that works on an F-droid build server, which is based on debian stable, is here:
 
-#### Simple method with Docker
-
-```
-pushd .
-git clone https://github.com/wownero/wownero
-cd wownero
-git submodule init && git submodule update
-
-docker build -f utils/build_scripts/android64.Dockerfile -t wownero-android .
-# Create container
-docker create -it --name wownero-android wownero-android bash
-# Get binaries
-docker cp wownero-android:/src/build/release/bin .
-```
-
-The binary needed is `./bin/wownerod`.
-
-#### Alternative methods
-
-1. One docker instance per hash
-
-See `etc/scripts/docker-build-wownero.sh`, modify the value of `version` per build.
-
-2. Debian based system similar to F-droid
-
-See the `wow` task in `Makefile`.
-
-### Install flutter and make sure it's in path
-
-### Compile CyberWOW
-
-```
-popd
-git clone https://github.com/wownero/cyberwow/
-cd cyberwow
-
-mkdir -p cyberwow/android/app/src/main/jniLibs/arm64-v8a
-
-# Copy wownerod that we just built
-cp $PATH_TO_WOWNEROD \
-cyberwow/android/app/src/main/jniLibs/arm64-v8a/libwownerod.so
-
-make build
-```
-
-The resulting apk is `cyberwow/build/app/outputs/apk/release/app-release.apk`.
-
+<https://gitlab.com/fdroid/fdroiddata/-/raw/master/metadata/org.wownero.cyberwow.yml>
 
 ## How to use custom start up arguments
 
