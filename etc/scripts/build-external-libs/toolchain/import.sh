@@ -36,7 +36,7 @@ source etc/scripts/build-external-libs/env.sh
 build_root=$BUILD_ROOT
 PATH=$ANDROID_NDK_ROOT/build/tools/:$PATH
 
-args="--api 23 --stl=libc++"
+args="--api 29 --stl=libc++"
 archs=(arm64)
 
 for arch in ${archs[@]}; do

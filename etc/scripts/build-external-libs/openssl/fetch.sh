@@ -38,12 +38,18 @@ cd $BUILD_ROOT_SRC
 name=openssl
 version=1.1.1g
 hash=ddb04774f1e32f0c49751e21b67216ac87852ceb056b75209af2443400636d46
+url=https://www.openssl.org/source/openssl-${version}.tar.gz
+out=openssl-${version}.tar.gz
 
 rm -rf ${name}-${version}
 
-curl -# -L -O \
-     https://www.openssl.org/source/openssl-${version}.tar.gz
+if [ -f $SRC_OPENSSL ]; then
+    echo "using pre-fetched $name"
+    cp $SRC_OPENSSL $out
+else
+    curl -# -L -o $out -O $url
+fi
 
-echo "${hash} ${name}-${version}.tar.gz" | sha256sum -c
+echo "${hash} $out" | sha256sum -c
 
-tar xzf ${name}-${version}.tar.gz
+tar xzf $out

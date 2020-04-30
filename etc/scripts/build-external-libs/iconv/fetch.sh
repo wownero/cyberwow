@@ -35,15 +35,21 @@ source etc/scripts/build-external-libs/env.sh
 
 cd $BUILD_ROOT_SRC
 
+name=libiconv
 version=1.16
 hash=e6a1b1b589654277ee790cce3734f07876ac4ccfaecbee8afa0b649cf529cc04
-name=libiconv
+url=http://ftp.gnu.org/pub/gnu/${name}/${name}-${version}.tar.gz
+out=${name}-${version}.tar.gz
 
 rm -rf ${name}-${version}
-curl -# -L -O \
-     http://ftp.gnu.org/pub/gnu/${name}/${name}-${version}.tar.gz
 
-echo "${hash} ${name}-${version}.tar.gz" | sha256sum -c
+if [ -f $SRC_ICONV ]; then
+    echo "using pre-fetched $name"
+    cp $SRC_ICONV  $out
+else
+    curl -# -L -o $out -O $url
+fi
 
-tar -xzf ${name}-${version}.tar.gz
+echo "$hash $out" | sha256sum -c
+tar -xzf $out
 

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright (c) 2019, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
@@ -77,10 +77,10 @@ for arch in ${archs[@]}; do
     cd build/release
     (
         CMAKE_INCLUDE_PATH="${PREFIX}/include" \
-          CMAKE_LIBRARY_PATH="${PREFIX}/lib" \
-          CC=aarch64-linux-android-clang \
-          CXX=aarch64-linux-android-clang++ \
-          cmake \
+        CMAKE_LIBRARY_PATH="${PREFIX}/lib" \
+        CC=aarch64-linux-android-clang \
+        CXX=aarch64-linux-android-clang++ \
+        cmake \
           -D BUILD_TESTS=OFF \
           -D ARCH="armv8-a" \
           -D STATIC=ON \

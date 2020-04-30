@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright (c) 2019, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
@@ -63,16 +63,24 @@ for arch in ${archs[@]}; do
     echo "building for ${arch}"
 
     (
-        PATH=$build_root/tool/$arch/$target_host/bin:$build_root/tool/$arch/bin:$PATH \
-            CC=clang \
-            CXX=clang++; \
+        PATH=$build_root/tool/$arch/$target_host/bin:$build_root/tool/$arch/bin:$PATH
+        if [ -x "$(command -v ccache)" ]; then
+            echo "////////////////////////////////////////////"
+            echo "//              CCACHE 1                  //"
+            echo "////////////////////////////////////////////"
+            CC="ccache clang"
+            CXX="ccache clang++"
+        else
+            CC=clang
+            CXX=clang++
+        fi
 
-            ./configure \
-            --prefix=${PREFIX} \
-            --host=${target_host} \
-            --enable-static \
-            --disable-shared \
-            && make -j${NPROC} && make install && make clean \
+        ./configure \
+        --prefix=${PREFIX} \
+        --host=${target_host} \
+        --enable-static \
+        --disable-shared \
+        && make -j${NPROC} && make install && make clean \
     )
 
 done

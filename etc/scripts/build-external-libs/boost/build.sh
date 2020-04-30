@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright (c) 2019, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
@@ -66,33 +66,42 @@ for arch in ${archs[@]}; do
     echo "building for ${arch}"
 
     (
-        PATH=$build_root/tool/$arch/$target_host/bin:$build_root/tool/$arch/bin:$PATH \
-            CC=clang \
-            CXX=clang++; \
-            ./b2 \
-                cxxstd=14 \
-                toolset=clang \
-                threading=multi \
-                threadapi=pthread \
-                link=static \
-                runtime-link=static \
-                target-os=android \
-                --ignore-site-config \
-                --prefix=${PREFIX} \
-                --build-dir=android \
-                -sICONV_PATH=${ICONV_PATH} \
-                --build-type=minimal \
-                --with-chrono \
-                --with-date_time \
-                --with-filesystem \
-                --with-program_options \
-                --with-regex \
-                --with-serialization \
-                --with-system \
-                --with-thread \
-                --with-locale \
-                install \
-                -j${NPROC} \
+        PATH=$build_root/tool/$arch/$target_host/bin:$build_root/tool/$arch/bin:$PATH
+        if [ -x "$(command -v ccache)" ]; then
+            echo "////////////////////////////////////////////"
+            echo "//              CCACHE 1                  //"
+            echo "////////////////////////////////////////////"
+            CC="ccache clang"
+            CXX="ccache clang++"
+        else
+            CC=clang
+            CXX=clang++
+        fi
+
+        ./b2 \
+            cxxstd=14 \
+            toolset=clang \
+            threading=multi \
+            threadapi=pthread \
+            link=static \
+            runtime-link=static \
+            target-os=android \
+            --ignore-site-config \
+            --prefix=${PREFIX} \
+            --build-dir=android \
+            -sICONV_PATH=${ICONV_PATH} \
+            --build-type=minimal \
+            --with-chrono \
+            --with-date_time \
+            --with-filesystem \
+            --with-program_options \
+            --with-regex \
+            --with-serialization \
+            --with-system \
+            --with-thread \
+            --with-locale \
+            install \
+            -j${NPROC} \
     )
 
 done

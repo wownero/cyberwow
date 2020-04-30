@@ -39,14 +39,40 @@ name=wownero
 # version=v0.7.0
 version=dev-v0.8
 githash=4c6c7ab87b2a56165f400f6e49f17b9577a2bcad
+out=wownero
 
-rm -rf $name
+chmod u+w -f -R $out || true
 
-git clone --depth 1 https://github.com/fuwa0529/wownero.git -b $version
+rm -rf $out
+
+if [ -d $SRC_WOWNERO_DIR ]; then
+    echo "using pre-fetched $name"
+    rsync -av --no-perms --no-owner --no-group --delete $SRC_WOWNERO_DIR/* $out
+    chmod u+w -R $out/external
+else
+    git clone --depth 1 https://github.com/wownero/wownero.git -b $version
+    # test `git rev-parse HEAD` = $githash || exit 1
+fi
 
 cd $name
-# test `git rev-parse HEAD` = $githash || exit 1
 
-git submodule update --init external/miniupnp
-git submodule update --init external/rapidjson
-git submodule update --init external/RandomWOW
+if [ -d $SRC_MINIUPNP_DIR ]; then
+    echo "using pre-fetched miniupnpc"
+    rsync -av --no-perms --no-owner --no-group --delete $SRC_MINIUPNP_DIR/* external/miniupnp
+else
+    git submodule update --init external/miniupnp
+fi
+
+if [ -d $SRC_RAPIDJSON_DIR ]; then
+    echo "using pre-fetched rapidjson"
+    rsync -av --no-perms --no-owner --no-group --delete $SRC_RAPIDJSON_DIR/* external/rapidjson
+else
+    git submodule update --init external/rapidjson
+fi
+
+if [ -f $SRC_RANDOMWOW ]; then
+    echo "using pre-fetched RandomWOW"
+    tar xzf $SRC_RANDOMWOW -C external/RandomWOW --strip-components=1
+else
+    git submodule update --init external/RandomWOW
+fi

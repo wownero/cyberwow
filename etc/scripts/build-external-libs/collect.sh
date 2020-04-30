@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright (c) 2019, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
@@ -34,6 +34,7 @@ set -e
 source etc/scripts/build-external-libs/env.sh
 
 src_root=$BUILD_ROOT_SRC
+build_root=$BUILD_ROOT
 target_root=`pwd`
 
 name=wownero
@@ -62,7 +63,7 @@ for arch in ${archs[@]}; do
     echo "collecting for ${arch}"
     mkdir -p $target_root/cyberwow/android/app/src/main/jniLibs/$target_abi
     cp build/release/bin/wownerod \
-    $target_root/cyberwow/android/app/src/main/jniLibs/$target_abi/libwownerod.so
+      $target_root/cyberwow/android/app/src/main/jniLibs/$target_abi/libwownerod.so
 
 done
 
