@@ -136,10 +136,10 @@ let
 ; wownero-source =
     nixpkgs.fetchFromGitHub
     {
-      owner = "fuwa0529"
+      owner = "wownero"
     ; repo = "wownero"
-    ; rev = "8ca7e3"
-    ; sha256 = "07h8wiq8qm70m2s8bpalzx0fbrjl66khlha4qyfmpidpgv92daa6"
+    ; rev = "dev-v0.8"
+    ; sha256 = "13032pa9wx3h6x860f9iy28vdpkc94wzby153ig7hw4dixjqhs6w"
     ; }
 
 ; miniupnp-source =
@@ -149,6 +149,15 @@ let
     ; repo = "miniupnp"
     ; rev = "7800de9"
     ; sha256 = "1f7jgll8lxz2l5lifgqafgx8694x0svgwyz8w8w4cwavm9lmah63"
+    ; }
+
+; unbound-source =
+    nixpkgs.fetchFromGitHub
+    {
+      owner = "monero-project"
+    ; repo = "unbound"
+    ; rev = "9a77c29"
+    ; sha256 = "0dmm5pz2yf1lfand9k1c8x0mbrwynkpphh877b8jbavjrwiwsw35"
     ; }
 
 ; in
@@ -216,6 +225,7 @@ with nixpkgs;
     export SRC_SODIUM=${sodium-source}
     export SRC_RANDOMWOW=${randomwow-source}
     export SRC_MINIUPNP_DIR=${miniupnp-source}
+    export SRC_UNBOUND_DIR=${unbound-source}
     export SRC_RAPIDJSON_DIR=${nixpkgs.rapidjson.src}
     export SRC_WOWNERO_DIR=${wownero-source}
 

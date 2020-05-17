@@ -76,3 +76,10 @@ if [ -f $SRC_RANDOMWOW ]; then
 else
     git submodule update --init external/RandomWOW
 fi
+
+if [ -d $SRC_UNBOUND_DIR ]; then
+    echo "using pre-fetched unbound"
+    rsync -av --no-perms --no-owner --no-group --delete $SRC_UNBOUND_DIR/* external/unbound
+else
+    git submodule update --init external/unbound
+fi
