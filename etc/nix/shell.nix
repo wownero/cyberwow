@@ -210,7 +210,7 @@ with nixpkgs;
 ; profile = ''
     export ANDROID_HOME=~/SDK/Android/Sdk
 
-    PATH=~/local/sdk/flutter/beta/bin:$PATH
+    PATH=~/local/sdk/flutter/stable/bin:$PATH
     PATH=~/SDK/Android/android-studio/bin:$PATH
     PATH=~/SDK/Android/Sdk/tools/bin:$PATH
 
