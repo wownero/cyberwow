@@ -43,7 +43,7 @@ out=openssl-${version}.tar.gz
 
 rm -rf ${name}-${version}
 
-if [ -f $SRC_OPENSSL ]; then
+if [ ! -z $SRC_OPENSSL ]; then
     echo "using pre-fetched $name"
     cp $SRC_OPENSSL $out
 else

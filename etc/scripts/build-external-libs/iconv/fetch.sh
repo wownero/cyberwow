@@ -43,7 +43,7 @@ out=${name}-${version}.tar.gz
 
 rm -rf ${name}-${version}
 
-if [ -f $SRC_ICONV ]; then
+if [ ! -z $SRC_ICONV ]; then
     echo "using pre-fetched $name"
     cp $SRC_ICONV  $out
 else

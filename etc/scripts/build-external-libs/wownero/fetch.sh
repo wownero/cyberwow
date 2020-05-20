@@ -45,39 +45,40 @@ chmod u+w -f -R $out || true
 
 rm -rf $out
 
-if [ -d $SRC_WOWNERO_DIR ]; then
+if [ ! -z $SRC_WOWNERO_DIR ]; then
     echo "using pre-fetched $name"
     rsync -av --no-perms --no-owner --no-group --delete $SRC_WOWNERO_DIR/* $out
     chmod u+w -R $out/external
+    cd $name
 else
     git clone --depth 1 https://github.com/wownero/wownero.git -b $version
+    cd $name
     test `git rev-parse HEAD` = $githash || exit 1
 fi
 
-cd $name
 
-if [ -d $SRC_MINIUPNP_DIR ]; then
+if [ ! -z $SRC_MINIUPNP_DIR ]; then
     echo "using pre-fetched miniupnpc"
     rsync -av --no-perms --no-owner --no-group --delete $SRC_MINIUPNP_DIR/* external/miniupnp
 else
     git submodule update --init external/miniupnp
 fi
 
-if [ -d $SRC_RAPIDJSON_DIR ]; then
+if [ ! -z $SRC_RAPIDJSON_DIR ]; then
     echo "using pre-fetched rapidjson"
     rsync -av --no-perms --no-owner --no-group --delete $SRC_RAPIDJSON_DIR/* external/rapidjson
 else
     git submodule update --init external/rapidjson
 fi
 
-if [ -f $SRC_RANDOMWOW ]; then
+if [ ! -z $SRC_RANDOMWOW ]; then
     echo "using pre-fetched RandomWOW"
     tar xzf $SRC_RANDOMWOW -C external/RandomWOW --strip-components=1
 else
     git submodule update --init external/RandomWOW
 fi
 
-if [ -d $SRC_UNBOUND_DIR ]; then
+if [ ! -z $SRC_UNBOUND_DIR ]; then
     echo "using pre-fetched unbound"
     rsync -av --no-perms --no-owner --no-group --delete $SRC_UNBOUND_DIR/* external/unbound
 else

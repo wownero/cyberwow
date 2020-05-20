@@ -44,7 +44,7 @@ out=${name}_${version}.tar.bz2
 
 rm -rf ${name}_${version}
 
-if [ -f $SRC_BOOST ]; then
+if [ ! -z $SRC_BOOST ]; then
     echo "using pre-fetched $name"
     cp $SRC_BOOST  $out
 else

@@ -43,7 +43,7 @@ out=${name}-${version}.tar.gz
 
 rm -rf ${name}-${version}
 
-if [ -f $SRC_SODIUM ]; then
+if [ ! -z $SRC_SODIUM ]; then
     echo "using pre-fetched $name"
     cp $SRC_SODIUM  $out
 else
