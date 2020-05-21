@@ -34,6 +34,7 @@ final _theme = ThemeData
   accentColor: crtGreen,
   cursorColor: crtGreen,
 
+  backgroundColor: Colors.black,
   scaffoldBackgroundColor: Colors.black,
 
   textTheme: TextTheme

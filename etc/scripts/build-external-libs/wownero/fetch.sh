@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Copyright (c) 2019, The Wownero Project
+# Copyright (c) 2019-2020, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
 #
 # All rights reserved.
@@ -36,14 +36,51 @@ source etc/scripts/build-external-libs/env.sh
 cd $BUILD_ROOT_SRC
 
 name=wownero
-version=v0.7.0
-githash=4c6c7ab87b2a56165f400f6e49f17b9577a2bcad
+version=v0.8.0.0
+# version=dev-v0.8
+githash=1271a7e3a97c0d81816b401627aefb6c6697d0b3
+out=wownero
 
-rm -rf $name
+chmod u+w -f -R $out || true
 
-git clone --depth 1 https://github.com/wownero/wownero.git -b $version
+rm -rf $out
 
-cd $name
-test `git rev-parse HEAD` = $githash || exit 1
+if [ ! -z $SRC_WOWNERO_DIR ]; then
+    echo "using pre-fetched $name"
+    rsync -av --no-perms --no-owner --no-group --delete $SRC_WOWNERO_DIR/* $out
+    chmod u+w -R $out/external
+    cd $name
+else
+    git clone --depth 1 https://github.com/wownero/wownero.git -b $version
+    cd $name
+    test `git rev-parse HEAD` = $githash || exit 1
+fi
 
-git submodule init && git submodule update
+
+if [ ! -z $SRC_MINIUPNP_DIR ]; then
+    echo "using pre-fetched miniupnpc"
+    rsync -av --no-perms --no-owner --no-group --delete $SRC_MINIUPNP_DIR/* external/miniupnp
+else
+    git submodule update --init external/miniupnp
+fi
+
+if [ ! -z $SRC_RAPIDJSON_DIR ]; then
+    echo "using pre-fetched rapidjson"
+    rsync -av --no-perms --no-owner --no-group --delete $SRC_RAPIDJSON_DIR/* external/rapidjson
+else
+    git submodule update --init external/rapidjson
+fi
+
+if [ ! -z $SRC_RANDOMWOW ]; then
+    echo "using pre-fetched RandomWOW"
+    tar xzf $SRC_RANDOMWOW -C external/RandomWOW --strip-components=1
+else
+    git submodule update --init external/RandomWOW
+fi
+
+if [ ! -z $SRC_UNBOUND_DIR ]; then
+    echo "using pre-fetched unbound"
+    rsync -av --no-perms --no-owner --no-group --delete $SRC_UNBOUND_DIR/* external/unbound
+else
+    git submodule update --init external/unbound
+fi

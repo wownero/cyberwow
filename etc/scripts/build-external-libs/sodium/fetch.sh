@@ -38,12 +38,18 @@ cd $BUILD_ROOT_SRC
 name=libsodium
 version=1.0.18
 hash=d59323c6b712a1519a5daf710b68f5e7fde57040845ffec53850911f10a5d4f4
+url=https://github.com/jedisct1/libsodium/archive/${version}.tar.gz
+out=${name}-${version}.tar.gz
 
 rm -rf ${name}-${version}
 
-curl -# -L -o ${name}-${version}.tar.gz \
-https://github.com/jedisct1/libsodium/archive/${version}.tar.gz
+if [ ! -z $SRC_SODIUM ]; then
+    echo "using pre-fetched $name"
+    cp $SRC_SODIUM  $out
+else
+    curl -# -L -o $out -O $url
+fi
 
-echo "${hash} ${name}-${version}.tar.gz" | sha256sum -c
+echo "${hash} $out" | sha256sum -c
 
-tar xzf ${name}-${version}.tar.gz
+tar xzf $out

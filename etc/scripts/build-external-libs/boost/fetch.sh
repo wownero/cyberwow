@@ -39,12 +39,18 @@ name=boost
 version=1_71_0
 dot_version=1.71.0
 hash=d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee
+url=https://dl.bintray.com/boostorg/release/${dot_version}/source/${name}_${version}.tar.bz2
+out=${name}_${version}.tar.bz2
 
 rm -rf ${name}_${version}
 
-curl -# -L -O \
-     https://dl.bintray.com/boostorg/release/${dot_version}/source/${name}_${version}.tar.bz2
+if [ ! -z $SRC_BOOST ]; then
+    echo "using pre-fetched $name"
+    cp $SRC_BOOST  $out
+else
+    curl -# -L -o $out -O $url
+fi
 
-echo "${hash} ${name}_${version}.tar.bz2" | sha256sum -c
+echo "$hash $out" | sha256sum -c
 
-tar xfv ${name}_${version}.tar.bz2
+tar xfv $out

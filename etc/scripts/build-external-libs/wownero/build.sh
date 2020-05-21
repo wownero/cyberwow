@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright (c) 2019, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
@@ -72,13 +72,30 @@ for arch in ${archs[@]}; do
     export TOOLCHAIN_DIR=`realpath $build_root_wow/tool/${arch}`
     export PATH=$PATH:$build_root/host/bin
 
+    mkdir -p build/release
+    pushd .
+    cd build/release
     (
         CMAKE_INCLUDE_PATH="${PREFIX}/include" \
         CMAKE_LIBRARY_PATH="${PREFIX}/lib" \
-        ANDROID_STANDALONE_TOOLCHAIN_PATH=${TOOLCHAIN_DIR} \
-        USE_SINGLE_BUILDDIR=1 \
-        make release-static-android-armv8 -j${NPROC} \
+        CC=aarch64-linux-android-clang \
+        CXX=aarch64-linux-android-clang++ \
+        cmake \
+          -D BUILD_TESTS=OFF \
+          -D ARCH="armv8-a" \
+          -D STATIC=ON \
+          -D BUILD_64=ON \
+          -D CMAKE_BUILD_TYPE=release \
+          -D ANDROID=true \
+          -D INSTALL_VENDORED_LIBUNBOUND=ON \
+          -D BUILD_TAG="android-armv8" \
+          -D CMAKE_SYSTEM_NAME="Android" \
+          -D CMAKE_ANDROID_STANDALONE_TOOLCHAIN="${TOOLCHAIN_DIR}" \
+          -D CMAKE_ANDROID_ARCH_ABI="arm64-v8a" \
+          -D MANUAL_SUBMODULES=ON \
+          ../.. && make -j${NPROC} daemon
     )
+    popd
 
 done
 

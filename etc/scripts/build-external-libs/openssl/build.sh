@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Copyright (c) 2019, The Wownero Project
 # Copyright (c) 2014-2019, The Monero Project
@@ -37,7 +37,7 @@ build_root=$BUILD_ROOT
 src_root=$BUILD_ROOT_SRC
 
 name=openssl
-version=1.1.1f
+version=1.1.1g
 
 cd $src_root/${name}-${version}
 
@@ -64,19 +64,30 @@ for arch in ${archs[@]}; do
 
     echo "building for ${arch}"
 
+
     (
-        export CC=clang
-        export CXX=clang++
-        export ANDROID_API=23
-        export PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
+        ANDROID_API=29
         export ANDROID_NDK_HOME=$ANDROID_NDK_ROOT
+
+        PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
+        if [ -x "$(command -v ccache)" ]; then
+            echo "////////////////////////////////////////////"
+            echo "//              CCACHE 1                  //"
+            echo "////////////////////////////////////////////"
+            CC="ccache clang"
+            CXX="ccache clang++"
+        else
+            CC=clang
+            CXX=clang++
+        fi
 
         ./Configure android-${arch} \
                     --prefix=${PREFIX} \
+                    no-comp \
                     -D__ANDROID_API__=$ANDROID_API \
-                    --with-zlib-include=${ZLIB_PATH}/include \
-                    --with-zlib-lib=${ZLIB_PATH}/lib \
-            && make -j${NPROC} && make install && make clean \
+            && make -j${NPROC} SHLIB_VERSION_NUMBER= SHLIB_EXT=.so \
+            && make install_sw SHLIB_VERSION_NUMBER= SHLIB_EXT=.so \
+            && make clean \
     )
 
 done
