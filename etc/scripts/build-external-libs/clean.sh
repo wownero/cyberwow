@@ -35,6 +35,6 @@ source etc/scripts/build-external-libs/env.sh
 
 build_root=$BUILD_PATH
 
-chmod u+w -R $build_root
+chmod u+w -f -R $build_root || true
 rm -rf $build_root
 mkdir -p $build_root
